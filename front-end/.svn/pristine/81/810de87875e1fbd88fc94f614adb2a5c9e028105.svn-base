@@ -1,0 +1,358 @@
+// pages/jlxg/jlxg.js
+// 加载 常量
+const GLOBAL_CONSTANT = require('../../common/globalConstant');
+const CONSTANT = require('../../common/constant');
+// 加载 工具
+const prompt_util = require('../../utils/prompt_util');
+const string_util = require('../../utils/string_util');
+const img_util = require('../../utils/img_util');
+const Loading = require('../../utils/loading_util');
+// 加载 服务
+const { UserService, user } = require('../../service/user_service');
+const userCandidateService = require('../../common/userCandidateService');
+const userRecruiterService = require('../../common/userRecruiterService');
+
+const app = getApp();
+Page({
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        portraitPath: '',
+        portraitPath: null,
+        realName: '',
+        // 身份证
+        identityCard: '',
+        // 选择社区列表
+        choosedCommunityList: [],
+        genderList: CONSTANT.genderList,
+        gender: 0,
+        phone: '',
+        birthday: '1990-01-01',
+        workingAge: 0,
+        userIdentity: "",
+
+        choosedCommunityName: '',
+        choosedCommunityList: [],
+
+    },
+    lock: new Loading.Lock(),
+    // 错误头像
+    bindPersonalPortrait(e) {
+        this.setData({
+            portraitPath: Boolean(this.data.gender) ?
+                CONSTANT.STATIC_IMG_URL.portrait_personal_female : CONSTANT.STATIC_IMG_URL.portrait_personal_male,
+        })
+
+    },
+    // 出生年月啊
+    bindDateChange: function (e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.setData({
+            birthday: e.detail.value
+        })
+    },
+    // 性别选择
+    bindPickerChange: function (e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.setData({
+            gender: e.detail.value
+        })
+    },
+    // 组件 - 选择所属社区
+    bindtapChooseCommunity(e) {
+        this.chooseCommunityComponent.showPopup();
+    },
+    // 选择社区组件事件
+    submitChooseCommunity(e) {
+        let currentChoosedCommunityList = e.detail.value;
+        this.setData({
+            choosedCommunityList: currentChoosedCommunityList,
+            choosedCommunityName: currentChoosedCommunityList.length == 0 ? '' : currentChoosedCommunityList[0].communityName
+        })
+    },
+    setPhone(openid, phone) {
+        var that = this;
+        wx.request({
+            url: app.globalData.web_path + '/gywm/setWxuserPhone',
+            data: {
+                openid: openid,
+                phone: phone,
+            },
+            header: app.globalData.header,
+            success: function (res) {
+                console.log(res)
+            },
+            fail: function (res) {
+            }
+        })
+    },
+    getPhoneNumber(e) {
+        let that = this
+        var sessionKey = wx.getStorageSync('sessionKey')
+        var openid = wx.getStorageSync('openid');
+        console.log(e);
+        wx.request({
+            url: app.globalData.web_path + '/wx/user/' + app.globalData.appId + '/phoneNumberInfo',
+            data: {
+                sessionKey: sessionKey,
+                iv: e.detail.iv,
+                encryptedData: e.detail.encryptedData,
+            },
+            header: app.globalData.header,
+            success: function (res) {
+                console.log(res.data.data.phoneNumber)
+                that.setData({
+                    phone: res.data.data.phoneNumber
+                })
+                that.setPhone(openid, res.data.data.phoneNumber);
+                wx.setStorageSync('phone', res.data.data.phoneNumber)
+            },
+            fail: function (res) {
+            }
+        })
+    },
+    handleInputRealName: function (e) {
+        this.setData({
+            realName: e.detail.value,
+        });
+    },
+    bindinputIdentityCard: function (e) {
+        this.setData({
+            identityCard: e.detail.value,
+        })
+    },
+    bindinputWorkingAge: function (e) {
+        this.setData({
+            workingAge: e.detail.value,
+        });
+    },
+    handleInputPhoneNumber: function (e) {
+        this.setData({
+            phone: e.detail.value,
+        });
+    },
+
+    //点击修改头像
+    async bindtapChangePortrait() {
+        let that = this;
+
+        let chooseMediaPromise = wx.chooseMedia({
+            count: 1,
+            mediaType: ['image'],
+            sourceType: ['album', 'camera'],
+            camera: ['back', 'front'],
+        })
+        await chooseMediaPromise.then(res => {
+            console.log(res.tempFiles[0].tempFilePath);
+            that.setData({
+                portraitPath: res.tempFiles[0].tempFilePath,
+                none: 0
+            })
+
+        })
+        console.log(this.data)
+    },
+    // 保存
+    bindtapSaveResume: async function () {
+        let userIdentity = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY);
+       
+        this.setData({
+            userIdentity: userIdentity,
+        });
+        if (userIdentity == 'user') {
+            await this._saveCandidateResume();
+            wx.requestSubscribeMessage({
+              //zOhHPg2OJCVaFetsGxWkqItK8OY-K6XnkgQKgViRa8A
+              tmplIds: ['9uBKXPZrMPWqX-ny9BiW4z7FrL5-W8jpYzA7j3ChsM0'],
+              success(res) {
+                  console.log(res)
+                  if (res['9uBKXPZrMPWqX-ny9BiW4z7FrL5-W8jpYzA7j3ChsM0'] == 'accept') {
+                      console.log(111)
+                      wx.request({
+                          url: app.globalData.web_path + '/fczc/searchtoken',
+                          header: app.globalData.header,
+                          method: "GET",
+                          data: {
+                              grant_type: "client_credential",
+                          },
+                          success: function (data) {
+                          }
+                        })
+                      }
+                    }
+                  })
+        } else if (userIdentity == 'company') {
+            await this._saveRecruiterResume();
+            wx.requestSubscribeMessage({
+              //zOhHPg2OJCVaFetsGxWkqItK8OY-K6XnkgQKgViRa8A
+              tmplIds: ['zCyKj9S-dZ24qVDK-UXkf2-sZ8dBYyLXHOsZiT9jOUU'],
+              success (res) { 
+                console.log(res)
+                if(res['zCyKj9S-dZ24qVDK-UXkf2-sZ8dBYyLXHOsZiT9jOUU']=='accept'){
+                    console.log(111)
+                  wx.request({
+                      url: app.globalData.web_path +'/fczc/searchtoken',
+                      header: app.globalData.header,
+                      method: "GET",
+                      data:{
+                        grant_type:"client_credential",
+                      },
+                      success: function (data) {
+                      }
+                    })
+                  }
+                }
+              })
+        }
+    },
+    // 保存 求职者简历
+    _saveCandidateResume: async function () {
+        let that = this;
+        let data = this.data;
+        let openid = wx.getStorageSync('openid');
+        console.log(this.data);
+        try {
+            Loading.begin();
+            // 如果图片路径 为空 或者 包含 web_path则不执行上传
+            let flagUpload = true;
+            if (string_util.isEmpty(that.data.portraitPath)
+                || that.data.portraitPath.includes(app.globalData.web_path)
+                || !that.data.portraitPath.includes(CONSTANT.TMP_IMG_PREFIX)) {
+                flagUpload = false;
+            }
+            if (flagUpload) {
+                await userCandidateService.uploadPortrait(openid, that.data.portraitPath)
+            }
+            if (!string_util.isEmpty(data.phone)) {
+                app.globalMonitors.candidateTelephoneChangeMonitor.notifyAll(data.phone);
+            }
+            // 修改图片
+            await userCandidateService.updateByEntity({
+                id: openid,
+                realName: data.realName,
+                communityUuid: string_util.isEmpty(this.data.choosedCommunityName) ? '' : this.data.choosedCommunityList[0].communityUuid,
+                communityName: string_util.isEmpty(this.data.choosedCommunityName) ? '' : this.data.choosedCommunityList[0].communityName,
+                identityCard: this.data.identityCard,
+                gender: data.gender,
+                telephone: data.phone,
+                birthday: data.birthday,
+                workingAge: data.workingAge
+            })
+        } catch (e) {
+            console.error(e);
+            prompt_util.saveFailPrompt();
+        } finally {
+            Loading.end();
+            wx.navigateBack({
+                delta: 0,
+            });
+        }
+    },
+    // 保存招聘者简历
+    _saveRecruiterResume: async function () {
+        let that = this;
+        let data = this.data;
+        let openid = wx.getStorageSync('openid');
+        // 如果图片路径 为空 或者 包含 web_path则不执行上传
+        let flagUpload = true;
+        if (string_util.isEmpty(that.data.portraitPath)
+            || that.data.portraitPath.includes(app.globalData.web_path)
+            || !that.data.portraitPath.includes(CONSTANT.TMP_IMG_PREFIX)) {
+            flagUpload = false;
+        }
+        try {
+            Loading.begin();
+            if (flagUpload) {
+                await userRecruiterService.uploadPortrait(openid, that.data.portraitPath)
+            }
+            // 修改图片
+            await userRecruiterService.updateByEntity({
+                id: openid,
+                realName: data.realName,
+                gender: data.gender,
+                telephone: data.phone,
+            })
+        } catch (e) {
+            console.error(e);
+            prompt_util.saveFailPrompt();
+        } finally {
+            Loading.end();
+            wx.navigateBack({
+                delta: 0,
+            });
+        }
+    },
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: async function (options) {
+        this.lock = new Loading.Lock();
+        await app.getOpenidReady();
+        console.info(wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY));
+        try {
+            if (!this.lock.isLock) {
+                Loading.begin(this.lock);
+                let userIdentity = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY);
+                this.setData({
+                    userIdentity: userIdentity,
+                });
+                if (userIdentity == 'user') {
+                    wx.setNavigationBarTitle({
+                        title: '求职者信息修改',
+                    })
+                    await this._loadContentCandidate();
+                } else if (userIdentity == 'company') {
+                    wx.setNavigationBarTitle({
+                        title: '招聘人信息修改',
+                    })
+                    await this._loadContentRecruiter();
+                }
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end(this.lock);
+        }
+
+    },
+
+    onShow: async function () {
+
+    },
+    onReady: function () {
+        // 加载社区组件
+        this.chooseCommunityComponent = this.selectComponent("#choose-community");
+
+    },
+    _loadContentCandidate: async function () {
+        let recruiteeInfo = await userCandidateService.loadEntityPlusById(app.getOpenid());
+        recruiteeInfo = recruiteeInfo.data;
+        this.setData({
+            gender: recruiteeInfo.gender,
+            portraitPath: img_util.handlePersonnelPortraitPath(recruiteeInfo.portraitPath, recruiteeInfo.gender),
+            realName: recruiteeInfo.realName,
+            identityCard: recruiteeInfo.identityCard,
+            choosedCommunityList: [{
+                communityUuid: recruiteeInfo.communityUuid,
+                communityName: recruiteeInfo.communityName,
+            }],
+            choosedCommunityName: string_util.isEmpty(recruiteeInfo.communityName) ? '' : recruiteeInfo.communityName,
+            phone: recruiteeInfo.telephone,
+            birthday: string_util.isEmpty(recruiteeInfo.birthday) ? '' : app.formatDate(recruiteeInfo.birthday, "yyyy-MM-dd"),
+            workingAge: recruiteeInfo.workingAge,
+        });
+    },
+
+    _loadContentRecruiter: async function () {
+        let recruiterInfo = await UserService.loadRecruiterInfo();
+        this.setData({
+            gender: recruiterInfo.gender,
+            portraitPath: img_util.handlePersonnelPortraitPath(recruiterInfo.portraitPath, recruiterInfo.gender),
+            realName: recruiterInfo.realName,
+            phone: recruiterInfo.telephone,
+        });
+    }
+
+
+})

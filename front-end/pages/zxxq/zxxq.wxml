@@ -1,0 +1,29 @@
+<view class="container">
+  <view class="toptit">
+    {{title}}
+  </view>
+  <view class="clearfloat lybox">
+    <view class="ft ly">{{ly}}</view>
+    <view class="fr ly">{{fbsj}}</view>
+  </view>
+  <scroll-view class="content" style="height:{{ht}}px;position: relative;padding-bottom: 60px;    text-align: center;" scroll-y>
+    <!-- <rich-text nodes="{{htmlSnip}}"></rich-text> -->
+    <wxparser rich-text="{{htmlSnip}}" />
+    <view wx:for="{{fileList}}" class="download clearfloat" >
+      <view class="ft fjname"><image class="imgfj" src="/img/fuimg.png"></image>{{item.fileName}}</view>
+      <view class="fr xz" data-url="{{item.fileUrl}}" bindtap="download">附件下载</view>
+    </view>
+  </scroll-view >
+  <!-- <wxparser rich-text="{{richText}}" /> -->
+	
+</view>
+<view class="btmbox clearfloat">
+	<view class="readtime ft">阅读 {{times}}</view>
+	<view class="share fr" bindtap="share">
+		<!-- <image class="srimg" src="/img/share.png"></image> -->
+		<image class="srimg" src="/img/fximg.png"></image>
+		<button class="share_icon" open-type = "share">
+        分享
+    </button>
+	</view>
+</view>

@@ -1,0 +1,358 @@
+.byszc {
+    width: 100%;
+    /* height: 150px; */
+}
+
+.tit {
+    font-size: 16px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: bold;
+    color: #333333;
+    margin: 20px 15px 10px 15px;
+}
+
+.sj {
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    margin-left: 15px;
+    color: #999999;
+    margin-bottom: 6px;
+}
+
+.bmcj {
+    width: 90px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #FFFFFF;
+    background: #FD1400;
+    /* padding: 8px 21px; */
+    border-radius: 0px 0px 0px 0px;
+    text-align: center;
+    margin-right: 20px;
+}
+
+.bmcj1 {
+    background: #3484FC;
+
+}
+
+.isbm {
+    width: 90px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
+    background: #EEEEEE;
+    /* padding: 8px 21px; */
+    border-radius: 0px 0px 0px 0px;
+    text-align: center;
+    margin-right: 20px;
+}
+
+.top_nav {
+    display: flex;
+    border-bottom: 1px solid #EEEEEE;
+}
+
+.nav-name {
+    display: inline-block;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    background: #fff;
+    width: 100%;
+    color: #333333;
+    padding: 18rpx 18rpx 10rpx 18rpx;
+    font-size: 14px;
+    opacity: 0.6;
+}
+
+.nav-hover {
+    font-size: 14px;
+    font-family: Source Han Sans CN;
+    background: #fff;
+    opacity: 1;
+    color: #333333;
+    font-weight: bold;
+}
+
+.nav-hover .linbc {
+    width: 35px;
+    height: 4px;
+    background: rgba(67, 118, 228, 1);
+    margin: 0 auto;
+    border-radius: 3px;
+}
+
+.jobbox1 {
+    margin: 0 16px 0 20px;
+    padding-bottom: 19px;
+}
+
+.ltbox {
+    width: 100%;
+}
+
+.jobname {
+    font-size: 16px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    margin-top: 18px;
+    color: #333333;
+}
+
+.jobmoney {
+    font-size: 14px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    margin: 11px 0 10px 0;
+    color: #F8424C;
+}
+
+.companyname1 {
+    font-size: 14px;
+    font-family: SimHei-Regular, SimHei;
+    font-weight: 400;
+    color: #999999;
+}
+
+.companytx {
+    width: 36px;
+    height: 36px;
+    vertical-align: middle;
+    background: #CBCBCB;
+    border-radius: 50%;
+}
+
+.far {
+    font-size: 14px;
+    margin-top: 23px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #999999;
+    text-align: right;
+}
+
+.phonecall {
+    height: 30px;
+    width: 70px;
+    margin-top: 32px;
+    background: #FFFFFF;
+    border-radius: 0px 0px 0px 0px;
+    font-size: 12px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #F8424C;
+    opacity: 1;
+    border: 1px solid #F8424C;
+    line-height: 30px;
+    text-align: center;
+}
+
+.jobbox2 {
+    margin: 0 16px 0 20px;
+    padding-bottom: 10px;
+}
+
+.companyname2 {
+    font-size: 14px;
+    font-family: SimHei-Regular, SimHei;
+    font-weight: 400;
+    color: #999999;
+    margin-top: 11px;
+}
+
+.phonecall1 {
+    height: 30px;
+    width: 70px;
+    margin-top: 16px;
+    background: #FFFFFF;
+    border-radius: 0px 0px 0px 0px;
+    font-size: 12px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #F8424C;
+    opacity: 1;
+    border: 1px solid #F8424C;
+    line-height: 30px;
+    text-align: center;
+}
+
+.zphopen {
+    font-size: 14px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
+    margin: 0px 15px 10px 15px;
+
+}
+
+.zphtit {
+    font-size: 14px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    margin: 0px 15px 10px 15px;
+}
+
+.zbdw {
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #3182FC;
+    margin: 7px 10px;
+}
+
+.iconzb {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-top: -3px;
+}
+
+.iconjt {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    margin-top: -3px;
+}
+
+.ftks {
+    background-color: #F4F9FF;
+    padding: 10px 0px;
+    margin: 0px 15px 10px 15px;
+}
+
+.checkall {
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #3786FD;
+    margin: 0px 15px 10px 15px;
+}
+
+.rt {
+    transform: rotate(180deg);
+}
+
+.bmsj {
+    margin: 0px 15px 10px 15px;
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #333333;
+}
+
+.bmbtnbox {
+    margin: 15px 15px 10px 15px;
+    display: flex;
+    padding-bottom: 21px;
+
+}
+
+.topbox {
+    box-shadow: 0px 3px 3px 1px rgba(51, 51, 51, 0.16);
+}
+
+.jobbigbox {
+    margin-top: 10px;
+}
+
+.jobbigbox>navigator {
+    margin: 0 18px;
+    border: 1px solid #EEEEEE;
+    margin-bottom: 10px;
+}
+
+.zpr {
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #333333;
+
+}
+
+.com {
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
+    margin-top: 6px;
+}
+
+.zpqy .companytx {
+    width: 22px;
+    height: 22px;
+}
+
+.zzjob {
+    font-size: 14px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #FD1400;
+    margin-top: 12px;
+}
+
+.perbox .ltbox {
+    width: 60px;
+    height: 60px;
+}
+
+.perbox .companytx {
+    width: 60px;
+    height: 60px;
+}
+
+.perbox .jobbox2 {
+    margin: 14px 0px 16px 13px;
+    padding-bottom: 0;
+}
+
+.pername {
+    font-size: 16px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #111111;
+}
+
+.perjs {
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #333333;
+    margin: 6px 0 5px 0;
+}
+
+.yx {
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
+}
+
+.wantjob {
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #666666
+}
+
+
+.fix-banner-img{
+    width: 690rpx;
+    height: 96rpx;
+    margin: 26rpx 30rpx 20rpx 30rpx;
+    
+}

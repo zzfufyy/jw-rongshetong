@@ -1,0 +1,148 @@
+@import "/app.wxss";
+
+.container {
+    /* display: flex; */
+    /* align-items: left; */
+    margin: 20px;
+    background: #ffffff;
+    border-radius: 5px 5px 5px 5px;
+    padding: 14px 13px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.line-box {
+    padding: 5px 5px;
+}
+
+.clearfloat::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+.num-box {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.input-box {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    width: 80%;
+}
+
+.radio-box {
+    /* display: inline-block; */
+    vertical-align: middle;
+    margin-top: 10px;
+    position: relative;
+}
+
+.image-box-cancel {
+    display: inline-block;
+    vertical-align: center;
+}
+
+.cercle {
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+}
+
+.gbimg {
+    position: absolute;
+    right: 0;
+}
+
+.addbtn {
+    font-size: 14px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #3585FC;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.line1 {
+    margin-top: 10px;
+}
+
+.tmsz {
+    font-size: 16px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #297EFE;
+    margin-top: 15px;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.sxbox {
+    bottom: 0;
+    /* height: 200px; */
+    top: auto;
+}
+
+.toptit {
+    padding: 0 18px;
+    height: 50px;
+    line-height: 50px;
+    background: #F7F8FA;
+    color: #333333;
+}
+
+.qx {
+    width: 33%;
+    text-align: left;
+}
+
+.sz {
+    width: 33%;
+    text-align: center;
+}
+
+.qd {
+    width: 33%;
+    text-align: right;
+}
+
+.cont {
+    padding: 0 18px;
+    height: 50px;
+    line-height: 50px;
+    color: #333333;
+}
+
+.wx-switch-input {
+    zoom: 0.7;
+}
+
+.an {
+    position: absolute;
+    right: 18px;
+}
+
+.btnbox {
+    height: 52px;
+    line-height: 52px;
+    text-align: center;
+    font-size: 18px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #333333;
+}
+
+.closeqx {
+    color: #999999;
+}

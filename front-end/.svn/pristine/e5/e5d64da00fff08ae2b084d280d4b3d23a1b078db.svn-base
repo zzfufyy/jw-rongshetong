@@ -1,0 +1,56 @@
+<view class="container">
+	<view class="creatbox_top clearfloat">
+		<view class="ft mycreat">我的创建</view>
+		<view class="fr newcreat" bindtap="creattp">+创建投票</view>
+	</view>
+	<view class="mainbox">
+		<view class="conbox" wx:for="{{formInformationList}}" wx:key="key">
+			<view class="title pd">{{item.formTtitle}}</view>
+			<view class="leg pd">
+				<text>发布时间：{{item.beginTime}}</text>
+				<text style="margin-left: 20px;">已收集：{{item.completedCount}}份</text>
+			</view>
+			<view class="line1"></view>
+			<view class="btnbox pd">
+				<view class="btn">
+					<image src="/img/edit.png" class="editimg"></image>
+					<text class="bjwz">编辑</text>
+				</view>
+				<view class="btn" bindtap="fxtp">
+					<image src="/img/fxtp.png" class="editimg"></image>
+					<text class="bjwz">分享</text>
+				</view>
+
+				<view class="btn" bindtap="data_sj">
+					<image src="/img/sjtp.png" class="editimg"></image>
+					<text class="bjwz">数据</text>
+				</view>
+				<view class="btn">
+					<image src="/img/sctp.png" class="editimg"></image>
+					<text class="bjwz">删除</text>
+				</view>
+			</view>
+		</view>
+	</view>
+</view>
+
+<view class="zzc" hidden="{{fxhide}}"  bindtap="fxtp"></view>
+<view class="sxbox" hidden="{{fxhide}}">
+	<view class="fxhy">分享到</view>
+	<view class="fxbox">
+		<view class="wxhy">
+			<button class="button" open-type="share">
+				<image src="/img/wxhy.png" class="hyimg"></image>
+				<view style="margin-top: 10px;">微信好友</view>
+			</button>
+		</view>
+
+		<view class="wxhy">
+			<button class="button" bindtap="gotoewm">
+				<image src="/img/ewming.png" class="hyimg"></image>
+				<view style="margin-top: 10px;">二维码</view>
+			</button>
+		</view>
+	</view>
+
+</view>

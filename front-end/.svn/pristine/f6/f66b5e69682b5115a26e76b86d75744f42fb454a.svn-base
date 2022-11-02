@@ -1,0 +1,15 @@
+const $ = require('../utils/request_util')
+
+
+const insertByList = function (insertList) {
+    return $.request({
+        url: '/user-for-form/addList',
+        data: insertList,
+        method: $.RequestMethod.POST,
+        header: $.jsonHeader,
+    });
+}
+
+module.exports = {
+    insertByList: insertByList
+}

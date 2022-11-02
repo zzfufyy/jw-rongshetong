@@ -1,0 +1,115 @@
+<view class="container">
+    <view class="topbox">
+        <view class="">
+            <image class="byszc" src="{{fairPortraitPath}}" mode="widthFix"></image>
+        </view>
+        <view class="titbox">
+            <view class="tit">{{fairTitle}}</view>
+        </view>
+        <view class=" {{isContentFold?'zphopen':'zphtit'}}">{{fairContent}}</view>
+        <view class="checkall" bindtap="bindtapFoldFairContent">
+            查看全部<image src="/img/jtx.png" class="iconjt {{isContentFold?'rt':''}}"></image>
+        </view>
+        <view class="line1" style="margin-bottom:10px"></view>
+        <view class="clearfloat sjbox">
+            <view class=" ftks">
+                <view class="zbdw">
+                    <image class="iconzb" src="/img/zbdw.png"></image>
+                    主办单位：{{fairHost}}
+                </view>
+                <view class="zbdw">
+                    <image class="iconzb" src="/img/hddz.png"></image>
+                    活动地址：{{fairAddress}}
+                </view>
+            </view>
+            <view class="bmsj">
+                <view>开始时间：{{fairBeginTime}}</view>
+                <view>结束时间：{{fairEndTime}}</view>
+            </view>
+        </view>
+
+        <view class="bmbtnbox">
+            <view class="bmcj bmcj1 {{isCompanySign == true?'isbm':'nobm'}}" bindtap="bindtapCompanySign">{{companySignText}}</view>
+            <view class="bmcj {{isCandidateSign == true?'isbm':'nobm'}}" bindtap="bindtapCandidateSign">{{candidateSignText}}</view>
+        </view>
+
+    </view>
+    <view class="middlebox">
+        <view class='top_nav'>
+            <view class="nav-name {{item.typeId == currentId ? 'nav-hover':''}}" wx:for="{{tabList}}" wx:key="id" id='{{item.typeId}}' catchtap='catchtapSwitchTab'>
+                {{item.name}}({{item.num}})
+                <view class="linbc"></view>
+            </view>
+        </view>
+        <swiper current="{{currentTab}}" data-current="{{currentId}}" style="height:{{winHeight - 55}}px;" bindchange="switchTab">
+            <!-- 招聘岗位 -->
+            <swiper-item style="height:100%;overflow-y:scroll;">
+                <scroll-view scrollY="true" bindscrolltolower="reachBottom" style="height: 100%">
+                    <view class="jobbigbox">
+                        <navigator hover-class="none" wx:for="{{jobList}}" wx:key="index" bindtap="bindtapChooseJob" data-index="{{index}}">
+                            <view class="jobbox1 clearfloat">
+                                <view class="ft ltbox">
+                                    <view class="jobname">{{item.jobName}}</view>
+                                    <view class="jobmoney">{{item.jobSalaryScope}}</view>
+                                    <view class="companyname1 clearfloat">
+                                        <image src="{{item.recruiterPortraitPath}}" class="companytx ft"></image>
+                                        <view class="ft" style="margin-left: 6px;">
+                                            <view class="zpr">{{item.recruiterName}} · 招聘人</view>
+                                            <view class="com">{{item.companyName}}</view>
+                                        </view>
+                                    </view>
+                                </view>
+                            </view>
+                        </navigator>
+                    </view>
+                </scroll-view>
+            </swiper-item>
+            <!-- 招聘企业  -->
+            <swiper-item style="height:100%;overflow-y:scroll;">
+                <scroll-view scrollY="true" bindscrolltolower="reachBottom" style="height: 100%">
+                    <view class="jobbigbox">
+                        <navigator hover-class="none" wx:for="{{companyList}}" wx:key="index" bindtap="bindtapChooseCompany" data-index="{{index}}">
+                            <view class="jobbox2 clearfloat">
+                                <view class="ft ltbox">
+                                    <view class="jobname">{{item.companyName}}</view>
+                                    <view class="zzjob">{{item.countJob}}个在招职位</view>
+                                    <view class="companyname2 zpqy">
+                                        <image src="{{item.companyPortraitPath}}" class="companytx"></image>
+                                        {{item.recruiterName}}·招聘人
+                                    </view>
+                                </view>
+                            </view>
+                        </navigator>
+                    </view>
+                </scroll-view>
+            </swiper-item>
+
+            <!-- 求职者  -->
+            <swiper-item style="height:100%;overflow-y:scroll;">
+                <scroll-view scrollY="true" bindscrolltolower="reachBottom" style="height: 100%">
+                    <view class="jobbigbox">
+                        <navigator hover-class="none" class="perbox" wx:for="{{candidateList}}" wx:key="index" bindtap="bindtapChooseCandidate" data-index="{{index}}">
+                            <view class="jobbox2 clearfloat">
+                                <view class="ft ltbox">
+                                    <image src="{{item.candidatePortraitPath}}" class="companytx"></image>
+                                </view>
+                                <view class="ft lrbox" style="margin-left: 10px;">
+                                    <view class="pername">{{item.candidateName}}</view>
+                                    <view class="perjs">{{item.age}}·{{item.sex}}·{{item.workingAge}}</view>
+                                    <view class="wantjob"><text class="yx">意向 </text>
+                                        <text class="wantjob" wx:for="{{item.expectCategoryName}}" wx:key="key"> {{item}}</text>|
+                                        {{item.expectSalaryScope}}
+                                    </view>
+                                </view>
+                            </view>
+                        </navigator>
+                    </view>
+                </scroll-view>
+            </swiper-item>
+
+        </swiper>
+    </view>
+</view>
+<!-- 授权组件  -->
+<authorize id='authorize'>
+</authorize>

@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    align-items: left;
+    margin: 20px;
+    background: #ffffff;
+    flex-flow: column wrap;
+    justify-content: left;
+}
+.line-box{
+    padding: 5px 5px;
+}
+
+.clearfloat::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+.num-box {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.input-box {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+.radio-box {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 10px;
+}
+.image-box-cancel{
+    display: inline-block;
+    vertical-align: center;
+}
+

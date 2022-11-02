@@ -1,0 +1,202 @@
+// pages/creattp/creattp.js
+const object_util = require('../../utils/object_util');
+const { Completer } = require('../../utils/function_util');
+const CONSTANT = require('../../common/constant');
+const COMPONENT_ID_PREFIX = '#option-component-'
+
+const app = getApp();
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        formTitle: '',
+        formIntroduction: '',
+        subjectList: [
+            {
+                componentType: CONSTANT.FORM_COMPONENT_TYPE.CHOICE_SELECT,
+                subjectType: CONSTANT.FORM_SUBJECT_TYPE.SINGLE_SELECT,
+            }, {
+                componentType: CONSTANT.FORM_COMPONENT_TYPE.COMPLETION,
+                subjectType: CONSTANT.FORM_SUBJECT_TYPE.COMPLETION,
+            }, {
+                componentType: CONSTANT.FORM_COMPONENT_TYPE.IMG_UPLOAD,
+                subjectType: CONSTANT.FORM_SUBJECT_TYPE.IMG_UPLOAD,
+            }, {
+                componentType: CONSTANT.FORM_COMPONENT_TYPE.SIGN,
+                subjectType: CONSTANT.FORM_SUBJECT_TYPE.SIGN,
+            },
+        ],
+
+        showAdvancedSetting: false,
+        endDate: '请选择',
+    },
+    bindchangeEndTime: function (e) {
+        this.setData({
+            endDate: e.detail.value
+        })
+    },
+    bindchangeShowAdvancedSetting(e) {
+        this.setData({
+            showAdvancedSetting: e.detail.value,
+        })
+    },
+    bindtapAddSubject(e) {
+        wx.navigateTo({
+          url: '/pages/subjectAdd/subjectAdd',
+        })
+    },
+
+    bindtapSubmit() {
+        // 提交 form信息 返回表单id
+
+        // 提交题目信息 返回题目id列表
+        
+        this.selectComponent(COMPONENT_ID_PREFIX + 1).getData();
+        
+        // 根据类型提交  选项信息
+        return;
+        wx.navigateTo({
+            url: '/pages/subscces/subscces',
+        })
+    },
+    /** BEGIN 选择框组件 绑定交互事件 */
+    formComponentCopy(e) {
+        this._getAllOptionComponentData();
+        let currentIndex = e.currentTarget.dataset.index;
+        let currentSubjectList = object_util.copyObject(this.data.subjectList);
+        currentSubjectList.splice(currentIndex, 0, object_util.copyObject(this.data.subjectList[currentIndex]));
+        this.setData({
+            subjectList: currentSubjectList,
+        });
+        this._setAllOptionComponentData();
+
+    },
+    formComponentMovePrev(e) {
+        this._getAllOptionComponentData();
+        let currentIndex = e.currentTarget.dataset.index;
+        let currentSubjectList = object_util.copyObject(this.data.subjectList);
+        currentSubjectList.splice(currentIndex - 1, 0, object_util.copyObject(this.data.subjectList[currentIndex]));
+        currentSubjectList.splice(currentIndex + 1, 1);
+        this.setData({
+            subjectList: currentSubjectList,
+        });
+        this._setAllOptionComponentData();
+    },
+    formComponentMoveNext(e) {
+        this._getAllOptionComponentData();
+        let currentIndex = e.currentTarget.dataset.index;
+        let currentSubjectList = object_util.copyObject(this.data.subjectList);
+        currentSubjectList.splice(currentIndex + 2, 0, object_util.copyObject(this.data.subjectList[currentIndex]));
+        currentSubjectList.splice(currentIndex, 1);
+        // currentSubjectList.splice(currentIndex, 1);
+        this.setData({
+            subjectList: currentSubjectList,
+        });
+        this._setAllOptionComponentData();
+    },
+    formComponentDelete(e) {
+        this._getAllOptionComponentData();
+        let currentIndex = e.currentTarget.dataset.index;
+        let currentSubjectList = object_utils.copyObject(this.data.subjectList);
+        currentSubjectList.splice(currentIndex, 1);
+        this.setData({
+            subjectList: currentSubjectList,
+        });
+        this._setAllOptionComponentData();
+    },
+    /** END 选择框组件 绑定交互事件 */
+
+    /** BEGIN 内部方法 */
+    // 页面与组件 传、赋值  构造 触发事件双向绑定效果
+    _getAllOptionComponentData() {
+        let currentSubjectList = this.data.subjectList;
+        this.setData({
+            subjectList: currentSubjectList.map((v, index) => {
+                return this.selectComponent(COMPONENT_ID_PREFIX + v.componentType + '-' + index).getData()
+            }),
+        })
+        console.log(this.data.subjectList);
+    },
+    _setAllOptionComponentData() {
+        let currentSubjectList = this.data.subjectList;
+        currentSubjectList.map((v, index) => {
+            console.log(v.componentType);
+            console.log(index);
+            this.selectComponent(COMPONENT_ID_PREFIX + v.componentType + '-' + index).buildData(v);
+        });
+    },
+    /** END 内部方法 */
+
+    /** BEGIN 外部暴露方法 */
+    callAddSubject(componentType, subjectType) {
+        this.setData({
+            subjectList: this.data.subjectList.concat({ 
+                componentType: componentType,
+                subjectType: subjectType,
+            }),
+        })
+    },
+    /** END 外部暴露方法 */
+    
+    communityUuidCompleter: new Completer(),
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: function (options) {
+        this.communityUuidCompleter = new Completer();
+        let openid = app.getOpenid();
+        let communityUuid = options.communityUuid;
+        this.communityUuidCompleter.resolve(communityUuid);
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    }
+})

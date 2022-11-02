@@ -1,0 +1,43 @@
+<view class="container">
+	<view class="sqname clearfloat">
+		<view class="ft addxq" bindtap="bindtapAddCell">+添加小区</view>
+		<view class="fr fpgl" bindtap="bindtapManagement">
+			<text hidden="{{!showfp}}" >分配管理</text> 
+			<text hidden="{{showfp}}" style="color: #3383FD;">退出管理</text>
+		</view>
+	</view>
+	<view class="mainbox">
+		<view class="bggbox" wx:for="{{cellList}}" wx:key="key">
+			<navigator hover-class="none" catchtap="wglrxq"  class="xqbox" >
+				<view class="xqname clearfloat">
+					<view class="ft ">{{item.cellName}}</view>
+				</view>
+				<view class="sqlocal">共{{item.numBuilding}}栋{{item.numLayer}}层{{item.numLayerFamily}}户 {{item.numRegistered}}户已登记 {{item.numUnregistered}}户未登记</view>
+				<view class="luy">
+					网格录入员: {{item.recorderName}}
+				</view>
+			</navigator>
+			<view class="xzbox" hidden="{{showfp}}">
+				<checkbox-group bindchange="bindchangeCell">
+					<label class="checkbox">
+						<checkbox color="#F8424C" value="{{item.id}}" />选中
+					</label>
+				</checkbox-group>
+			</view>
+		</view>
+	</view>
+</view>
+
+<view class="qdbox" hidden="{{showfp}}">
+	<view class="rdbox">
+		<radio-group bindchange="bindchangeRecorder">
+			<label class="weui-cell weui-check__label" wx:for="{{recorderList}}" wx:key="key">
+				<view class="weui-cell__hd">
+					<radio value="{{item.id}}" checked="false"/>{{item.name}}
+				</view>
+			</label>
+		</radio-group>
+	</view>
+	<view class="tijsq" bindtap="bindtapAllocationSubmit">确定分配</view>
+</view>
+

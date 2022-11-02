@@ -1,0 +1,58 @@
+<view class="p60"></view>
+		<view class="toptit">茶陵县城乡居民建房安全隐患排查整治信息采集表</view>
+		<view class="line10"></view>
+		<view class="first mt14">第三部分：管理情况</view>
+		<view class="first mt14">是否取得行政登记、审批备案手续【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+        <label class="weui-cell weui-check__label" wx:for="{{isba}}" wx:key="{{item.value}}">
+          <view class="weui-cell__hd">
+            <radio value="{{item.value}}" />{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+		<view class="first mt14">行政登记、审批备案手续类型【多选题】</view>
+		<view class="mt14">
+			<checkbox-group  bindchange="checkboxChange">
+				<label class="weui-cell weui-check__label" wx:for="{{sxlx}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<checkbox value="{{item.value}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+		<view class="first mt14">是否违法建设经营【单选题】</view>
+		<view class="mt14">
+			<radio-group  bindchange="checkboxChange">
+				<label class="weui-cell weui-check__label" wx:for="{{iswf}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<radio value="{{item.value}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+
+		<view class="first mt14">违法建设经营情况【多选题】</view>
+		<view class="mt14">
+			<checkbox-group  bindchange="checkboxChange">
+				<label class="weui-cell weui-check__label" wx:for="{{wfjyzk}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<checkbox value="{{item.value}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+		
+
+	<view class="clearfloat">
+		<navigator class="tijsq ft prew" style="margin-left: 5%;" hover-class="none" url="/pages/messgecollect1/messgecollect1">上一步</navigator>
+		<navigator hover-class="none" style="margin-right: 5%;" url="/pages/messgecollect3/messgecollect3"  class="tijsq fr">下一步</navigator>
+	</view>
+
+
+
+
+
+		
+		

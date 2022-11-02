@@ -1,0 +1,13 @@
+<view class="container">
+	<block wx:for="{{communityList}}">
+		<navigator hover-class="none" url="/pages/sqfw/sqfw?communityUuid={{item.communityUuid}}" class="heightboxgz clearfloat">
+			<view class="ft">
+				<text class="wggltxt">{{item.communityName}}</text>
+			</view>
+			<view class="fr">
+				<image class="rtjtimg" src="/img/jt.png"></image>
+			</view>
+		</navigator>
+		<view class="line1"></view>
+	</block>
+</view>

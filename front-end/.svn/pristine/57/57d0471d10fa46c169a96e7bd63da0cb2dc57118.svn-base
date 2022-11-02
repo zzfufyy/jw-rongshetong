@@ -1,0 +1,181 @@
+<view class="container">
+    <!-- <view class="page-section-spacing">
+		<scroll-view class="scroll-view_H" scroll-x="true" style="width: 100%" >
+			<view bindtap="zczp" class='vv scroll-view-item_H demo-text-1' wx:for='{{vedio_data}}' style="background: {{item.bac}};" wx:key='key'>
+				<view class="xdname">{{item.xdname}}</view>
+				<view class="zczph">专场招聘会</view>
+				<view class="jrzc">进入专场 →</view>
+				<image bindtap="preimg" class="videoVideo2" src="{{item.img}}" data-src="{{item.img}}" mode="scaleToFill">
+				</image>
+				<video src="{{item.url}}" id="{{index}}" class='video' wx:if="{{_index == index}}" >
+				</video>
+			</view>
+		</scroll-view>
+	</view> -->
+    <view class="middlebox">
+        <view class='top_nav'>
+            <view class="nav-name {{item.checked ? 'nav-hover':''}}" wx:for="{{tabList}}" wx:key="id" data-index="{{index}}" catchtap='catchtapChangeTab'>
+                {{item.name}}({{item.number}})
+                <view class="linbc"></view>
+            </view>
+        </view>
+        <swiper current="{{tabIndex}}" data-current="{{currentId}}" style="height:{{winHeight - 55}}px;" bindchange="bindchangeSwiperTab">
+            <!-- 在招职位 -->
+            <swiper-item style="height:100%;overflow-y:scroll;">
+                <scroll-view class="list" scrollY="true" bindscrolltolower="reachBottom" style="height: {{winHeight-55}}px">
+                    <view class="scbox">
+                        <view class="clearfloat sssx">
+                            <view class="ft lt">
+                                <icon class="INsearchicon" type="search" size="22" color="#999999" />
+                                <input class="weui-input" placeholder-class="opl" placeholder="搜索职位" confirm-type="search" bindinput="bindinputSearchJob" bindconfirm="bindconfirmSearchJob" value="{{searchJobText}}" />
+                            </view>
+                            <view class=" ft czan" bindtap="resetSearchJobContent">重置</view>
+                        </view>
+                    </view>
+                    <view class="zxfj">
+                        <view class="zx {{item.checked?'actfj':'' }}" wx:for="{{orderTypeList}}" bindtap="bindtapChangeOrderType" data-type="{{item.type}}" wx:key="key">
+                            {{item.tagName}}
+                        </view>
+                        <view class=" fr nbtn zx" bindtap="changedw" style="margin-right: 8px;margin-left: 0;margin-top: 6px;">
+                            <image class="dwimg" src="/img/dw.png"></image>
+                            定位
+                        </view>
+                        <view class=" fr nbtn zx" bindtap="bindtapShowSearchBar" style="margin-right: 8px;margin-top: 6px;margin-left: 0;">
+                            筛选
+                            <image class="sximg" src="/img/sximg.png"></image>
+                        </view>
+                    </view>
+                    <view class="jobbigbox">
+                        <navigator hover-class="none" wx:for="{{jobList}}" wx:key="index" catchtap="catchtapChooseJob" data-index="{{index}}">
+                            <view class="jobbox1 clearfloat">
+                                <view class="ft ltbox">
+                                    <view class="jobname">{{item.jobName}}</view>
+                                </view>
+                                <view class="fr lrbox">
+                                    <view class="far">{{item.distance}}</view>
+                                </view>
+                            </view>
+                            <view class="jobbox1 clearfloat">
+                                <view class="ft ltbox" style="width: 55%;">
+                                    <view class="jobmoney">{{item.salaryScope}}</view>
+                                </view>
+                                <view class="fr lrbox">
+                                    <view class="phonecall tdjl {{item.flagApply?'ytd':''}} " catchtap="catchtapSendResume" style="margin-right: 10px;" data-item="{{item}}" data-index="{{index}}">
+                                        {{item.flagApplyText}}
+                                    </view>
+                                    <view class="phonecall" catchtap="catchtapCallJob" data-phone="{{item.phone}}">
+                                        电话沟通
+                                    </view>
+                                </view>
+                            </view>
+                            <!-- <view class="jobbox1 clearfloat">
+                                <view class="ft ltbox">
+                                    <view class="companyname1">
+                                        <image src="{{item.companyPortraitPath}}" class="companytx"></image>
+                                        {{item.companyName}}
+                                    </view>
+                                </view>
+                            </view> -->
+														
+                            <view class="jobbox1 clearfloat" >
+															<view class="ft bgzy"  wx:if="{{item.jobRequireMajor!=''}}">
+																	{{item.jobRequireMajor}}
+															</view>
+															<view class=" ft bgzy" wx:if="{{item.jobBeginTime!=''&&item.jobEndTime!=''}}">
+																	工作时间{{item.jobBeginTime}}-{{item.jobEndTime}}
+															</view>
+                            </view>
+                            <view class="jobbox1 companyname1  clearfloat" style="padding-bottom: 15px;padding-top: 10px;">
+                                <image src="{{item.companyPortraitPath}}" class="companytx ft" data-index="{{index}}"></image>
+                                <view class="ft" style="width: 80%;">
+                                    <view>{{item.juridicalPerson}}·招聘人</view>
+                                    <view>{{item.companyName}}</view>
+                                </view>
+                            </view>
+                            
+                            <view class="line1"></view>
+                        </navigator>
+                    </view>
+                </scroll-view>
+            </swiper-item>
+            <!-- 入驻企业 -->
+            <swiper-item style="height:100%;overflow-y:scroll;">
+                <scroll-view class="list" scrollY="true" bindscrolltolower="reachBottom" style="height: {{winHeight-55}}px">
+                    <view class="scbox">
+                        <view class="clearfloat sssx">
+                            <view class="ft lt">
+                                <icon class="INsearchicon" type="search" size="22" color="#999999" />
+                                <input class="weui-input" placeholder-class="opl" placeholder="搜索公司" confirm-type="searchqy" bindinput="bindinputSearchCompany" bindconfirm="bindconfirmSearchCompany" value="{{searchCompanyText}}" />
+                            </view>
+                            <view class=" ft czan" bindtap="resetSearchCompanyContent">重置</view>
+                        </view>
+                    </view>
+                    <view class="zxfj">
+                        <view class="zx {{item.checked?'actfj':'' }}" wx:for="{{orderTypeList}}" bindtap="bindtapChangeOrderType" data-type="{{item.type}}" wx:key="key">
+                            {{item.tagName}}
+                        </view>
+                        <!-- <view class=" fr zx" bindtap="sx" style="margin-right:20px ;">筛选 ></view> -->
+                    </view>
+                    <view class="jobbigbox">
+                        <navigator hover-class="none" wx:for="{{companyList}}" wx:key="key" bindtap="bindtapChooseCompany" data-index="{{index}}">
+                            <view class="jobbox2 clearfloat">
+                                <view class="ft ltbox">
+                                    <view class="jobname">{{item.companyName}}</view>
+                                    <view class="companyname2">
+                                        <image src="{{item.recruiterPortraitPath}}" class="companytx"></image>
+                                        {{item.recruiterName}}
+                                    </view>
+                                </view>
+                                <view class="fr lrbox">
+                                    <view class="far">{{item.distance}}</view>
+                                    <view class="phonecall1" catchtap="catchtapCallCompany" data-phone="{{item.phone}}">
+                                        电话沟通
+                                    </view>
+                                </view>
+                            </view>
+                            <view class="line1"></view>
+                        </navigator>
+                    </view>
+                </scroll-view>
+            </swiper-item>
+        </swiper>
+    </view>
+</view>
+<view class="zzc" bindtap="sx" hidden="{{hideSearchBar}}"></view>
+<scroll-view scroll-y class="sxbox" hidden="{{hideSearchBar}}">
+    <view class="topjlsg">
+        <view class="yxyq clearfloat">
+            <view class="yx ft">月薪要求</view>
+            <view class=" fr sxac" bindtap="bindtapShowSearchBar">
+                收起
+                <!-- <view class="jtbox xz"></view> -->
+            </view>
+        </view>
+        <view class="yxbox">
+            <view class="yxforbox {{item.checked?'active':'xb'}}" catchtap="catchtapChooseSalary" data-index="{{index}}" wx:for="{{salaryList}}" wx:key="key">
+                {{item.value}}
+            </view>
+        </view>
+        <view class="yxyq clearfloat">
+            <view class="yx ft">搜索范围</view>
+        </view>
+        <view class="yxbox">
+            <view class="yxforbox {{item.checked?'active':'xb'}}" catchtap="catchtapChooseScope" data-index="{{index}}" wx:for="{{scopeList}}" wx:key="key">
+                {{item.name}}
+            </view>
+        </view>
+    </view>
+    <!-- <view class="topjlsg">
+        <view class="yxyq clearfloat">
+            <view class="yx ft">距离</view>
+            <view class=" fr sxac">收起 <view class="jtbox xz"></view></view>
+        </view>
+        <view class="yxbox">
+            <view class="yxforbox {{item.id==oid?'active':'xb'}}" bindtap="nlfw" data-id="{{item.id}}" wx:for="{{nyxz}}" wx:key="key">{{item.nl}}</view>
+        </view>
+    </view> -->
+    <view class="btmbtnbox">
+        <view class="clear" bindtap="catchtapSearchBarClear">清空</view>
+        <view class="qd" bindtap="catchtapSearchBarConfirm">确定</view>
+    </view>
+</scroll-view>

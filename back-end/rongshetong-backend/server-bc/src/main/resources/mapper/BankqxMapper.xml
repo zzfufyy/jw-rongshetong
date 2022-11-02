@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.BankqxMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Bankqx">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bankid" jdbcType="INTEGER" property="bankid" />
+    <result column="orgonid" jdbcType="VARCHAR" property="orgonid" />
+    <result column="oppenid" jdbcType="VARCHAR" property="oppenid" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, bankid, orgonid, oppenid, state, type, name, phone
+  </sql>
+</mapper>

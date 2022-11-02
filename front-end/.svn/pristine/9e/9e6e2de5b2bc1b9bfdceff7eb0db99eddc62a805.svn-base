@@ -1,0 +1,70 @@
+<view class="p100"></view>
+<view class="toptit">茶陵县城乡居民建房安全隐患排查整治信息采集表</view>
+<view class="line10"></view>
+<view class="first mt14">第五部分：整治情况</view>
+<view class="first mt14">对存在质量及消防安全隐患管理措施【多选题】</view>
+<view class="mt14">
+	<checkbox-group  bindchange="checkboxChange">
+		<label class="weui-cell weui-check__label" wx:for="{{glcs}}" wx:key="{{item.value}}">
+			<view class="weui-cell__hd ">
+				<checkbox value="{{item.value}}" checked="{{item.checked}}"/>{{item.name}}
+			</view>
+		</label>
+	</checkbox-group>
+</view>
+
+<view class="first mt14">经鉴定后为C、D级危房工程措施【单选题】</view>
+<view class="mt14">
+	<radio-group bindchange="radioChange">
+		<label class="weui-cell weui-check__label" wx:for="{{gccs}}" wx:key="{{item.value}}">
+			<view class="weui-cell__hd">
+				<radio value="{{item.value}}" />{{item.name}}
+			</view>
+		</label>
+	</radio-group>
+</view>
+
+<view class="first mt14">违法建设查处【单选题】</view>
+<view class="mt14" style="padding-bottom: 20px;">
+	<radio-group bindchange="radioChange">
+		<label class="weui-cell weui-check__label" wx:for="{{wfcc}}" wx:key="{{item.value}}">
+			<view class="weui-cell__hd">
+				<radio value="{{item.value}}" />{{item.name}}
+			</view>
+		</label>
+	</radio-group>
+</view>
+
+<view class="line10"></view>
+
+<view class="first mt14">调查时间</view>
+<view class="input" style="margin-bottom:20px">
+	<picker mode="date" value="{{date}}"  bindchange="bindDateChange">
+		<view class="picker slect">
+				{{date}}
+		</view>
+	</picker>
+</view>
+
+<view class="line10"></view>
+
+<view class="first mt14">采集小组</view>
+<view class="input " style="margin-bottom:20px">
+	<input class="slect" type="text" placeholder="请输入小组组号" />
+</view>
+
+<view class="textbox mt14">
+	注：本表信息由小组成员共同认可，对存在重大安全隐患的房屋单独上报说明。各组长留好现场影视资料，负责将本组排查信息每日5点前报住建局城建股。
+</view>
+
+<view class="clearfloat">
+	<navigator class="tijsq ft prew" style="margin-left: 5%;" hover-class="none" url="/pages/messgecollect3/messgecollect3">上一步</navigator>
+	<navigator bindtap="submit" hover-class="none" style="margin-right: 5%;"class="tijsq fr">提交</navigator>
+</view>
+
+
+
+
+
+		
+		

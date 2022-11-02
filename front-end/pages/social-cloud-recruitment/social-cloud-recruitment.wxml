@@ -1,0 +1,58 @@
+<view class="container">
+    <view class="top-box" style=" background-image:url('{{backgroundImg}}');">
+        <view class="tab-box {{item.checked?'tab-box-checked':''}}" wx:for="{{tabList}}" wx:key="index" data-index="{{index}}" bindtap="bindtapChangeTab">
+            <image class="tab-icon" src="{{item.imgSrc}}" />
+            <text class="tab-text">{{item.tagName}}</text>
+        </view>
+    </view>
+
+
+    <view class="content-box" wx:if="{{tabIndex == 0}}">
+        <view class="content-item-box">
+            <view wx:for="{{ADList}}">
+                <view class="title-box">
+                    <image class="title-icon" src="../../img/social-cloud-recruitment/title-bg-left.svg" />
+                    <view class="title-view">
+                        <text class="title-text">{{item.title}}</text>
+                    </view>
+                    <image class="title-icon" src="../../img/social-cloud-recruitment/title-bg-right.svg" />
+                </view>
+                <video class="company-video {{index==ADList.length - 1 ?'margin-bottom-48':''}}"
+                    direction="90" title="{{item.title}}" src="{{item.videoSrc}}" />
+            </view>
+        </view>
+        <view class="content-item-box" wx:for="{{companyList}}">
+            <view class="title-box">
+                <image class="title-icon" src="../../img/social-cloud-recruitment/title-bg-left.svg" />
+                <view class="title-view">
+                    <text class="title-text">{{item.companyName}}</text>
+                </view>
+                <image class="title-icon" src="../../img/social-cloud-recruitment/title-bg-right.svg" />
+            </view>
+            <video class="company-video"    direction="90" title="{{item.companyName}}" src="{{item.videoSrc}}" />
+            <view class="item-bottom-box" data-id="{{item.companyUuid}}" bindtap="bindtapMoreCompanyInfo">
+                <text class="item-bottom-text">查看更多</text>
+            </view>
+        </view>
+    </view>
+    <view class="content-box" wx:if="{{tabIndex == 1}}">
+
+        <view class="content-item-box" wx:for="{{streetList}}" wx:for-item="streetItem">
+            <view class="title-box">
+                <image class="title-icon" src="../../img/social-cloud-recruitment/title-bg-left.svg" />
+                <view class="title-view">
+                    <text class="title-text">{{streetItem.streetName}}</text>
+                </view>
+                <image class="title-icon" src="../../img/social-cloud-recruitment/title-bg-right.svg" />
+            </view>
+            <view class="company-box" wx:for="{{streetItem.companyList}}">
+                <video class="company-video" src="{{item.videoSrc}}" />
+                <text class="company-name">{{item.companyName}}</text>
+                <view class="company-split-line"></view>
+            </view>
+            <view class="item-bottom-box cancel-margin-top" bindtap="bindtapMoreCompanyList">
+                <text class="item-bottom-text">查看更多</text>
+            </view>
+        </view>
+    </view>
+</view>

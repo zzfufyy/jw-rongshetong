@@ -1,0 +1,73 @@
+<view class="container">
+	<view class="topbox">
+		<view class="jobname">{{jobName}}</view>
+		<view class="jobmony">{{salaryScope}}</view>
+		<!-- <view class="jobyq">{{location}}</view> -->
+		<view class="jobyq">{{jobyq.rs}}</view>
+		<view class="lll">浏览 {{countView}}</view>
+	</view>
+	<!-- <view class="line1"></view> -->
+	<view class="clearfloat topbox">
+		<view class="ft">
+			<image class="ltimg" src="{{recruiterPortrait}}"  binderror="binderrorPortraitImg" ></image>
+			<view class="rttext">
+				<view class="nacs"><text class="namezzp"> {{recruiterName}}</text>·招聘人</view>
+			</view>
+		</view>
+		<!-- <view class="ft">
+			<view class="nacs">{{recruiterName}}</view>
+			<view class="nacom">招聘人</view>
+		</view> -->
+	</view>
+	<view class="topbox jobxq">
+		<view class="xqxq">
+			<view class="jobname" style="margin-bottom:15px">岗位需求</view>
+			{{xqxq}}
+		</view>
+	</view>
+	<!-- <view class="line1"></view> -->
+
+	<!-- <view class="line1"></view> -->
+	<view class="topbox comxx">
+		<view class="jobname">公司信息</view>
+		<view class="zzzw" bindtap="bindtapRecruitingJob" hidden="{{hideRecruitingJob}}">
+			{{countJob}}<text class="zw"> 个在招职位</text>
+			<image src="/img/jt.png" class="rtjtimg"></image>
+		</view>
+		<view class="combox">
+			<view class="comtb clearfloat">
+				<view class="imgbox">
+					<!-- <image class="ltimg" src="/img/tx.png" ></image> -->
+					<image class="ltimg" src="{{portraitPath}}"  binderror="binderrorCompanyPortrait" ></image>
+					<text class="comname">{{companyName}}</text>
+				</view>
+				<view class="conadrres clearfloat">
+					<view class="ft addressloc">{{conadrres}}</view>
+					<view class="fr local">{{distance}}</view>
+				</view>
+			</view>
+		</view>
+	</view>
+	<!-- <button type="default" bindtap="openMap">打开地图</button>
+	<map 
+		id="mapId"
+		class="map"
+		latitude="{{latitude}}"
+		longitude="{{longitude}}"
+		bindtap="openMap"
+	></map> -->
+	<!-- <view class="line1"></view> -->
+	
+	<view class="botombox clearfloat">
+		<button class="imgbt ft buttonbox" style="margin-left: 9px;" open-type = "share">
+			<image src="/img/fximg.png" class="imgbg ft"></image>
+		</button>
+		<!-- <image class="imgbt ddh ft" data-cellphne="{{cellphne}}" bindtap="callPhone" src="/img/dhred.png"></image> -->
+		<view class="fr tijsq tdjl" bindtap="tdjl">投递简历</view>
+
+		<view class="fr tijsq ddh" data-cellphne="{{cellphne}}" bindtap="callPhone">打电话</view>
+		<view class="fr tijsq ddh" data-cellphne="{{cellphne}}" bindtap="msxx">视频面试</view>
+
+		<!-- <view class="fr tijsq lyl" bindtap="talk">聊一聊</view> -->
+	</view>
+</view>

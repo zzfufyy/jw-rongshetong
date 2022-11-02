@@ -1,0 +1,111 @@
+<view class="container">
+
+	<view class="xinbox" style="margin-top: 25px;">
+		<view class="boxtt">房屋地址*</view>
+		<view class="iptbox ">
+			<picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}" disabled="{{addressPickerDisabled}}">
+				<view class="picker ipt cor" style="line-height: 48px;">
+					{{cellName}}
+					<image src="/img/jt.png" class="jt" hidden="{{addressPickerDisabled}}"></image>
+				</view>
+			</picker>
+		</view>
+		<view class="iptbox ">
+			<picker bindchange="bindPickerChange1" value="{{index1}}" range="{{array1}}" disabled="{{addressPickerDisabled}}">
+				<view class="picker ipt cor" style="line-height: 48px;">
+					{{buildingName}}
+					<image src="/img/jt.png" class="jt" hidden="{{addressPickerDisabled}}"></image>
+				</view>
+			</picker>
+		</view>
+		<view class="iptbox ">
+			<picker bindchange="bindPickerChange2" value="{{index2}}" range="{{array2}}" disabled="{{addressPickerDisabled}}">
+				<view class="picker ipt cor" style="line-height: 48px;">
+					{{layerName}}
+					<image src="/img/jt.png" class="jt" hidden="{{addressPickerDisabled}}"></image>
+				</view>
+			</picker>
+		</view>
+		<view class="iptbox ">
+			<picker bindchange="bindPickerChange3" value="{{index3}}" range="{{array3}}" disabled="{{addressPickerDisabled}}">
+				<view class="picker ipt cor" style="line-height: 48px;">
+					{{roomNumberName}}
+					<image src="/img/jt.png" class="jt" hidden="{{addressPickerDisabled}}"></image>
+				</view>
+			</picker>
+		</view>
+	</view>
+
+	<view class="xinbox">
+		<view class="boxtt">房屋情况*</view>
+		<view class="iptbox">
+			<view class="pi">
+				<input type="text" class="xwd" value="{{houseSpace}}" /><text>平米</text>
+				<picker class="ps" bindchange="bindPickerChange4" value="{{houseChamberIndex}}" range="{{houseChamberList}}">
+					<view class="picker ipt cor pickers" style="line-height: 48px;">
+						{{houseChamberList[houseChamberIndex]}}
+						<image src="/img/jt.png" class="jt"></image>
+					</view>
+				</picker>
+				<text style="margin-left: -10px;">室</text>
+				<picker class="ps" bindchange="bindPickerChange5" value="{{houseHallIndex}}" range="{{houseHallList}}">
+					<view class="picker ipt cor pickers" style="line-height: 48px;">
+						{{houseHallList[houseHallIndex]}}
+						<image src="/img/jt.png" class="jt"></image>
+					</view>
+				</picker>
+				<text style="margin-left: -10px;">厅</text>
+			</view>
+		</view>
+	</view>
+
+	<view class="xinbox">
+		<view class="boxtt">房主姓名*</view>
+		<view class="iptbox">
+			<input class="ipt" placeholder="请输入" bindinput="bindinputResidentName" value="{{residentName}}" />
+		</view>
+	</view>
+	<view class="xinbox">
+		<view class="boxtt">房主电话号码*</view>
+		<view class="iptbox">
+			<input class="ipt" placeholder="请输入" bindinput="bindinputResidentPhone" value="{{residentPhone}}" />
+		</view>
+	</view>
+	<view class="xinbox">
+		<view class="boxtt">房屋用途（可多选）*</view>
+		<view class="iptbox">
+			<checkbox-group class="csgop" bindchange="checkboxChange">
+				<label class="weui-cell weui-check__label " data-id="{{item.id}}" wx:for="{{houseUsageList}}" wx:key="value">
+					<view class="weui-cell__hd ipt " data-id="{{item.id}}">
+						<checkbox value="{{item.usageName}}" data-id="{{item.id}}" color="#F8424C" class="tppos" checked="{{item.checked}}" />
+						<text class="weui-cell__bd tppos1">{{item.usageName}}</text>
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+	</view>
+
+	<view class="xinbox">
+		<view class="boxtt">安全情况（可多选）*</view>
+		<view class="iptbox">
+			<checkbox-group class="csgop" bindchange="checkboxChange1">
+				<label class="weui-cell weui-check__label " data-tag="{{item.tag}}" wx:for="{{items1}}" wx:key="value">
+					<view class="weui-cell__hd ipt " data-tag="{{item.tag}}">
+						<checkbox value="{{item.value}}" data-tag="{{item.tag}}" color="#F8424C" class="tppos" checked="{{item.checked}}" />
+						<text class="weui-cell__bd tppos1">{{item.name}}</text>
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+	</view>
+
+	<view class="xinbox" >
+		<view class="boxtt">电动车牌号</view>
+		<view class="iptbox">
+			<input class="ipt" placeholder="请输入" bindinput="ddccph"/>
+		</view>
+	</view>
+
+
+	<view class="tijsq" bindtap="next">下一步</view>
+</view>

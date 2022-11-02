@@ -1,0 +1,45 @@
+<!-- <job list="{{joblistyfb}}"></job> -->
+
+
+<!--pages/user/pages/area/index.wxml-->
+<view class="area">
+    <view class="list">
+      <view class="list-item header">
+        <view class="left">
+          <view>功能列表</view>
+        </view>
+        <!-- <view class="right" bindtap="handleSet">
+          <view>完成</view>
+        </view> -->
+      </view>
+      <!-- 克隆 item -->
+      <view id="{{kelong.id}}"  class="list-item kelong"  hidden='{{!showkelong}}' style='top:{{kelong.top}}px'>
+				<view class="left">
+					<!-- <image src="delete.png"></image> -->
+					<view>{{kelong.name}}</view>
+				</view>
+				<view class="right">
+					<image src="{{kelong.iconimg}}" class="small-icon"></image>
+				</view>
+			</view>
+			<!-- 列表 -->
+      <block wx:for-items="{{list}}" wx:key="id">
+        <!-- <view id="{{item.id}}" class="list-item"> -->
+        <navigator class="list-item" hover-class="none" bindtap="bindtapGoLink"   data-id="{{item.id}}" target="{{item.target}}" 	app-id="{{item.appId}}">
+          <view class="left">
+            <!-- <image  id="{{item.id}}" bindtap="handleDelete" src="delete.png"></image> -->
+            <view>{{item.name}}</view>
+          </view>
+          <view class="right" data-index='{{index}}' catchtouchstart='dragStart' catchtouchmove='dragMove' catchtouchend='dragEnd'>
+            <image src="{{item.iconimg}}" class="small-icon"></image>
+          </view>
+        </navigator>
+        <!-- </view> -->
+
+      </block>
+    </view>
+    <view class="footer">
+      Tips：长按<image src="/img/more.png" style="width:30rpx;height:30rpx;"></image>可拖动调整排序
+    </view>
+    <view class="tijsq">完成</view>
+  </view>

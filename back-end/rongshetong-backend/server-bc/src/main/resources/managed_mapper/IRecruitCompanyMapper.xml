@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IRecruitCompanyMapper">
+    <resultMap id="BaseResultMap" type="com.shopping.wx.model.RecruitCompany">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+        <result column="register_date" jdbcType="DATE" property="registerDate" />
+        <result column="license_id" jdbcType="VARCHAR" property="licenseId" />
+        <result column="license_photo_path" jdbcType="VARCHAR" property="licensePhotoPath" />
+        <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+        <result column="tyshxydm" jdbcType="VARCHAR" property="tyshxydm" />
+        <result column="juridical_person" jdbcType="VARCHAR" property="juridicalPerson" />
+        <result column="juridical_idcard" jdbcType="VARCHAR" property="juridicalIdcard" />
+        <result column="juridical_phone" jdbcType="VARCHAR" property="juridicalPhone" />
+        <result column="company_person" jdbcType="VARCHAR" property="companyPerson" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="company_person_idcard" jdbcType="VARCHAR" property="companyPersonIdcard" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="address_detail" jdbcType="VARCHAR" property="addressDetail" />
+        <result column="lon" jdbcType="DOUBLE" property="lon" />
+        <result column="lat" jdbcType="DOUBLE" property="lat" />
+        <result column="portrait_path" jdbcType="VARCHAR" property="portraitPath" />
+        <result column="photo_path" jdbcType="VARCHAR" property="photoPath" />
+        <result column="expect_category_id" jdbcType="VARCHAR" property="expectCategoryId" />
+        <result column="priority" jdbcType="INTEGER" property="priority" />
+        <result column="flag_identification" jdbcType="TINYINT" property="flagIdentification" />
+        <result column="count_view" jdbcType="INTEGER" property="countView" />
+        <result column="community_uuid" jdbcType="VARCHAR" property="communityUuid" />
+        <result column="building_uuid" jdbcType="VARCHAR" property="buildingUuid" />
+        <result column="recruiter_openid" jdbcType="VARCHAR" property="recruiterOpenid" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+        <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+        <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        id, company_name, register_date, license_id, license_photo_path, introduction, juridical_person,
+        juridical_idcard, phone, address, lon, lat, portrait_path, photo_path, expect_category_id,
+        priority, flag_identification, count_view, community_uuid, status, create_time, ext1,
+        ext2, ext3
+    </sql>
+    <resultMap id="resultMapRecruitCompanyDTO" type="com.shopping.wx.pojo.dto.recruit_company.RecruitCompanyDTO">
+        <result column="company_uuid" jdbcType="VARCHAR" property="companyUuid"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="recruiter_openid" jdbcType="VARCHAR" property="recruiterOpenid"/>
+        <result column="recruiter_name" jdbcType="VARCHAR" property="recruiterName"/>
+        <result column="recruiter_gender" jdbcType="VARCHAR" property="recruiterGender"/>
+        <result column="recruiter_portrait_path" jdbcType="VARCHAR" property="recruiterPortraitPath"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="distance" jdbcType="DOUBLE" property="distance"/>
+        <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
+    </resultMap>
+    <select id="pagedByCondition" resultMap="resultMapRecruitCompanyDTO">
+        SELECT
+            rc.id as company_uuid,
+            rc.company_name as company_name,
+            ur.id as recruiter_openid,
+            ur.real_name as recruiter_name,
+            ur.gender as recruiter_gender,
+            ur.portrait_path as recruiter_portrait_path,
+            ur.telephone as phone,
+            (
+                CASE WHEN rc.`lon` = 0 THEN 10000 * 1000
+                WHEN  #{location.longitude} = 0 THEN 10000 * 1000
+                ELSE ST_DISTANCE_SPHERE(
+                          POINT(#{location.longitude}, #{location.latitude}),
+                          POINT(rc.`lon`, rc.`lat`)
+                ) END
+            )AS `distance`,
+            rc.create_time as create_time
+        FROM recruit_company rc
+        LEFT JOIN user_recruiter ur
+        ON rc.id = ur.company_uuid
+        WHERE rc.flag_identification = 1
+        <if test="communityUuid != '' and communityUuid != null">
+            AND rc.community_uuid = #{communityUuid}
+        </if>
+        <if test="companyName != '' and companyName != null">
+            AND company_name like concat('%',#{companyName},'%')
+        </if>
+        <if test="orderType == 0">
+            ORDER BY `distance` asc
+        </if>
+        <if test="orderType == 1">
+            ORDER BY create_time desc
+        </if>
+    </select>
+
+    <update id="increaseCountView">
+        UPDATE recruit_company SET count_view = count_view +1 WHERE id = #{id};
+    </update>
+
+    <resultMap id="ResultMapRecruitCompanyPlus" extends="BaseResultMap" type="com.shopping.wx.pojo.dto.recruit_company.RecruitCompanyPlus">
+        <result column="community_name" jdbcType="VARCHAR" property="communityName"/>
+    </resultMap>
+    <select id="infoWithAssociated" resultMap="ResultMapRecruitCompanyPlus">
+        SELECT
+          rc.*,
+          ci.community_name AS community_name
+        FROM recruit_company rc
+        LEFT JOIN community_information ci
+        ON rc.community_uuid = ci.id
+        WHERE rc.id = #{id}
+    </select>
+
+    <resultMap id="RecruitCompanyJobNameList" type="com.shopping.wx.pojo.dto.recruit_company.RecruitCompanyJobNameList">
+        <result column="company_uuid" jdbcType="VARCHAR" property="companyUuid" />
+        <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="address_detail" jdbcType="VARCHAR" property="addressDetail" />
+        <result column="job_name_list" jdbcType="VARCHAR" property="jobNameList"/>
+    </resultMap>
+    <select id="pageJobNameList" resultMap="RecruitCompanyJobNameList">
+        SELECT
+            rc.id AS company_uuid,
+            rc.company_name AS company_name,
+            rc.address AS address,
+            rc.address_detail AS address_detail,
+            GROUP_CONCAT(DISTINCT job_name SEPARATOR ',') AS job_name_list
+        FROM recruit_company rc
+        LEFT JOIN recruit_job rj
+        ON rc.id = rj.company_uuid
+        WHERE rc.building_uuid = #{buildingUuid}
+        <if test="companyName !=null and companyName!=''">
+            AND rc.company_name  LIKE CONCAT('%',#{companyName},'%')
+        </if>
+        GROUP BY company_uuid,company_name,address,address_detail
+    </select>
+
+
+
+</mapper>

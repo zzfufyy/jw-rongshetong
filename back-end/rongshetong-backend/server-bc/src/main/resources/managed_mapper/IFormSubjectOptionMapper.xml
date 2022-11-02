@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IFormSubjectOptionMapper">
+    <resultMap id="BaseResultMap" type="com.shopping.wx.model.FormSubjectOption">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="option_order" jdbcType="INTEGER" property="optionOrder"/>
+        <result column="option_title" jdbcType="VARCHAR" property="optionTitle"/>
+        <result column="option_img" jdbcType="VARCHAR" property="optionImg"/>
+        <result column="form_uuid" jdbcType="VARCHAR" property="formUuid"/>
+        <result column="subject_uuid" jdbcType="VARCHAR" property="subjectUuid"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="ext1" jdbcType="VARCHAR" property="ext1"/>
+        <result column="ext2" jdbcType="VARCHAR" property="ext2"/>
+        <result column="ext3" jdbcType="VARCHAR" property="ext3"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        id, option_order, option_title, option_img, form_uuid, subject_uuid, status, create_time,
+        ext1, ext2, ext3
+    </sql>
+
+    <insert id="insertByList" parameterType="java.util.List">
+        INSERT INTO form_subject_option(
+        id,
+        option_order,
+        option_title,
+        form_uuid,
+        subject_uuid,
+        status,
+        create_time
+        ) VALUES
+        <foreach collection="listFormSubjectOption" item="fso" index="index" separator=",">
+            (
+            #{fso.id},
+            #{fso.optionOrder},
+            #{fso.optionTitle},
+            #{fso.formUuid},
+            #{fso.subjectUuid},
+            0,
+            now()
+            )
+        </foreach>
+    </insert>
+
+    <select id="listBySubjectUuidList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM form_subject_option
+        WHERE subject_uuid in(
+          <foreach collection="listSubjectUuid" item="su" index="index" separator=",">
+              #{su}
+          </foreach>
+        )
+    </select>
+    <select id="listChoiceSelectBySubjectUuid"
+            resultType="com.shopping.wx.pojo.dto.form_subject_option.ChoiceSelectDTO">
+        SELECT
+            fso.option_order AS optionOrder,
+            fso.option_title AS optionTitle,
+            fso.subject_uuid AS subjectUuid,
+            fso.form_uuid    AS formUuid,
+            COUNT(uff.option_uuid) AS countOptionNum,
+            COUNT(DISTINCT  uff.user_openid) AS countUserNum
+        FROM form_subject_option fso
+        LEFT JOIN user_for_form uff
+        ON fso.id = uff.option_uuid
+        WHERE fso.subject_uuid = #{subjectUuid}
+        GROUP BY optionOrder,optionTitle,subjectUuid,formUuid
+        ORDER BY optionOrder ASC
+    </select>
+
+</mapper>

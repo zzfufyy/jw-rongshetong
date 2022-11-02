@@ -1,0 +1,108 @@
+<view class="container">
+    <view class="topbox clearfloat">
+        <view class="ft">
+            <!-- <image class="sqzy" src="/img/sqzy.png"></image> -->
+            <image class="sqzy" src="{{communityPortraitPath}}" binderror="binderrorCommunityPortraitPath"></image>
+        </view>
+        <view class="ft lrbox">
+            <view class="sqname">
+                <text class="namesq">{{communityName}} </text>
+                <image class="phoneimg" bindtap="bindtapCommunityCellphone" src="/img/phoneimg.png"></image>
+            </view>
+            <view class="local">
+                <image class="localimg" src="/img/localimg.png"></image>
+                <text class="localtt">{{communityAddress}} </text>
+            </view>
+        </view>
+    </view>
+    <view class="content">
+        <navigator wx:for="{{functionTagList}}" wx:key="key" hover-class="none" bindtap="bindtapGoLink" data-id="{{item.tagId}}" target="{{item.target}}" app-id="{{item.appId}}" class="vcont" style="background: {{item.backgroundColor}};">
+            <image class="qyzp" src="{{item.logoPathBig}}"></image>
+            <text class="qytext">{{item.tagName}}</text>
+        </navigator>
+        <navigator hover-class="none" bindtap="bindtapGoMoreFunction"  data-id="tagNewsAnnouncement" class="vcont" style="background: #EAFBF8;">
+            <image class="qyzp" src="/img/moregn.png"></image>
+            <text class="qytext">更多功能</text>
+        </navigator>
+    </view>
+
+    <block wx:if="{{ewmimg!=''}}">
+        <view class="line10"></view>
+        <navigator hover-class="none" url="/pages/syzl/syzl" class="imgbox">
+            <image src="{{ewmimg}}" show-menu-by-longpress="true" style="width: 100%;" mode="widthFix" class="ewmimg"></image>
+        </navigator>
+    </block>
+    <view class="line10" style="margin-top: -4px;"></view>
+
+    <view class="newsbox">
+        <view class="titbox clearfloat">
+            <view class="ft">
+                <image class="newimg" src="/img/newimg.png"></image>
+                <text class="newtit">新闻公告</text>
+            </view>
+            <view class="fr qbnews" bindtap="bindtapTagNewsAnnouncement">
+                全部 >
+            </view>
+        </view>
+        <block wx:for="{{newsList}}" wx:key="key">
+            <!-- url="/pages/zcxq/zcxq" -->
+            <navigator hover-class="none" id="{{item.id}}" bindtap="bindtapAllNews" class="mainbox clearfloat">
+                <view class="ft leftimgbox">
+                    <image class="ltimg" src="{{item.articlePortraitPath}}" data-index="{{index}}" binderror="binderrorArticlePortraitPath">
+                    </image>
+                </view>
+                <view class="fr rightbox">
+                    <view class="title">{{item.articleTitle}}</view>
+                    <view class="ptit">{{item.articleIntroduction}}</view>
+                    <view class="clearfloat">
+                        <view class="ptime ft">{{item.articleAuthor}}</view>
+                        <view class="ptime fr">{{item.articleReleaseTime}}</view>
+                    </view>
+                </view>
+            </navigator>
+            <view class="line1"></view>
+        </block>
+    </view>
+</view>
+
+
+<view hidden="{{hiddenChooseIdentity}}" bindtap="passbtn">
+    <view class="full-mask-layer"></view>
+    <view class="identity-box">
+        <view class="identity-line-1">请确认你的身份</view>
+        <view class="identity-line-2">确认后将为你提供专属服务</view>
+        <view class="identity-item" bindtap="bindtapChooseCandidate">我是求职者 ></view>
+        <view class="identity-item margin-top-9px" bindtap="bindtapChooseRecruiter">我是招聘方 ></view>
+    </view>
+</view>
+
+
+ <!-- 实名认证 -->
+<view class="" hidden="{{hiddenBindCompanyInfo}}">
+    <view class="full-mask-layer"></view>
+    <view class="qzbox">
+        <view class="qusf">尝试绑定已有公司信息</view>
+        <view class="zsfw smrz">温馨提示：使用“智慧就业”获取您的电话，绑定后台导入的公司信息。</view>
+        <view class="qzz1 zpf clearfloat">
+            <view class="ft comlefttxt" style="width: 77%;">
+                <input type="text" class="iptnam" bindinput="handleIdentityCard" placeholder="请获取电话号码" value='{{telephone}}' />
+            </view>
+            <view class="fr comrightipt" style="margin-top: 0;width: 40%;">
+                <button class="hqlxfs " open-type="getUserInfo" open-type="getPhoneNumber" lang="zh_CN" bindgetphonenumber="bindgetphonenumberRecruiter">
+                    授权
+                </button>
+            </view>
+        </view>
+        <view class="tijsq" bindtap="bindtapSubmitBindCompany" style="margin: 0 21px;width: auto;margin-top: 25px;">
+            确认
+        </view>
+        <view class="tiaoguo" bindtap="bindtapSkipBindCompany" style="margin: 0 21px;width: auto;margin-top: 25px;">
+            跳过
+        </view>
+    </view>
+</view>
+
+
+<authorize id="authorize">
+</authorize>
+

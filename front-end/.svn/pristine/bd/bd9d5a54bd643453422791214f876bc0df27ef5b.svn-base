@@ -1,0 +1,28 @@
+const $ = require('../utils/request_util');
+const { personTypeList } = require('./constant');
+
+const insertByEntity = function (entity) {
+    return $.request({
+        url: '/resident-for-person/add',
+        data: entity,
+        method: $.RequestMethod.POST,
+        header: $.jsonHeader,
+    });
+}
+
+const loadListByResidentUuid = function (residentUuid, personType) {
+    // 单参数容错
+    personType = personType == undefined ? '' : personType;
+    return $.request({
+        url: '/resident-for-person/listByResidentUuid?residentUuid=' + residentUuid + '&personType=' + personType,
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader,
+    });
+}
+
+
+module.exports = {
+    insertByEntity: insertByEntity,
+    loadListByResidentUuid: loadListByResidentUuid,
+}

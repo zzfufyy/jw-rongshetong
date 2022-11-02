@@ -1,0 +1,772 @@
+// pages/datdpage/datdpage.js
+const CONSTANT = require('../../common/constant');
+// util 加载
+const Loading = require('../../utils/loading_util');
+const object_util = require('../../utils/object_util');
+const {
+    Completer
+} = require('../../utils/function_util');
+const string_util = require('../../utils/string_util');
+// Service 加载
+const formInformationService = require('../../common/formInformationService');
+// 数据统计 模块加载
+const datdpageEx = require('./datdpageEx');
+const pageCompletion = require('./pageCompletion');
+const pageSelection = require('./pageSelection');
+const pageUploadImg = require('./pageUploadImg');
+const pageSign = require('./pageSign');
+// 数据详情 模块加载
+const pageDetailUserFormList = require('./pageDetailUserFormList');
+const pageDetailFormSubjectList = require('./pageDetaiFormlSubjectList');
+const pageDetailUserData = require('./pageDetailUserData');
+
+const {
+    createPageData
+} = require('../../utils/paging_util');
+
+const app = getApp();
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        // 表单信息
+        formFillThisDay: 0,
+        formFillThisMonth: 0,
+        formFillTotal: 0,
+
+        // 数据统计列表
+        formSubjectList: [],
+
+        /** 数据详情 */
+        // 单页用户信息list(1分页)
+        detailUserFormList: [],
+        // 用户列表
+        detailFormSubjectList: [],
+        tablist: [{
+                listitem: '数据统计',
+                id: 0
+            },
+            {
+                listitem: '数据详情',
+                id: 1
+            },
+        ],
+        tabid: 0,
+        currentTab: '0',
+        currentId: '0',
+        fxhide: true,
+        subjectList: [{
+                type: CONSTANT.FORM_COMPONENT_TYPE.COMPLETION,
+                pindex: 1,
+                listData1: [{
+                        yhname: "1",
+                        sxe: "第1份结果填写内容显示，显示.",
+                    },
+                    {
+                        yhname: "2",
+                        sxe: "第1份结果填写内容显示，显示不全内容用......",
+                    },
+                    {
+                        yhname: "3",
+                        sxe: "第1份结果填写内容显示，显示不全内容用......",
+                    },
+                    {
+                        yhname: "4",
+                        sxe: "第1份结果填写内容显示，显示不全内容用......",
+                    },
+                    {
+                        yhname: "5",
+                        sxe: "第1份结果填写内容显示，显示不全内容用......",
+                    },
+                    {
+                        yhname: "6",
+                        sxe: "第1份结果填写内容显示，显示不全内容用......",
+                    },
+                    {
+                        yhname: "7",
+                        sxe: "第1份结果填写内容显示，显示不全内容用......",
+                    },
+                    {
+                        yhname: "8",
+                        sxe: "第1份结果填写内容显示，显示不全内容用......",
+                    },
+                ]
+            },
+            {
+                type: CONSTANT.FORM_COMPONENT_TYPE.CHOICE_SELECT,
+                pindex: 0,
+                listData1: [
+
+                    {
+                        yhname: "选项一，超过一定字数显示用...",
+                        sxe: "1",
+                        bl: '50'
+                    },
+                    {
+                        yhname: "选项二，超过一定字数显示用...",
+                        sxe: "1",
+                        bl: '50'
+                    },
+                ]
+            },
+            {
+                type: CONSTANT.FORM_COMPONENT_TYPE.IMG_UPLOAD,
+                pindex: 2,
+                listData1: [{
+                        yhname: "1",
+                        sxe: [{
+                                imgsrc: '/img/bigimg.jpg'
+                            },
+                            {
+                                imgsrc: '/img/byll.png'
+                            },
+                        ]
+                    },
+                    {
+                        yhname: "2",
+                        sxe: [{
+                                imgsrc: '/img/bigimg.jpg'
+                            },
+                            {
+                                imgsrc: '/img/byll.png'
+                            },
+                        ]
+                    },
+                    {
+                        yhname: "3",
+                        sxe: [{
+                                imgsrc: '/img/bigimg.jpg'
+                            },
+                            {
+                                imgsrc: '/img/byll.png'
+                            },
+                        ]
+                    },
+                ]
+            },
+            {
+                type: CONSTANT.FORM_COMPONENT_TYPE.SIGN,
+                pindex: 3,
+                listData1: [{
+                        yhname: "头大下雨不用伞",
+                        imgsrc: '/img/bigimg.jpg'
+                    },
+                    {
+                        yhname: "头大下雨不用伞2",
+                        imgsrc: '/img/byll.png'
+                    },
+                    {
+                        yhname: "头大下雨不用伞3",
+                        imgsrc: '/img/byll.png'
+                    },
+                    {
+                        yhname: "头大下雨不用伞4",
+                        imgsrc: '/img/byll.png'
+                    },
+                    {
+                        yhname: "头大下雨不用伞5",
+                        imgsrc: '/img/byll.png'
+                    },
+                    {
+                        yhname: "头大下雨不用伞6",
+                        imgsrc: '/img/byll.png'
+                    },
+                ]
+            }
+        ],
+        ishowtkt: false,
+        ishowimg: false,
+        isshowautograph: false,
+
+        datames: [{
+            tjz: "头大下雨不用伞",
+            tjsj: "2022-06-16",
+            formcontent: [{
+                    tmtype: '怎么回去',
+                    anserarr: [{
+                        anser: '骑车'
+                    }]
+                },
+                {
+                    tmtype: '中午吃什么',
+                    anserarr: [{
+                        anser: '鸡蛋'
+                    }, {
+                        anser: '饺子'
+                    }]
+                },
+                {
+                    tmtype: '垃圾桶实拍',
+                    anserarr: [{
+                        anser: '/img/hddz.png',
+                        type: 'img'
+                    }, {
+                        anser: '/img/bigimg.jpg',
+                        type: 'img'
+                    }]
+                },
+                {
+                    tmtype: '签名照片',
+                    anserarr: [{
+                        anser: '/img/cfxd.png',
+                        type: 'img'
+                    }]
+                },
+            ]
+        }]
+    },
+    /** BEGIN 页面事件加载 */
+    tabbtn(e) {
+        let id = e.currentTarget.dataset.id
+        this.setData({
+            tabid: id
+        })
+    },
+    switchTab: function (e) { 
+        var that = this;
+        that.setData({
+            tabid: e.detail.current,
+            currentId: e.detail.current
+        });
+    },
+    fxtp() {
+        let fxhide = !this.data.fxhide
+        this.setData({
+            fxhide: fxhide
+        })
+    },
+    // 图片上传
+    preimg(e) {
+        let subjectList = this.data.subjectList
+        let arrimg = []
+        for (let i = 0; i < subjectList.length; i++) {
+            if (subjectList[i].type == 'img') {
+                for (let j in subjectList[i].listData1) {
+                    for (let k in subjectList[i].listData1[j].sxe) {
+                        arrimg.push(subjectList[i].listData1[j].sxe[k].imgsrc)
+                    }
+                }
+            }
+        }
+        let oimg = e.currentTarget.dataset.src
+        console.log(arrimg)
+        // console.log(oimg)
+        wx.previewImage({
+            current: oimg, // 当前显示图片的http链接
+            urls: arrimg // 需要预览的图片http链接列表
+        })
+    },
+    // 签名
+    shpwimg(e) {
+        let oimg = e.currentTarget.dataset.src
+        let subjectList = this.data.subjectList
+        let arrimg = []
+        for (let i = 0; i < subjectList.length; i++) {
+            if (subjectList[i].type == 'autograph') {
+                for (let j in subjectList[i].listData1) {
+                    arrimg.push(subjectList[i].listData1[j].imgsrc)
+                }
+            }
+        }
+        wx.previewImage({
+            current: oimg, // 当前显示图片的http链接
+            urls: arrimg // 需要预览的图片http链接列表
+        })
+    },
+    //显示全部
+    showall(e) {
+        console.log(e.currentTarget.dataset.type)
+        let type = e.currentTarget.dataset.type
+        let that = this
+        if (type == 'input') {
+            that.setData({
+                ishowtkt: !that.data.ishowtkt
+            })
+        } else if (type == 'img') {
+            that.setData({
+                ishowimg: !that.data.ishowimg
+            })
+        } else if (type == 'autograph') {
+            that.setData({
+                isshowautograph: !that.data.isshowautograph
+            })
+        }
+    },
+    //数据详情图片显示
+    showdataimg(e) {
+        let oimg = e.currentTarget.dataset.src
+        let datames = this.data.datames
+        let arr = []
+        for (let i in datames[0].formcontent) {
+            for (let j in datames[0].formcontent[i].anserarr) {
+                if (datames[0].formcontent[i].anserarr[j].type == 'img') {
+                    arr.push(datames[0].formcontent[i].anserarr[j].anser)
+                }
+            }
+        }
+        console.log(arr)
+        wx.previewImage({
+            current: oimg, // 当前显示图片的http链接
+            urls: arr // 需要预览的图片http链接列表
+        })
+    },
+
+
+    bindtapPrevPage: async function (e) {
+        let subjectItemIndex = e.currentTarget.dataset.index;
+        let currentSubjectItem = object_util.copyObject(this.data.formSubjectList[subjectItemIndex]);
+
+        if (!currentSubjectItem.hasPreviousPage) {
+            wx.showToast({
+                icon: 'error',
+                title: '没有上一页',
+                mask: true,
+                duration: 1200,
+            });
+            return;
+        }
+        // 获取上一页页码
+        let execPageNum = currentSubjectItem.pageNum - 1;
+        let newSubjectItem = await this._loadSubjectContentByPageNum(currentSubjectItem, execPageNum);
+        this.setData({
+            [`formSubjectList[${subjectItemIndex}]`]: newSubjectItem,
+        })
+
+    },
+    bindtapNextPage: async function (e) {
+        let subjectItemIndex = e.currentTarget.dataset.index;
+        let currentSubjectItem = object_util.copyObject(this.data.formSubjectList[subjectItemIndex]);
+        if (!currentSubjectItem.hasNextPage) {
+            wx.showToast({
+                icon: 'error',
+                title: '没有下一页',
+                mask: true,
+                duration: 1200,
+            });
+            return;
+        }
+        // 加载下一页
+        let execPageNum = currentSubjectItem.pageNum + 1;
+        let newSubjectItem = await this._loadSubjectContentByPageNum(currentSubjectItem, execPageNum);
+        this.setData({
+            [`formSubjectList[${subjectItemIndex}]`]: newSubjectItem,
+        })
+
+    },
+    bindinputGoPageNum: function (e) {
+        let subjectItemIndex = e.currentTarget.dataset.index;
+        this.setData({
+            [`formSubjectList[${subjectItemIndex}].changePageNum`]: e.detail.value,
+        })
+    },
+
+    bindtapGoPage: async function (e) {
+        let subjectItemIndex = e.currentTarget.dataset.index;
+        let currentSubjectItem = object_util.copyObject(this.data.formSubjectList[subjectItemIndex]);
+        // 无属性 或 不是数字 
+        if (!currentSubjectItem.hasOwnProperty('changePageNum') || isNaN(currentSubjectItem.changePageNum)) {
+            return;
+        }
+        let changePageNum = Number(currentSubjectItem.changePageNum);
+        let pageNum = Number(currentSubjectItem.pageNum);
+        let pages = Number(currentSubjectItem.pages);
+        // 无变化
+        if (changePageNum == pageNum) {
+            return;
+        }
+
+        if (changePageNum > pages || changePageNum < 1) {
+            wx.showToast({
+                icon: 'error',
+                title: `没有${changePageNum}页`,
+                mask: true,
+                duration: 1200,
+            });
+            return;
+        }
+
+        // 获取上一页页码
+        let execPageNum = changePageNum;
+        let newSubjectItem = await this._loadSubjectContentByPageNum(currentSubjectItem, execPageNum);
+        this.setData({
+            [`formSubjectList[${subjectItemIndex}]`]: newSubjectItem,
+        })
+    },
+
+    // 详情 tab 页面事件
+    bindtapPrevPageDetail: async function (e) {
+        // detailUserFormList
+        let currentDetailUserForm = object_util.copyObject(this.data.detailUserFormList[0]);
+        if (!currentDetailUserForm.hasPreviousPage) {
+            wx.showToast({
+                icon: 'error',
+                title: '没有上一页',
+                mask: true,
+                duration: 1200,
+            });
+            return;
+        }
+        // 获取上一页页码
+        let execPageNum = currentDetailUserForm.pageNum - 1;
+        await this._loadDetailUserFormList(execPageNum);
+        // 清空列表
+        await this._clearDetailFormSubjectList();
+        // 重新加载
+        await this._buildDetailFormSubjectList();
+    },
+    bindtapNextPageDetail: async function (e) {
+        // detailUserFormList
+        let currentDetailUserForm = object_util.copyObject(this.data.detailUserFormList[0]);
+        if (!currentDetailUserForm.hasNextPage) {
+            wx.showToast({
+                icon: 'error',
+                title: '没有下一页',
+                mask: true,
+                duration: 1200,
+            });
+            return;
+        }
+        // 获取上一页页码
+        let execPageNum = currentDetailUserForm.pageNum + 1;
+        await this._loadDetailUserFormList(execPageNum);
+        // 清空列表
+        await this._clearDetailFormSubjectList();
+        // 重新加载
+        await this._buildDetailFormSubjectList();
+    },
+    bindinputGoPageNumDetail: function (e) {
+        this.setData({
+            ['detailUserFormList[0].changePageNum']: e.detail.value,
+        })
+    },
+    bindtapGoPageDetail: async function (e) {
+        let currentDetailUserForm = object_util.copyObject(this.data.detailUserFormList[0]);
+        // 无属性 或 不是数字 
+        if (!currentDetailUserForm.hasOwnProperty('changePageNum') || isNaN(currentDetailUserForm.changePageNum)) {
+            return;
+        }
+        let changePageNum = Number(currentDetailUserForm.changePageNum);
+        let pageNum = Number(currentDetailUserForm.pageNum);
+        let pages = Number(currentDetailUserForm.pages);
+        // 无变化
+        if (changePageNum == pageNum) {
+            return;
+        }
+
+        if (changePageNum > pages || changePageNum < 1) {
+            wx.showToast({
+                icon: 'error',
+                title: `没有${changePageNum}页`,
+                mask: true,
+                duration: 1200,
+            });
+            return;
+        }
+        let execPageNum = changePageNum;
+        await this._loadDetailUserFormList(execPageNum);
+        // 清空列表
+        await this._clearDetailFormSubjectList();
+        // 重新加载
+        await this._buildDetailFormSubjectList();
+    },
+    // 统计reach bottom 事件
+    bindscrolltolowerReachBottomStatistic: async function (e) {
+        try {
+            Loading.begin();
+            await this._loadSubjectList();
+            await this._loadSubjectContent();
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+    },
+    // 详情 reach bottom 事件
+    bindscrolltolowerReachBottomDetail: async function (e) {
+        if (this.data.detailUserFormList.length == 0) {
+            return;
+        }
+        try {
+            Loading.begin();
+            await this._buildDetailFormSubjectList();
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+    },
+
+    /** END 页面事件加载 */
+
+    /** BEGIN 内部方法 */
+    _loadSubjectContentByPageNum: async function (execSubjectItem, execPageNum) {
+        let componentType = execSubjectItem.componentType;
+        let newSubjectItem;
+        switch (componentType) {
+            case CONSTANT.FORM_COMPONENT_TYPE.COMPLETION:
+                let completionData = await this._buildCompletionList(execSubjectItem.subjectUuid, execPageNum);
+                newSubjectItem = {
+                    ...execSubjectItem,
+                    ...completionData,
+                }
+                break;
+                // 图片上传题加载  需要分页
+            case CONSTANT.FORM_COMPONENT_TYPE.IMG_UPLOAD:
+                let imgUploadData = await this._buildUploadImgListInit(execSubjectItem.subjectUuid, execPageNum);
+                newSubjectItem = {
+                    ...imgUploadData,
+                    ...completionData,
+                }
+                break;
+                // 签名题加载  需要分页
+            case CONSTANT.FORM_COMPONENT_TYPE.SIGN:
+                let signData = await this._buildSignListInit(execSubjectItem.subjectUuid, execPageNum);
+                newSubjectItem = {
+                    ...signData,
+                    ...completionData,
+                }
+                break;
+            default:
+                break;
+        }
+        return newSubjectItem;
+    },
+    _loadFormInformation: async function () {
+        await this.formUuidCompleter.promise;
+        let formInformationData = (await formInformationService.loadInfoWithFilled(this.data.formUuid)).data;
+        this.setData({
+            formUuid: formInformationData.formUuid,
+            formFillThisDay: formInformationData.formFillThisDay,
+            formFillThisMonth: formInformationData.formFillThisMonth,
+            formFillTotal: formInformationData.formFillTotal,
+        })
+    },
+    // 加载题目内容
+    _loadSubjectContent: async function () {
+        let formSubjectListCopy = object_util.copyObject(this.data.formSubjectList);
+        // 加载题目内容信息
+        let formSubjectList;
+        formSubjectList = await Promise.all(
+            formSubjectListCopy.map(v => {
+                return (async () => {
+                    // 如果已有数据 则不加载 -- isLoad为false
+                    if (!v.isLoad) {
+                        switch (v.componentType) {
+                            case CONSTANT.FORM_COMPONENT_TYPE.COMPLETION:
+                                let completionData = await this._buildCompletionList(v.subjectUuid);
+                                return {
+                                    ...v,
+                                    ...completionData,
+                                    isLoad: true,
+                                }
+                                break;
+                            case CONSTANT.FORM_COMPONENT_TYPE.CHOICE_SELECT:
+                                let choiceSelectData = await this._buildChoiceSelectInit(v.subjectUuid);
+                                return {
+                                    ...v,
+                                    ...choiceSelectData,
+                                    isLoad: true,
+                                }
+                                break;
+                                // 图片上传题加载  需要分页
+                            case CONSTANT.FORM_COMPONENT_TYPE.IMG_UPLOAD:
+                                let imgUploadData = await this._buildUploadImgListInit(v.subjectUuid);
+                                return {
+                                    ...v,
+                                    ...imgUploadData,
+                                    isLoad: true,
+                                }
+                                break;
+                                // 签名题加载  需要分页
+                            case CONSTANT.FORM_COMPONENT_TYPE.SIGN:
+                                let signData = await this._buildSignListInit(v.subjectUuid);
+                                return {
+                                    ...v,
+                                    ...signData,
+                                    isLoad: true,
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    return v;
+                })();
+            })
+
+        );
+        this.setData({
+            formSubjectList: formSubjectList,
+        })
+    },
+    _buildDetailFormSubjectList: async function () {
+        // 先加载列表
+        await this._loadDetailFormSubjectList();
+        // 遍历列表加载用户填写的答案
+        let detailFormSubjectList = object_util.copyObject(this.data.detailFormSubjectList);
+        let newDetailFormSubjectList = await Promise.all(
+            detailFormSubjectList.map(v => {
+                return (async () => {
+                    if (!v.isLoad) {
+                        switch (v.componentType) {
+                            case CONSTANT.FORM_COMPONENT_TYPE.COMPLETION:
+                                return {
+                                    ...v,
+                                    dataList: await this._loadUserCompletionData(v.subjectUuid),
+                                        isLoad: true,
+                                }
+                                break;
+                            case CONSTANT.FORM_COMPONENT_TYPE.CHOICE_SELECT:
+                                return {
+                                    ...v,
+                                    dataList: await this._loadUserChoiceSelectData(v.subjectUuid),
+                                        isLoad: true,
+                                }
+                                break;
+                            case CONSTANT.FORM_COMPONENT_TYPE.IMG_UPLOAD:
+                                return {
+                                    ...v,
+                                    dataList: await this._loadUserUploadImgData(v.subjectUuid),
+                                        isLoad: true,
+                                }
+                                break;
+                            case CONSTANT.FORM_COMPONENT_TYPE.SIGN:
+                                return {
+                                    ...v,
+                                    dataList: await this._loadUserSignData(v.subjectUuid),
+                                        isLoad: true,
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    } else {
+                        return v;
+                    }
+                })();
+            })
+        )
+        this.setData({
+            detailFormSubjectList: newDetailFormSubjectList,
+        });
+
+    },
+    // 清除 state信息
+    _clearStateAll: function () {
+        this.stateEx.pageConfigSubjectList.reset();
+        this.statePageCompletion.pageConfigCompletionList.reset();
+        this.stateDetailFormSubjectList.pageConfigDetailFormSubjectList.reset();
+        this.stateDetailUserFormList.pageConfigDetailUserFormList.reset();
+        this.statePageSign.pageConfigSignList.reset();
+        this.statePageUploadImg.pageConfigUploadImgList.reset();
+
+    },
+    /** END 内部方法 */
+
+
+    formUuidCompleter: new Completer(),
+    onLoad: async function (options) {
+        await app.getAppInitReady();
+        this.formUuidCompleter = new Completer();
+        let formUuid = options.formUuid;
+        this.formUuidCompleter.resolve(formUuid);
+        this.setData({
+            formUuid: formUuid,
+        });
+        try {
+            Loading.begin();
+            // 重置页面 state 分页状态信息
+            this._clearStateAll();
+            // 加载 FORM 信息
+            await this._loadFormInformation();
+            // 数据统计 - 题目列表
+            await this._loadSubjectList();
+            // 数据统计 - 题目内容
+            await this._loadSubjectContent();
+
+            // 数据详情 - 用户信息
+            await this._loadDetailUserFormList();
+            if (this.data.detailUserFormList.length != 0) {
+                await this._buildDetailFormSubjectList();
+            }
+            // 数据详情 - 用户信息
+        } catch (e) {
+            console.error(e)
+        } finally {
+            Loading.end();
+        }
+
+        let that = this;
+        wx.getSystemInfo({
+            success: function (res) {
+                that.setData({
+                    winWidth: res.windowWidth,
+                    winHeight: res.windowHeight,
+                });
+            }
+        })
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: function () {
+    },
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    },
+    onShareTimeline(res) {
+        console.log(res)
+    },
+
+    ...datdpageEx.createPageMethods(),
+    ...pageCompletion.createPageMethods(),
+    ...pageSelection.createPageMethods(),
+    ...pageUploadImg.createPageMethods(),
+    ...pageSign.createPageMethods(),
+
+    ...pageDetailUserFormList.createPageMethods(),
+    ...pageDetailFormSubjectList.createPageMethods(),
+    ...pageDetailUserData.createPageMethods(),
+})

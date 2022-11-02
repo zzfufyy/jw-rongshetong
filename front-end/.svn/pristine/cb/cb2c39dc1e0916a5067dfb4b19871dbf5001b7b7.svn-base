@@ -1,0 +1,121 @@
+// pages/messgecollect/messgecollect.js
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+		itemsarea:[
+			{value: 'USA', name: '城镇建成区'},
+      {value: 'CHN', name: '城乡结合部', },
+      {value: 'BRA', name: '城中村'},
+      {value: 'JPN', name: '拆迁安置区'},
+      {value: 'ENG', name: '建制镇'},
+      {value: 'FRA', name: '集镇'},
+      {value: 'FRA', name: '学校周边'},
+      {value: 'FRA', name: '医院周边'},
+      {value: 'FRA', name: '批发市场周边'},
+      {value: 'FRA', name: '景区及周边'},
+      {value: 'FRA', name: '其他'},
+		],
+		cqlist:[
+			{value: 'USA', name: '产权人'},
+      {value: 'CHN', name: '实际拥有人', },
+		],
+		ytlist:[
+			{value: 'USA', name: '自有住宅'},
+      {value: 'CHN', name: '小产权房', },
+		],
+		isjy:[
+			{value: 'USA', name: '是'},
+      {value: 'CHN', name: '否', },
+		],
+		jyzt:[
+			{value: 'USA', name: '餐饮饭店'},
+      {value: 'CHN', name: '民宿宾馆', },
+      {value: 'BRA', name: '批发零售'},
+      {value: 'JPN', name: '休闲娱乐'},
+      {value: 'ENG', name: '教育设施'},
+      {value: 'FRA', name: '医疗卫生'},
+      {value: 'FRA', name: '养老服务'},
+      {value: 'FRA', name: '生产加工'},
+      {value: 'FRA', name: '仓储物流'},
+      {value: 'FRA', name: '出租居住'},
+      {value: 'FRA', name: '其他'},
+		],
+		zyjd:[
+			{value: 'USA', name: '是'},
+      {value: 'CHN', name: '否', },
+		],
+		tdxz:[
+			{value: 'USA', name: '国有土地'},
+      {value: 'CHN', name: '集体土地', },
+		],
+		gytdyt:[
+			{value: 'USA', name: '居住用地'},
+      {value: 'CHN', name: '商住用地', },
+      {value: 'CHN', name: '商业用地', },
+      {value: 'CHN', name: '国有林场、种场、渔场等用地', },
+		],
+		srtdxz:[
+			{value: 'USA', name: '宅基地'},
+      {value: 'CHN', name: '集体建设用地', },
+		],
+	},
+
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: function (options) {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	}
+})

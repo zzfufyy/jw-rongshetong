@@ -1,0 +1,36 @@
+<view class="container">
+    <view class="flex-box">
+        <view class="item-top">期望职位</view>
+        <view class="item-bottom" bindtap="bindtapChooseJobCategory">
+            <text hidden="{{!hiddenJobCategory}}">请选择期望职位</text>
+            <text hidden="{{hiddenJobCategory}}" wx:for="{{jobCategoryList}}" wx:key="key">{{item.checked?item.categoryName:''}} </text>
+        </view>
+    </view>
+    <view class="flex-box">
+        <view class="item-top">期望薪资</view>
+        <view class="item-bottom">
+            <picker bindchange="bindPickerChange" value="{{index}}" range="{{salaryStringList}}">
+                <view class="picker">
+                    {{salaryStringList[index]}}
+                </view>
+            </picker>
+        </view>
+    </view>
+    <view class="flex-box">
+        <view class="item-top">求职区域</view>
+        <view class="item-bottom" bindtap="bindtapChooseCommunity">
+            <text hidden="{{!choosedCommunityList.length==0}}">请选择期望求职区域</text>
+            <text hidden="{{choosedCommunityList.length==0}}" wx:for="{{choosedCommunityList}}" wx:key="key">{{item.communityName}} </text>
+        </view>
+    </view>
+</view>
+
+<choose-job-category id="choose-job-category" max_choosed_number="3" jobCategoryList="{{jobCategoryList}}" bind:submit="submitChooseJobCategory">
+</choose-job-category>
+
+<!-- 选择社区组件  -->
+<choose-community id='choose-community' max_choosed_number="3" choosedCommunityList="{{choosedCommunityList}}" bind:submit="submitChooseCommunity">
+</choose-community>
+
+
+<view class="button-big-save" bindtap="bc">保存</view>

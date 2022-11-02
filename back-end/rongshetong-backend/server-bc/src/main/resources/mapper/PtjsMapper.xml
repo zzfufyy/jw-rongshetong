@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.PtjsMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Ptjs">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="ptname" jdbcType="VARCHAR" property="ptname" />
+    <result column="ptcongtext" jdbcType="VARCHAR" property="ptcongtext" />
+    <result column="zfptjs" jdbcType="VARCHAR" property="zfptjs" />
+    <result column="ggfw" jdbcType="VARCHAR" property="ggfw" />
+    <result column="lqhg" jdbcType="VARCHAR" property="lqhg" />
+    <result column="yl1" jdbcType="VARCHAR" property="yl1" />
+    <result column="yl2" jdbcType="VARCHAR" property="yl2" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, ptname, ptcongtext, zfptjs, ggfw, lqhg, yl1, yl2
+  </sql>
+</mapper>

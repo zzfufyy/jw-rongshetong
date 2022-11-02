@@ -1,0 +1,7 @@
+@import "../common/formCommonStyle.wxss";
+
+.answer-box {
+    border: 1px solid #F3F3F3;
+    padding: 34rpx 0 30rpx 10rpx;
+    margin-bottom: 32rpx;
+}

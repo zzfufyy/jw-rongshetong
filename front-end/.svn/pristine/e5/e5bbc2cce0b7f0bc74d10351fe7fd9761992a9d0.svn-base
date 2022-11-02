@@ -1,0 +1,27 @@
+/**
+ * 提供  操作  全局变量方法的接口
+ */
+const GLOBAL_CONSTANT = require('../common/globalConstant');
+
+const getGlobalCommunityUuid = function () {
+    return wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_COMMUNITYUUID);
+}
+const setGlobalCommunityUuid = function (communityUuid) {
+    wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_COMMUNITYUUID, communityUuid);
+}
+
+const getGlobalUserIdentity = function(){
+    return wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY);
+}
+
+const setGlobalUserIdentity = function(userIdentity){
+    wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY, userIdentity)
+}
+
+module.exports = {
+    getGlobalCommunityUuid: getGlobalCommunityUuid,
+    setGlobalCommunityUuid: setGlobalCommunityUuid,
+
+    getGlobalUserIdentity: getGlobalUserIdentity,
+    setGlobalUserIdentity: setGlobalUserIdentity,
+}

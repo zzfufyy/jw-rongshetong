@@ -1,0 +1,24 @@
+const $ = require('../utils/request_util')
+
+const loadListByBuildingUuid = function(buildingUuid ){
+    return $.request({
+        url:'/building-resident/loadListByBuildingUuid?buildingUuid=' + buildingUuid,
+        data:{},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader,
+    })
+}
+
+const loadEntityWithAssociatedById = function(id){
+    return $.request({
+        url:'/building-resident/infoWithAssociated?id=' + id,
+        data:{},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader,
+    })
+}
+
+module.exports = {
+    loadListByBuildingUuid: loadListByBuildingUuid,
+    loadEntityWithAssociatedById: loadEntityWithAssociatedById,
+}

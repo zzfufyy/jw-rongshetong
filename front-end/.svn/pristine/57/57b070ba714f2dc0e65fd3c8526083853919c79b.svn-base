@@ -1,0 +1,114 @@
+<view class="p80"></view>
+		<view class="toptit">茶陵县城乡居民建房安全隐患排查整治信息采集表</view>
+		<view class="line10"></view>
+		<view class="first mt14">第四部分：安全情况</view>
+		<view class="first mt14">是否存在地质灾害隐患初判【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+        <label class="weui-cell weui-check__label" wx:for="{{dzzh}}" wx:key="{{item.value}}">
+          <view class="weui-cell__hd">
+            <radio value="{{item.value}}" />{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+		<view class="first mt14">地质灾害隐患类型【多选题】</view>
+		<view class="mt14">
+			<checkbox-group  bindchange="checkboxChange">
+				<label class="weui-cell weui-check__label" wx:for="{{dzzhlx}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<checkbox value="{{item.value}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+		<view class="first mt14">房屋结构安全隐患初判【单选题】</view>
+		<view class="mt14">
+			<radio-group  bindchange="checkboxChange">
+				<label class="weui-cell weui-check__label" wx:for="{{fwjg}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<radio value="{{item.value}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+
+		<view class="first mt14">房屋结构安全隐患部位【多选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+        <label class="weui-cell weui-check__label" wx:for="{{dzzh}}" wx:key="{{item.value}}">
+          <view class="weui-cell__hd">
+            <radio value="{{item.value}}" />{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+
+		<view class="first mt14">是否安全鉴定【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+        <label class="weui-cell weui-check__label" wx:for="{{isaqjd}}" wx:key="{{item.value}}">
+          <view class="weui-cell__hd">
+            <radio value="{{item.value}}" />{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+
+		<view class="first mt14">鉴定结论【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+        <label class="weui-cell weui-check__label" wx:for="{{jdjg}}" wx:key="{{item.value}}">
+          <view class="weui-cell__hd">
+            <radio value="{{item.value}}" />{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+
+		<view class="first mt14">鉴定结论为C级、D级隐患部位【多选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+        <label class="weui-cell weui-check__label" wx:for="{{jdcd}}" wx:key="{{item.value}}">
+          <view class="weui-cell__hd">
+            <radio value="{{item.value}}" />{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+
+		<view class="first mt14">是否存在消防安全【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+        <label class="weui-cell weui-check__label" wx:for="{{aqyh}}" wx:key="{{item.value}}">
+          <view class="weui-cell__hd">
+            <radio value="{{item.value}}" />{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+
+		<view class="first mt14">消防安全隐患【多选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+        <label class="weui-cell weui-check__label" wx:for="{{xfaqyh}}" wx:key="{{item.value}}">
+          <view class="weui-cell__hd">
+            <radio value="{{item.value}}" />{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+
+		
+
+	<view class="clearfloat">
+		<navigator class="tijsq ft prew" style="margin-left: 5%;" hover-class="none" url="/pages/messgecollect2/messgecollect2">上一步</navigator>
+		<navigator hover-class="none" style="margin-right: 5%;" url="/pages/messgecollect4/messgecollect4"  class="tijsq fr">下一步</navigator>
+	</view>
+
+
+
+
+
+		
+		

@@ -1,0 +1,80 @@
+<view class="container">
+    <view wx:for="{{jobList}}" wx:key="key" wx:for-index="pindex" style="position: relative;">
+        <!-- <image src="/img/del.png" class="jianhao" data-index="{{pindex}}" bindtap='bindtapDeleteIcon'></image> -->
+        <view class="clearfloat ttbox">
+            <view class="ft leftname">岗位名称*</view>
+            <view class="fr rtip">
+                <input type="text" class="iptqy" bindinput='bindinputJobName' name="gwmc" placeholder="请输入岗位名称" data-tag="NumLimit" data-index="{{pindex}}" value="{{item.jobName}}" />
+            </view>
+        </view>
+        <view class="clearfloat ttbox">
+            <view class="ft leftname">薪资范围*</view>
+            <view class="qyname rtip fr">
+                <picker bindchange="bindchangeChoooseSalary" data-index="{{pindex}}" range="{{item.array}}" value="{{item.index}}">
+                    <view class="picker" style="color:{{color}}">
+                        {{item.array[item.index]}}
+                        <image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+                    </view>
+                </picker>
+            </view>
+        </view>
+        <view class="clearfloat ttbox">
+            <view class="ft leftname">招聘人数*</view>
+            <view class="qyname rtip fr">
+                <input type="text" class="iptqy" bindinput='bindinputRecruitingNumber' name="recruitingNumber" placeholder="请输入招聘人数" data-tag="NumLimit" data-index="{{pindex}}" value="{{item.recruitingNumber}}" />
+                <!-- <picker bindchange="bindPickerChange1" data-index="{{pindex}}" range="{{item.array1}}" value="{{item.index1}}" >
+					<view class="picker" style="color:{{color1}}">
+						{{item.array1[item.index1]}}
+						<image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+					</view>
+				</picker> -->
+            </view>
+        </view>
+        <view class="clearfloat ttbox">
+            <view class="ft leftname">工作时间范围</view>
+            <view class="job-time-view-end  fr">
+                <picker mode="time" data-index="{{pindex}}" value="{{item.jobEndTime}}" start="00:00" end="23:59" bindchange="bindchangeJobEndTime">
+                    <view class="picker">{{item.jobEndTime? item.jobEndTime: '下班时间'}}</view>
+                </picker>
+            </view>
+            <view class="job-time-split-view fr">-</view>
+            <view class="job-time-view  margin-right-20 fr">
+                <picker mode="time" data-index="{{pindex}}" value="{{item.jobBeginTime}}" start="00:00" end="23:59" bindchange="bindchangeJobBeginTime">
+                    <view class="picker">{{item.jobBeginTime? item.jobBeginTime:'上班时间'}}</view>
+                </picker>
+            </view>
+        </view>
+       
+        <view class="clearfloat ttbox" style="height: auto;">
+            <view class=" leftname">岗位介绍*</view>
+            <view class="gwxq">
+                <textarea class="textarea height-200 " placeholder="请输入岗位介绍" name="xsbdz" data-index="{{pindex}}" bindinput='bindinputJobIntroduction' id="" value="{{item.jobIntroduction}}"></textarea>
+            </view>
+        </view>
+        <view class="clearfloat ttbox" style="height:auto;">
+            <view class=" leftname">岗位要求</view>
+            <view class="gwxq">
+                <textarea class="textarea height-120 " maxlength="200" placeholder="请输入岗位要求,如工作经验要求,技能等" name="xsbdz" data-index="{{pindex}}" bindinput='bindinputJobRequireSkill' id="" value="{{item.jobRequire}}"></textarea>
+            </view>
+        </view>
+        <view class="clearfloat ttbox" style="height: auto;">
+            <view class=" leftname">专业要求</view>
+            <view class="gwxq">
+                <textarea class="textarea height-120 " maxlength="200" placeholder="请输入专业要求,示例:广告设计专业等" name="xsbdz" data-index="{{pindex}}" bindinput='bindinputJobRequireMajor' id="" value="{{item.jobRequireMajor}}"></textarea>
+            </view>
+        </view>
+        
+        <view class="clearfloat ttbox" style="height:auto;">
+            <view class=" leftname">工作福利</view>
+            <view class="gwxq">
+                <textarea class="textarea height-120 " maxlength="200" placeholder="请输入工作福利,示例:五险一金,下午茶等" name="xsbdz" data-index="{{pindex}}" bindinput='bindinputJobBasicWorkfare' id="" value="{{item.jobBasicWorkfare}}"></textarea>
+            </view>
+        </view>
+        <view class="delet" data-index="{{pindex}}" bindtap='bindtapDeleteIcon'>删除</view>
+        <view class="line10"></view>
+    </view>
+    <view class="jxtj" bindtap="bindtapContinueAdd">继续添加职位</view>
+</view>
+<view class="btnbox" bindtap="bindtapSubmit">
+    <view class="tijsq">确认发布</view>
+</view>

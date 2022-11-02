@@ -1,0 +1,434 @@
+// pages/sqmdb/sqmdb.js
+const Loading = require('../../utils/loading_util');
+const date_util = require('../../utils/date_util');
+
+const { Completer } = require('../../utils/function_util');
+const format_util = require('../../utils/format_util');
+const string_util = require('../../utils/string_util');
+const object_util = require('../../utils/object_util');
+
+// 加载服务
+const buildingResidentService = require('../../common/buildingResidentService');
+const dimHouseUsageService = require('../../common/dimHouseUsageService');
+const dimSecuritySituationService = require('../../common/dimSecuritySituationService');
+const residentForHouseUsageService = require('../../common/residentForHouseUsageService');
+const residentForSecuritySituationService = require('../../common/residentForSecuritySituationService');
+
+const app = getApp();
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        // 当页 数据表 building_resident主键
+        residentUuid: '',
+
+        // 特殊标识
+        markHouseUsageName: '公司',
+        markSecuritySituationName: '电动车',
+        electrocarNumberDisabled: true,
+        flagChoosedCompany: false,
+
+        // 地址不允许修改
+        addressPickerDisabled: true,
+        cellName: '',
+        buildingName: '',
+        layerName: '',
+        roomNumberName: '',
+
+        houseSpace: 0,
+        houseChamberList: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        houseChamberIndex: 0,
+        houseHallList: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        houseHallIndex: 0,
+
+        residentName: '',
+        residentPhone: '',
+        houseUsageList: [
+            // {id: "158a1ca6-6df4-4bca-fe55-b4d574ea4b88", usageName: "住宅", checked: false },
+        ],
+        flag: '',
+        securitySituationList: [
+            // {id: "69b65da1-1893-9a6f-7184-e4225188f732", situationName: "电动车", checked: false},
+        ],
+        electrocarNumber: ''
+    },
+    state: {
+        residentUuidCompleter: new Completer(),
+    },
+
+    // //小区*
+    // bindPickerChange: function (e) {
+    //     console.log('picker发送选择改变，携带值为', e.detail.value)
+    //     this.setData({
+    //         index: e.detail.value,
+
+    //     })
+    // },
+    // //楼栋*
+    // bindPickerChange1: function (e) {
+    //     console.log('picker发送选择改变，携带值为', e.detail.value)
+    //     this.setData({
+    //         index1: e.detail.value,
+
+    //     })
+    // },
+    // //楼层*
+    // bindPickerChange2: function (e) {
+    //     console.log('picker发送选择改变，携带值为', e.detail.value)
+    //     this.setData({
+    //         index2: e.detail.value,
+
+    //     })
+    // },
+    // //房间号*
+    // bindPickerChange3: function (e) {
+    //     console.log('picker发送选择改变，携带值为', e.detail.value)
+    //     this.setData({
+    //         index3: e.detail.value,
+
+    //     })
+    // },
+
+    // 房屋面积
+    bindinputHouseSpace(e) {
+        this.setData({
+            houseSpace: e.detail.value,
+        })
+    },
+    // 几室
+    bindchangeChamber: function (e) {
+        this.setData({
+            houseChamberIndex: e.detail.value,
+        })
+    },
+    // 几厅
+    bindchangeHall: function (e) {
+        this.setData({
+            houseHallIndex: e.detail.value,
+        });
+    },
+
+    bindinputResidentName(e) {
+        this.setData({
+            residentName: e.detail.value,
+        });
+    },
+    bindinputResidentPhone(e) {
+        this.setData({
+            residentPhone: e.detail.value,
+        });
+    },
+
+    // 多选框 - 房屋用途
+    bindchangeHouseUsage(e) {
+        let checkedIdList = e.detail.value;
+        let currentHouseUsageList = this.data.houseUsageList;
+        let companyItem = currentHouseUsageList.find(v => {
+            return v.usageName == this.data.markHouseUsageName;
+        })
+        this.setData({
+            flagChoosedCompany: (checkedIdList.findIndex(v => { return v == companyItem.id }) == -1) ?
+                false : true
+        })
+        console.log(this.data.flagChoosedCompany);
+        this.setData({
+            houseUsageList: currentHouseUsageList.map(v => {
+                v.checked = false;
+                return v
+            }).map(v => {
+                if (checkedIdList.findIndex(r => {
+                    return r === v.id
+                }) != -1) {
+                    v.checked = !v.checked;
+                }
+                return v;
+            }),
+        })
+    },
+    // 安全情况（可多选）*
+    bindchangeSecuritySituation(e) {
+        console.log(e)
+        let checkedIdList = e.detail.value;
+        let currentSecuritySituationList = this.data.securitySituationList;
+        // 判断是否存在电动车
+        let electrocarItem = currentSecuritySituationList.find(v => {
+            return v.situationName == this.data.markSecuritySituationName;
+        })
+        if (checkedIdList.findIndex(v => { return v == electrocarItem.id }) == -1) {
+            this.setData({
+                electrocarNumberDisabled: true,
+                electrocarNumber: '',
+            })
+        } else {
+            this.setData({
+                electrocarNumberDisabled: false,
+            })
+        }
+        this.setData({
+            securitySituationList: currentSecuritySituationList.map(v => {
+                v.checked = false
+                return v;
+            }).map(v => {
+                if (checkedIdList.findIndex(r => {
+                    return r === v.id
+                }) != -1) {
+                    v.checked = true;
+                }
+                return v;
+            })
+        })
+    },
+    // 电动车牌号
+    bindinputElectrocarNumber(e) {
+        this.setData({
+            electrocarNumber: e.detail.value,
+        })
+    },
+    async bindtapNext() {
+        // 检查数据情况
+        if (this.data.houseSpace == 0) {
+            wx.showToast({
+                icon:'error',
+                title: '请输入房屋面积',
+            })
+            return;
+        } else if (string_util.isEmpty(this.data.residentName)) {
+            wx.showToast({
+                icon:'error',
+                title: '请输入房主姓名',
+            })
+            return;
+        } else if (string_util.isEmpty(this.data.residentPhone)) {
+            wx.showToast({
+                icon:'error',
+                title: '请输入房主电话号码',
+            })
+            return;
+        } else if (this.data.houseUsageList.findIndex(v => { return v.checked }) == -1) {
+            wx.showToast({
+                icon:'error',
+                title: '请选择房屋用途',
+            })
+            return;
+        } else if (this.data.securitySituationList.findIndex(v => { return v.checked }) == -1) {
+            wx.showToast({
+                icon:'error',
+                title: '请选择安全情况',
+            })
+            return;
+        } else if (
+            this.data.securitySituationList.findIndex(v => { return v.checked && v.situationName === this.data.markSecuritySituationName }) == -1
+            && string_util.isEmpty(this.data.electrocarNumber)) {
+            wx.showToast({
+                title: '请填写电动车牌号',
+            })
+            return;
+        }
+        // 插入building_Resident
+        let buildingResidentEntity = {
+            id: this.data.residentUuid,
+            residentName: this.data.residentName,
+            residentPhone: this.data.residentPhone,
+            houseSpace: this.data.houseSpace,
+            houseChamber: this.data.houseChamberList[this.data.houseChamberIndex],
+            houseHall: this.data.houseHallList[this.data.houseHallIndex],
+            electrocarNumber: this.data.electrocarNumber,
+            flagCompany: Number(this.data.flagChoosedCompany),
+        }
+        await buildingResidentService.updateByEntity(buildingResidentEntity);
+        // 插入resident_for_house_usage
+        let saveHouseUsageList = this.data.houseUsageList.filter(v => {
+            return v.checked;
+        }).map(v => {
+            return {
+                residentUuid: this.data.residentUuid,
+                houseUsageUuid: v.id,
+            }
+        })
+        await residentForHouseUsageService.insertByEntityList(this.data.residentUuid, saveHouseUsageList);
+
+        // 插入 resident_for_security_situation
+        let saveSecuritySituationList = this.data.securitySituationList.filter(v => {
+            return v.checked;
+        }).map(v => {
+            return {
+                residentUuid: this.data.residentUuid,
+                securitySituationUuid: v.id,
+            }
+        });
+        await residentForSecuritySituationService.insertByEntityList(this.data.residentUuid, saveSecuritySituationList);
+
+
+        // 页面跳转判断
+        if(this.data.flagChoosedCompany){
+            wx.navigateTo({
+              url: '/pages/comxx/comxx?residentUuid=' + this.data.residentUuid,
+            })
+        }else{
+            wx.navigateTo({
+              url: '/pages/ptjuzhu/ptjuzhu?residentUuid=' + this.data.residentUuid,
+            })
+        }
+    },
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: async function (options) {
+        // 初始化完成器 -- 页面不保存 prototype的属性， class中方法会失效
+        this.state.residentUuidCompleter = new Completer();
+        let residentUuid = options.residentUuid;
+        // 测试id
+        residentUuid = '801fb106-6792-4770-8f34-7f8950ca61cd';
+        this.state.residentUuidCompleter.resolve(residentUuid);
+
+    },
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: async function () {
+
+        try {
+            Loading.begin();
+            await this.loadContent();
+        } catch (e) {
+            console.error(e)
+        } finally {
+            Loading.end();
+        }
+
+        // 加载
+    },
+    loadContent: async function () {
+        let residentUuid = await this.state.residentUuidCompleter.promise;
+        console.log(residentUuid);
+        this.setData({
+            residentUuid: residentUuid,
+        })
+        let residentData = await buildingResidentService.loadEntityWithAssociatedById(residentUuid);
+        residentData = residentData.data;
+
+        // 加载 该户基本信息
+        this.setData({
+            cellName: residentData.cellName,
+            buildingName: residentData.buildingName,
+            layerName: residentData.whichLayer + '层',
+            roomNumberName: format_util.formatRoomNum(residentData.whichLayer, residentData.whichLayerFamily) + '号',
+
+            houseSpace: residentData.houseSpace,
+            houseChamberIndex: this.data.houseChamberList.findIndex(v => { return v == residentData.houseChamber }),
+            houseHallIndex: this.data.houseHallList.findIndex(v => { return v == residentData.houseHall }),
+
+            residentName: residentData.residentName,
+            residentPhone: residentData.residentPhone,
+
+            electrocarNumber: residentData.electrocarNumber
+        })
+        // 加载 已选择房屋用途列表
+        let residentForHouseUsageList = await residentForHouseUsageService.loadListByResidentUuid(residentUuid);
+        residentForHouseUsageList = residentForHouseUsageList.data;
+
+        // 加载	房屋用途列表
+        let dimHouseUsageList = await dimHouseUsageService.loadList();
+        dimHouseUsageList = dimHouseUsageList.data;
+        console.log(dimHouseUsageList);
+        let houseUsageList = dimHouseUsageList.map(v => {
+            return {
+                id: v.id,
+                usageName: v.usageName,
+                checked: (residentForHouseUsageList.findIndex(r => {
+                    return r.houseUsageUuid === v.id;
+                }) == -1) ? false : true,
+            }
+        })
+        // 初始化是否选择公司
+        this.setData({
+            houseUsageList: houseUsageList,
+        })
+        let companyItem = houseUsageList.find(v => {
+            return v.usageName == this.data.markHouseUsageName;
+        })
+        this.setData({
+            flagChoosedCompany: (residentForHouseUsageList.findIndex(v => { return v.houseUsageUuid == companyItem.id }) == -1) ?
+                false : true
+        })
+
+
+        // 加载 已选择安全情况列表
+        let residentForSecuritySituationList = await residentForSecuritySituationService.loadListByResidentUuid(residentUuid);
+        residentForSecuritySituationList = residentForSecuritySituationList.data;
+
+        // 加载 安全情况列表
+        let dimSecuritySituationList = await dimSecuritySituationService.loadList();
+        dimSecuritySituationList = dimSecuritySituationList.data;
+        let securitySituationList = dimSecuritySituationList.map(v => {
+            return {
+                id: v.id,
+                situationName: v.situationName,
+                checked: (residentForSecuritySituationList.findIndex(r => {
+                    return r.securitySituationUuid === v.id;
+                }) == -1) ? false : true,
+            }
+        });
+        this.setData({
+            securitySituationList: securitySituationList,
+        })
+        // 初始化是否选择电动车
+        let electrocarItem = securitySituationList.find(v => {
+            return v.situationName == this.data.markSecuritySituationName;
+        })
+        if (residentForSecuritySituationList.findIndex(v => { return v.securitySituationUuid == electrocarItem.id }) == -1) {
+            this.setData({
+                electrocarNumberDisabled: true,
+                electrocarNumber: '',
+            })
+        } else {
+            this.setData({
+                electrocarNumberDisabled: false,
+            })
+        }
+
+        console.log(dimSecuritySituationList)
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+    },
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    }
+})

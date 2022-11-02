@@ -1,0 +1,92 @@
+<view class="container">
+	<view class="qypllr">
+		批量录入求职者<text bindtap="sqwj" class="sqwj">上传文件</text>
+	</view>
+	<view class="line1"></view>
+	<view class="fjbox" hidden="{{fjhide}}">
+		<view class="ptfj">普通附件</view>
+		<view class="fjnamebox" hidden="{{scbtn}}">
+			<image class="fjname" src="/img/fj.png"></image>
+			<text class="scfile">{{scfile}}</text>
+			<text class="scbtn" bindtap="scbtn">删除</text>
+		</view>
+		<view class="qdlr">
+			<view class="qdlrbtn" bindtap="qdlrbtn">确定录入</view>
+		</view>
+	</view>
+	<view class="line10"></view>
+	<view wx:if="{{comxxlist.length == 0}}" class="clearfloat personbox">
+		<view class="clearfloat tybox" >
+			<view class="ft qzyx">基本信息</view>
+			<view class="fr ">
+				<view class="tjia" bindtap="gzjltj">+ 添加</view>
+			</view>
+		</view>
+		<view class="clearfloat yxjobname" >
+			<text>求职者个人基本信息</text>
+		</view>
+	</view>
+	<block wx:if="{{comxxlist != 0}}"  wx:for="{{comxxlist}}">
+		<view  class="clearfloat crbox" bindtap="gzjltj">
+			<view class="ft tximgbox">
+				<image class="imgtx" src="{{item.imgtx}}"></image>
+			
+			</view>
+			<view class="ft comnamebox">{{item.name}}
+				<view class="sqname">
+					{{item.sex}} · {{item.age}} · {{item.work}}年 · {{item.ellp}}
+				</view>
+			</view>
+			<view class="fr lrtjximg">
+				<image class="imgjt" src="/img/jt.png"></image>
+			</view>
+		</view>
+		<view class="txtbox">
+			
+		</view>
+		<view class="line1"></view>
+	</block>
+
+
+	<view class="clearfloat personbox">
+		<view class="clearfloat tybox" >
+			<view class="ft qzyx">求职信息</view>
+			<view wx:if="{{qzxxadd == ''}}" class="fr ">
+				<view class="tjia" bindtap="qyjstj">+ 添加</view>
+			</view>
+			<view wx:if="{{qzxxadd != ''}}" class="fr lrtjximg">
+				<image class="imgjt" src="/img/jt.png"></image>
+			</view>
+		</view>
+		<view class="clearfloat yxjobname" >
+			<text>{{qyjs}}</text>
+		</view>
+		<block  wx:if="{{qzxxadd != ''}}"  wx:for="{{yxjobname}}" wx:key="key">
+			<view class="clearfloat yxjobname" >
+				<text class="sqname" >{{item.categoryName}}</text>
+			</view>
+			<view class="clearfloat monbox" >
+				<text style="margin-right: 30px;">{{item.ygz}}</text>  
+			</view>
+			<view class="clearfloat monbox" >
+				<text class="sqname" wx:key="key">{{item.sqname}}</text>
+			</view>
+		</block>
+	</view>
+	<view class="clearfloat personbox">
+		<view class="clearfloat tybox" >
+			<view class="ft qzyx">自我评价</view>
+			<view wx:if="{{zwpjadd == ''}}" class="fr ">
+				<view class="tjia" bindtap="zwpj">+ 添加</view>
+			</view>
+			<view wx:if="{{zwpjadd != ''}}" class="fr lrtjximg">
+				<image class="imgjt" src="/img/jt.png"></image>
+			</view>
+		</view>
+		<view class="clearfloat yxjobname" >
+			<text>{{zwpj}}</text>
+		</view>
+	</view>
+	
+	<view class="tijsq" bindtap="bc">保存</view>
+</view>

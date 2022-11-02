@@ -1,0 +1,339 @@
+// pages/zpzhuanc/zpzhuanc.js
+const $ = require('../../utils/request_util');
+const Loading = require('../../utils/loading_util');
+const CONSTANT = require('../../common/constant');
+const { Salary } = require('../../common/constant');
+// 加载服务
+const recruitJobService = require('../../common/recruitJobService');
+const viewRecordService = require('../../common/viewRecordService');
+// 获取应用实例
+const app = getApp();
+// 附加模块
+// const searchpageEx = require('../../pages/qzjy/searchpageEx');
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+		imgsrc:'/img/gxbyzph.png',
+		tit:'2022年长沙市“高校毕业生”就业服务季专场招聘会',
+		zphcont:'为深入贯彻党的十九届六中全会，经济工作会议和省弟十二次党代会精神，认真落实政府工作报告部署要求为深入贯彻党的十九届六中全会，经济工作会议和省弟十二次党代会精神，认真落实政府工作报告部署要求为深入贯彻党的十九届六中全会，经济工作会议和省弟十二次党代会精神，认真落实政府工作报告部署要求',
+		zbdw:'长沙市人力资源和社会保障局长/长沙市芙蓉区人力资源和社会保障局 ',
+		hddz:'长沙市芙蓉区湘湖街道湘湖社区',
+		isopen:false,
+		kssj:'2022-03-15',
+		jssj:'2022-05-30',
+		combm:'企业报名',
+		bmcj:'求职者报名',
+		iscombm:false,
+		currentId: '0',
+		currentTab:'0',
+		section: [],
+		joblistyfb:[
+			{ jobname: '清洁工', jobmoney: '3000-3800',companylxr:'张经理', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800',companylxr:'张经理', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companylxr:'张经理',companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companylxr:'张经理',companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companylxr:'张经理',companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companylxr:'张经理',companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companylxr:'张经理',companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+		],
+		joblistyxj:[
+			{comname:'长沙竟网信息科技有限公司',companytx: '/img/tx.png',companylxr:'张经理', zzjob: '5'},
+			{comname:'长沙竟网信息科技有限公司',companytx: '/img/tx.png',companylxr:'张经理', zzjob: '1', },
+		],
+		qzzlist:[
+			{pertx: '/img/tx.png',pername:'张三',age:'30', sex: '男', workyear:'3',wantmoy: '5000-8000',
+			wantjob:[{jobname:'产品经理'},	{jobname:'仓储管理员'}]},
+			{pertx: '/img/tx.png',pername:'李四',age:'30', sex: '女', workyear:'3',wantmoy: '5000-8000',
+			wantjob:[{jobname:'产品经理'},	{jobname:'仓储管理员'}]},
+		],
+		pagess:1,
+	},
+	//查看全部
+	chekall(){
+		let isopen = !this.data.isopen
+		this.setData({
+			isopen:isopen
+		})
+	},
+	//点击头部导航的点击事件
+	handleTap: function (e) {
+		let id = e.currentTarget.id;
+		if (id) {
+			this.setData({
+				currentId: id,
+				currentTab: id,
+			})
+		}
+	},
+	// 滚动切换标签样式 
+	switchTab: function (e) {
+		// console.log(e) 
+		var that = this;
+		that.setData({
+			currentTab: e.detail.current,
+			currentId: e.detail.current
+		});
+	},
+	// 点击跳转到对应岗位
+	async bindtapChooseJob(e) {
+		let jobData = this.data.joblist[e.currentTarget.dataset.index]
+		let recruitJobUuid = jobData.jobUuid;
+		// TODO 生成浏览记录  +  浏览量+1
+		try {
+			Loading.begin();
+		} catch (e) {
+			console.log(e);
+		} finally {
+			Loading.end();
+			wx.navigateTo({
+				url: "/pages/zwxq/zwxq?recruitJobUuid=" + jobData.jobUuid,
+			})
+		}
+
+	},
+	//	点击跳转到对应公司
+	bindtapChoosecom(e){
+		wx.navigateTo({
+			url: '/pages/commessxq/commessxq',
+		})
+	},
+	bindtapChooqzz(){
+		wx.navigateTo({
+			url: '/pages/loojl/lookjl',
+		})
+	},
+	//企业报名
+	bmcj(){
+		let iscombm = this.data.iscombm
+		let that = this
+		let openid =wx.getStorageSync('openid')
+		if(that.data.iscombm==true){
+
+		}else{
+			wx.showModal({
+				title: '提示',
+				content: '是否报名参加招聘会',
+				success (res) {
+					if (res.confirm) {
+						wx.request({
+							url: app.globalData.web_path + '/fair-for-company/insertFairCompany',
+							data: {
+								fairUuid:"1528666400118718465",
+								candidateOpenid:openid,
+							},
+							header: app.globalData.header,
+							success: function (res) {
+								console.log(res)
+								
+								that.setData({
+									iscombm:true,
+									combm:'已报名'
+								})
+							}
+						});
+						
+					} else if (res.cancel) {
+						console.log('用户点击取消')
+					}
+				}
+			})
+		}
+	},
+	// 求职者报名
+	bmcjqz(){
+		let isworkbm = this.data.isworkbm
+		let that = this
+		let openid =wx.getStorageSync('openid')
+	if(that.data.isworkbm==true){
+
+	}else{
+		wx.showModal({
+			title: '提示',
+			content: '是否报名参加招聘会',
+			success (res) {
+				if (res.confirm) {
+					wx.request({
+						url: app.globalData.web_path + '/fair-for-candidate/insertFairCandidate',
+						data: {
+							fairUuid:"1528666400118718465",
+							candidateOpenid:openid,
+						},
+						header: app.globalData.header,
+						success: function (res) {
+							console.log(res)
+							
+							that.setData({
+								isworkbm:true,
+								bmcj:'已报名'
+							})
+						}
+					});
+					
+				} else if (res.cancel) {
+					console.log('用户点击取消')
+				}
+			}
+		})
+	}
+	
+	},
+	//获取招聘会详情
+	getJobFair(){
+		let that = this
+		wx.request({
+			url: app.globalData.web_path + '/job-fair/fairById',
+			data: {
+					id:"1528666400118718465",
+					pagess:this.data.pagess,
+			},
+			header: app.globalData.header,
+			success: function (res) {
+					console.log(res)
+					let fair = res.data.obj.jobFair
+		
+					that.setData({
+						tit:fair.fairTitle,
+						zphcont:fair.fairContent,
+						zbdw:	fair.fairHost,
+						hddz:	fair.fairAddress,
+						kssj:app.formatDate(fair.fairBeginTime ,"yyyy-MM-dd"),
+						jssj:app.formatDate(fair.fairEndTime,"yyyy-MM-dd"),
+						imgsrc:fair.fairPortraitPath
+					})
+			},
+		});
+	},
+
+		//获取求职者是否已经报名
+		getCandidateFair(){
+			let that = this
+			let openid =wx.getStorageSync('openid')
+			wx.request({
+				url: app.globalData.web_path + '/fair-for-candidate/searchFairCandidate',
+				data: {
+						id:"1528666400118718465",
+						candidateOpenid:openid,
+				},
+				header: app.globalData.header,
+				success: function (res) {
+						console.log(res)
+						let fair = res.data.obj.jobFair
+						if(res.data.obj.fairForCandidates.length>0){
+							that.setData({
+								isworkbm:true,
+								bmcj:'已报名'
+							})
+						}
+					
+				},
+			});
+		},
+
+		//获取公司是否已经报名
+		getCompanyFair(){
+			let that = this
+			let openid =wx.getStorageSync('openid')
+			wx.request({
+				url: app.globalData.web_path + '/fair-for-company/searchFairCompany',
+				data: {
+						id:"1528666400118718465",
+						candidateOpenid:openid,
+				},
+				header: app.globalData.header,
+				success: function (res) {
+						console.log(res)
+						let fair = res.data.obj.jobFair
+						if(res.data.obj.fairForCandidates.length>0){
+							that.setData({
+								iscombm:true,
+								combm:'已报名'
+							})
+						}
+					
+				},
+			});
+		},
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: function (options) {
+		let that = this
+		wx.getSystemInfo({
+			success: function (res) {
+				that.setData({
+					winWidth: res.windowWidth,
+					winHeight: res.windowHeight ,
+				});
+			}
+		})
+		that.getJobFair();
+		that.getCandidateFair();
+		that.getCompanyFair();
+		let fblg = that.data.joblistyfb.length
+		let xjlg = that.data.joblistyxj.length
+		let qzz = that.data.qzzlist.length
+		let section1 = [
+			{name: '招聘岗位',typeId: '0',num:fblg}, 
+			{name: '招聘企业',typeId: '1',num:xjlg},
+			{name: '求职者',typeId: '2',num:qzz},
+		]
+		
+		that.setData({
+			section:section1
+		});
+	},
+
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	},
+		// 页面分页内容相关
+		// ...searchpageEx.createPageMethods()
+})

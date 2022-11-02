@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.SchoolRecruitConferenceMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.SchoolRecruitConference">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="conference_name" jdbcType="VARCHAR" property="conferenceName" />
+    <result column="conference_type" jdbcType="TINYINT" property="conferenceType" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_type" jdbcType="TINYINT" property="companyType" />
+    <result column="company_major" jdbcType="VARCHAR" property="companyMajor" />
+    <result column="company_scale" jdbcType="VARCHAR" property="companyScale" />
+    <result column="company_city" jdbcType="VARCHAR" property="companyCity" />
+    <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
+    <result column="company_introduction" jdbcType="VARCHAR" property="companyIntroduction" />
+    <result column="recruit_introduction" jdbcType="VARCHAR" property="recruitIntroduction" />
+    <result column="recruit_major" jdbcType="VARCHAR" property="recruitMajor" />
+    <result column="conference_begin_time" jdbcType="TIMESTAMP" property="conferenceBeginTime" />
+    <result column="conference_address" jdbcType="VARCHAR" property="conferenceAddress" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="count_view" jdbcType="INTEGER" property="countView" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+    <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+    <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, conference_name, conference_type, company_name, company_type, company_major, 
+    company_scale, company_city, company_address, company_introduction, recruit_introduction, 
+    recruit_major, conference_begin_time, conference_address, status, count_view, create_time, 
+    ext1, ext2, ext3
+  </sql>
+</mapper>

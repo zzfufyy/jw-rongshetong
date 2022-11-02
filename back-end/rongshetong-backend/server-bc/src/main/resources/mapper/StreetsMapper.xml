@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.StreetsMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Streets">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="jdname" jdbcType="VARCHAR" property="jdname" />
+    <result column="jddz" jdbcType="VARCHAR" property="jddz" />
+    <result column="jdjd" jdbcType="VARCHAR" property="jdjd" />
+    <result column="jdwd" jdbcType="VARCHAR" property="jdwd" />
+    <result column="yl1" jdbcType="VARCHAR" property="yl1" />
+    <result column="yl2" jdbcType="VARCHAR" property="yl2" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, jdname, jddz, jdjd, jdwd, yl1, yl2
+  </sql>
+</mapper>

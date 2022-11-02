@@ -1,0 +1,132 @@
+<view class="container">
+    <view class="topbox">
+        <view class="clearfloat personbox" style="position: relative;">
+            <view class="ft ltimg">
+                <image src="{{portraitPath}}" class="tximg" binderror="binderrorCandidatePortrait"></image>
+            </view>
+            <view class="ft nameinfo">
+                <view class="name">
+                    {{name}}
+                </view>
+                <view class="sex">
+                    {{gender}} {{age}} {{gznl}}
+                </view>
+            </view>
+            <view class="fr frimg">
+                <!-- <image class="imgjt" src="/img/jt.png"></image> -->
+            </view>
+            <view class="lll">浏览 {{countView}}</view>
+
+        </view>
+        <view class="clearfloat ttbox">
+            <view class="ft leftname">意向岗位名称</view>
+            <!-- <view class="fr rtip">
+				{{expectJobName}}
+			</view> -->
+        </view>
+        <view class="clearfloat ttbox">
+            <view class="ft leftname" style="color: #F8424C;width:100%"> {{expectJobName}}</view>
+        </view>
+        <view class="clearfloat ttbox">
+            <view class="ft leftname">期望工资</view>
+            <view class="fr rtip">
+                {{salaryScope}}
+            </view>
+        </view>
+        <view class="clearfloat ttbox" wx:if="{{expectCommunityName!=''}}">
+            <view class="ft leftname" style="">期望工作地址</view>
+        </view>
+        <view class="clearfloat ttbox" wx:if="{{expectCommunityName!=''}}">
+            <view class="ft leftname" style="color: #999999;width:100%">{{expectCommunityName}}</view>
+        </view>
+        <view class="clearfloat ttbox" wx:if="{{eduBackgroundName!=''}}">
+            <view class="ft leftname">学历</view>
+            <view class="fr rtip">
+                {{eduBackgroundName}}
+            </view>
+        </view>
+        <view class="clearfloat ttbox" wx:if="{{eduSchoolName!=''}}">
+            <view class="ft leftname">毕业院校</view>
+            <view class="fr rtip">
+                {{eduSchoolName}}
+            </view>
+        </view>
+        <view class="clearfloat ttbox" wx:if="{{eduMajor!=''}}">
+            <view class="ft leftname">专业</view>
+            <view class="fr rtip">
+                {{eduMajor}}
+            </view>
+        </view>
+        <view class="clearfloat ttbox"  wx:if="{{curriculumVitae!=''}}">
+            <view class="ft leftname">个人简历</view>
+            <view class="fr rtip">
+                <text class="yulan" bindtap="prewfile" style="margin-right: 10px;">预览</text>
+                <text class="yulan" bindtap="uploadFile" >下载</text>
+            </view>
+        </view>
+        <!-- <view class="clearfloat ttbox"  wx:if="{{curriculumVitae==''}}">
+            <view class="ft leftname">个人简历</view>
+            <view class="fr rtip">
+                <text class="yulan" bindtap="prewfile" style="margin-right: 10px;">预览</text>
+                <text class="yulan" bindtap="uploadFile" >下载</text>
+            </view>
+        </view> -->
+        <view class="clearfloat ttbox" style="height: auto;">
+            <view class=" leftname">个人介绍</view>
+            <view class="gwxq textarea">
+                
+                <textarea style="width: 100%;" name=""  value="{{introduction}}" id="" cols="30" rows="10" readonly="true" disabled="true"></textarea>
+            </view>
+        </view>
+    </view>
+    <!-- <view class="topbox">
+		<view class="topjob">
+			<image class="local" src="/img/Icon ／ Location On ／ Rounded@2x.png"></image>推荐人才
+		</view>
+		<view class="joblist">
+			<view class="company" wx:for="{{compangjob}}" wx:key="key">
+				<view class="companyname">找 {{item.job}} 工作</view>
+				<view class="wid95 tagbox" >
+					<view class="companytag" >{{item.tagxb}}</view>
+					<view class="companytag" >{{item.tagnl}}岁</view>
+					<view class="companytag" >{{item.taggz}}/月</view>
+				</view>
+				<view class="companyname lcm">
+					<image src="{{item.persontx}}" class="companytx"></image>
+					{{item.personname}} {{item.time}}分钟前 {{item.sq}}·{{item.juli}}km
+				</view>
+			</view>
+			
+		</view>
+	</view>-->
+</view>
+<view class="botombox clearfloat">
+    <button class="imgbt ft buttonbox" style="margin-left: 9px;" open-type="share">
+        <image src="/img/fximg.png" class="imgbg ft"></image>
+    </button>
+    <!-- <image class="imgbt ddh ft" src="/img/dhred.png"></image> -->
+    <view class="fr tijsq yams" hidden="{{isinvite}}" bindtap="yqms">邀请面试</view>
+    <view class="fr tijsq yams yyqms" hidden="{{!isinvite}}">已邀请面试</view>
+
+    <view class="fr tijsq ms" data-cellphne="{{cellphne}}" bindtap="callnum">打电话</view>
+    <view class="fr tijsq ms" bindtap="msxx">视频面试</view>
+</view>
+<!-- <view class="botombox botombox1" hidden="{{jobWant}}" bindtap="showmes"></view> -->
+
+<view class="zzc" hidden="{{choosejob}}"></view>
+<view class="sxbox" hidden="{{choosejob}}">
+    <view class="toptit clearfloat">
+        <view class="ft qxbtn" bindtap="qxbtn">取消</view>
+        <view class="ft xzgw">选择招聘岗位</view>
+        <view class="ft addbtn" bindtap="addbtn">新增岗位</view>
+    </view>
+    <scroll-view style="height: 154px;" scroll-y>
+        <view class="jobnamebox {{item.id == id?'active':''}}" wx:key='key' bindtap="jobnamebox" wx:for="{{invitejob}}" data-id="{{item}}" wx:if="{{invitejob.length>0}}">
+            <view>{{item.jobname}} {{item.jobmoney}}</view>
+        </view>
+        <view class="jobnamebox" wx:key='key' wx:if="{{invitejob.length ==0}}" data-id="{{item.id}}">
+            <view style="color: #999999;">暂未发布职位,请去发布职位</view>
+        </view>
+    </scroll-view>
+    <view class="tijsq1" bindtap="tijsq1">发送面试邀请</view>
+</view>

@@ -1,0 +1,66 @@
+<view class="container">
+    <view class="topbox">
+        <view class="yhbg bg-blur" style="background: url({{portraitPath}}) no-repeat center;">
+        </view>
+    </view>
+    <view class="toxbox">
+        <image class="bgimg" src="{{portraitPath}}" binderror="binderrorPersonalPortrait"></image>
+        <view class="xgtx" bindtap="bindtapChangePortrait">点击修改头像</view>
+    </view>
+    <view class="naxbox" style="padding-bottom: 5px;">
+        <view class="name">真实姓名</view>
+        <input bindinput="handleInputRealName" type="text" placeholder="请输入真实姓名" class="wxh truename" value="{{realName}}" />
+    </view>
+    <view class="naxbox" style="padding-bottom: 5px;">
+        <view class="name">身份证号</view>
+        <input bindinput="bindinputIdentityCard" type="text" placeholder="请输入身份证号" class="wxh truename" value="{{identityCard}}" />
+    </view>
+    <view class="naxbox" style="padding-bottom: 5px;" bindtap="bindtapChooseCommunity">
+        <view class="name">所属社区</view>
+        <input type="text" placeholder="选择所属社区" class="wxh truename" value="{{choosedCommunityName}}" disabled="disabled" />
+    </view>
+    <!-- <view class="naxbox1">
+		<input type="text" placeholder="输入微信号" class="wxh" />
+	</view> -->
+    <view class="naxbox">
+        <view class="name">性别</view>
+        <view class="truename">
+            <picker bindchange="bindPickerChange" value="{{gender}}" range="{{genderList}}">
+                <view class="picker">
+                    {{genderList[gender]}}
+                </view>
+            </picker>
+        </view>
+    </view>
+    <view class="naxbox">
+        <view class="name">手机号</view>
+        <input bindinput="handleInputPhoneNumber" type="text" placeholder="输入手机号" class="wxh truename sjh" value="{{phone}}" disabled="true" />
+        <button class="hqlxfs " open-type="getUserInfo" open-type="getPhoneNumber" lang="zh_CN" bindgetphonenumber="getPhoneNumber">获取联系方式</button>
+    </view>
+
+    <view class="naxbox clearfloat" wx:if="{{userIdentity=='user'}}">
+        <view class="ft" style="width: 49%;">
+            <view class="name">出生年份</view>
+            <view class="phonenum">
+                <picker mode="date" fields="day" value="{{birthday}}" bindchange="bindDateChange">
+                    <view class="picker">
+                        <!-- {{birthday}} -->
+                        <input bindinput="" disabled="true" type="text" placeholder="输入出生年份" class="wxh truename" style="width:100%;" value="{{birthday}}" />
+                    </view>
+                </picker>
+            </view>
+        </view>
+        <view class="fr" style="width: 49%;border-left: 1px solid #F2F2F2;">
+            <view class="name">工作时间</view>
+            <view class="phonenum">
+                <input type="text" class="worktime" bindinput="bindinputWorkingAge" value="{{workingAge}}" placeholder="输入工作时间" />
+                <text class="year">年</text>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="tijsq" bindtap="bindtapSaveResume">保存</view>
+
+<!-- 选择社区组件  -->
+<choose-community id='choose-community' max_choosed_number="1" choosedCommunityList="{{choosedCommunityList}}" bind:submit="submitChooseCommunity">
+</choose-community>

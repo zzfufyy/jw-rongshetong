@@ -1,0 +1,59 @@
+<view class="container">
+	<view wx:for="{{jobList}}" wx:key="key" wx:for-index="pindex" style="position: relative;">
+		<!-- <image src="/img/del.png" class="jianhao" data-index="{{pindex}}" bindtap='bindtapDeleteIcon'></image> -->
+		<view class="clearfloat ttbox">
+			<view class="ft leftname">岗位名称</view>
+			<view class="fr rtip">
+				<input type="text" class="iptqy" bindinput='bindinputJobName' name="gwmc" placeholder="请输入岗位名称" data-tag="NumLimit" data-index="{{pindex}}"  value="{{item.jobName}}"/>
+			</view>
+		</view>
+		<view class="clearfloat ttbox">
+			<view class="ft leftname">薪资范围</view>
+			<view class="qyname rtip fr">
+					<picker bindchange="bindchangeChoooseSalary"  data-index="{{pindex}}" range="{{item.array}}" value="{{item.index}}" >
+						<view class="picker" style="color:{{color}}">
+							{{item.array[item.index]}}
+							<image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+						</view>
+					</picker>
+				</view>
+		</view>
+        <view class="clearfloat ttbox">
+			<view class="ft leftname">时间范围</view>
+			<view class="qyname rtip fr">
+					<picker mode="time" value="{{time}}" start="00:01" end="23:59" bindchange="bindTimeChange">
+						<view class="picker">
+                            当前选择: {{time}}
+                        </view>
+					</picker>
+				</view>
+		</view>
+		<view class="clearfloat ttbox">
+			<view class="ft leftname">招聘人数</view>
+			<view class="qyname rtip fr">
+				<input type="text" class="iptqy" bindinput='bindinputRecruitingNumber' name="recruitingNumber" placeholder="请输入招聘人数" data-tag="NumLimit" 
+				data-index="{{pindex}}" 
+                value="{{item.recruitingNumber}}" />
+				<!-- <picker bindchange="bindPickerChange1" data-index="{{pindex}}" range="{{item.array1}}" value="{{item.index1}}" >
+					<view class="picker" style="color:{{color1}}">
+						{{item.array1[item.index1]}}
+						<image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+					</view>
+				</picker> -->
+			</view>
+		</view>
+		<view class="clearfloat ttbox" style="height: auto;">
+			<view class=" leftname">岗位需求</view>
+			<view class="gwxq">
+				<textarea class="textarea" placeholder="请输入岗位需求" name="xsbdz" data-index="{{pindex}}"  bindinput='bindinputJobRequirement'  id="" value="{{item.jobIntroduction}}"></textarea>
+			</view>
+		</view>
+		<view class="delet" data-index="{{pindex}}" bindtap='bindtapDeleteIcon'>删除</view>
+
+		<view class="line10"></view>
+	</view>
+
+	<view class="jxtj" bindtap="bindtapContinueAdd">继续添加职位</view>
+</view>
+
+<view class="btnbox" bindtap="qrfb"><view class="tijsq">确认发布</view></view>

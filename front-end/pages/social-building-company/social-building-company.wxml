@@ -1,0 +1,24 @@
+<view class="container">
+    <view class="search-box">
+        <view class="search-box-content">
+            <icon class="search-icon" type="search" color="#333333" size="36rpx" />
+            <input class="search-input" placeholder="搜索企业" bindinput="bindinputSearchCompanyName" bindconfirm="bindconfirmSearchCompanyName"/>
+        </view>
+    </view>
+    <view class="split-line-2"></view>
+    <scroll-view scroll-y="true" style="height:{{winHeight}}px;width:100%;" bindscrolltolower="bindscrolltolowerCompanyList" >
+        <view class="company-box" wx:for="{{companyList}}" wx:for-item="companyItem" data-id="{{companyItem.companyUuid}}" bindtap="bindtapGoLinkCompany">
+            <text class="company-name">{{companyItem.companyName}}</text>
+            <view class="company-address-box" wx:if="{{companyItem.address!=''}}">
+                <image class="icon_address"src="../../img/icon/icon_address.svg" />
+                <text class="company-address">{{companyItem.address}}{{companyItem.addressDetail}}</text>
+            </view>
+            <view class="company-job-box" wx:if="{{companyItem.jobNameList!=''}}">
+                <div class="company-job-text" >热招<text class="company-job-list" space="nbsp"> {{companyItem.jobNameList}} </text>等职位</div>
+                <!-- company-job-list -->
+            </view>
+            
+        </view>
+    </scroll-view>
+    
+</view>

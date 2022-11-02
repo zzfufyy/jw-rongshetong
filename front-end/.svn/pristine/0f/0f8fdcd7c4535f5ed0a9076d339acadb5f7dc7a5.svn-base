@@ -1,0 +1,224 @@
+const CONSTANT = require('../../../common/constant');
+
+Component({
+    options: {
+        multipleSlots: true // 在组件定义时的选项中启用多slot支持
+    },
+    /**
+     * 组件的属性列表
+     */
+    properties: {
+        subjectOrder: {
+            value: 1,
+            type: Number,
+        }
+    },
+
+    /** 组件数据 */
+    data: {
+        // 组件类型
+        formComponentType: CONSTANT.FORM_COMPONENT_TYPE.CHOICE_SELECT,
+        // 选项list
+        optionList: [
+            { optionTitle: '', checked: false },
+            { optionTitle: '', checked: false },
+        ],
+        // 题目标题
+        subjectTitle: '',
+        // 题目类型
+        subjectType: CONSTANT.SUBJECT_TYPE.SINGLE_SELECT,
+        // 是否必须
+        isRequire: false,
+        isRequireTemp: false,
+        // 是否多选
+        isMultiple: false,
+        isMultipleTemp: false,
+        // 基础设置
+        hiddenBaseSetting: true,
+        // 更多设置
+        hiddenMoreSetting: true,
+    },
+
+    /** 组件方法 */
+    methods: {
+        // 暴露方法  重塑组件数据
+        buildData(newData) {
+            // 除了顺序 subjectOrder  
+            this.setData({
+                optionList: newData.optionList,
+                subjectTitle: newData.subjectTitle,
+                subjectType: newData.subjectType,
+                isRequire: newData.isRequire,
+                isRequireTemp: newData.isRequireTemp,
+                isMultiple: newData.isMultiple,
+                isMultipleTemp: newData.isMultipleTemp,
+                hiddenBaseSetting: newData.hiddenBaseSetting,
+                hiddenMoreSetting: newData.hiddenMoreSetting,
+            })
+        },
+        getData() {
+            return this.data;
+        },
+        // 通信交互方法:
+        bindtapCopy(e) {
+            this.setData({
+                hiddenMoreSetting: true,
+            });
+            let detail = {
+                value: this.data,
+            }
+            this.triggerEvent('copy', detail);
+        },
+        bindtapMovePrev(e) {
+            this.setData({
+                hiddenMoreSetting: true,
+            });
+            let detail = {
+                value: this.data,
+            }
+            this.triggerEvent('movePrev', detail);
+        },
+        bindtapMoveNext(e) {
+            this.setData({
+                hiddenMoreSetting: true,
+            });
+            let detail = {
+                value: this.data,
+            }
+            this.triggerEvent('moveNext', detail);
+        },
+        bindtapDelete(e) {
+            this.setData({
+                hiddenMoreSetting: true,
+            });
+            let detail = {
+                value: this.data,
+            }
+            this.triggerEvent('delete', detail);
+        },
+
+        // 添加 选项
+        bindinputSujectTitle(e) {
+            this.setData({
+                subjectTitle: e.detail.value,
+            })
+        },
+        bindinputOptionTitle(e) {
+            let currentIndex = e.currentTarget.dataset.index;
+            let currentItem = 'optionList[' + currentIndex + '].optionTitle';
+            this.setData({
+                [currentItem]: e.detail.value
+            })
+        },
+        bindtapAddOption(e) {
+            let currentOptionList = this.data.optionList;
+            currentOptionList.push({
+                optionTitle: '',
+                checked: false,
+            });
+            this.setData({
+                optionList: currentOptionList
+            })
+        },
+        // 关闭图标
+        bindtapDeleteOption(e) {
+            let currentIndex = e.currentTarget.dataset.index;
+            let currentOptionList = this.data.optionList;
+            let CanDeleteflag = currentOptionList.length <= 2 ? false : true
+            if (!CanDeleteflag) {
+                let wxmodalTip = wx.showModal({
+                    title: '提示',
+                    content: '请至少保留2个题目选项',
+                })
+                wxmodalTip.then(res => {
+                    return;
+                })
+            }
+            if (CanDeleteflag) {
+                let wxmodalDelete = wx.showModal({
+                    title: '提示',
+                    content: '是否确认删除',
+                });
+                wxmodalDelete.then(res => {
+                    if (res.confirm) {
+                        currentOptionList.splice(currentIndex, 1);
+                        this.setData({
+                            optionList: currentOptionList,
+                        })
+                    } else if (res.cancel) {
+                        return;
+                    }
+                })
+            }
+        },
+
+        /** BEGIN 基础设置 相关 */
+        bandtapBaseSettingPopup() {
+            let hiddenBaseSetting = !this.data.hiddenBaseSetting
+            this.setData({
+                hiddenBaseSetting: hiddenBaseSetting
+            })
+        },
+        bindchangeIsRequire(e) {
+            this.setData({
+                isRequireTemp: e.detail.value
+            })
+        },
+        bindchangeIsMultiple(e) {
+            this.setData({
+                isMultipleTemp: e.detail.value,
+            })
+        },
+        bindtapBaseSettingCancel() {
+            this.setData({
+                hiddenBaseSetting: true
+            })
+        },
+        bindtapBaseSettingConfirm() {
+            this.setData({
+                isRequire: this.data.isRequireTemp,
+                isMultiple: this.data.isMultipleTemp,
+                subjectType: this.data.isMultipleTemp ? CONSTANT.SUBJECT_TYPE.MULTIPLE_SELECT : CONSTANT.SUBJECT_TYPE.SINGLE_SELECT,
+                hiddenBaseSetting: true
+            })
+            console.log(this.data);
+        },
+        /** END 基础设置 相关 */
+
+        /** BEGIN 更多设置 相关 */
+        bindtapMoreSettingPopup() {
+            this.setData({
+                hiddenMoreSetting: false
+            })
+        },
+        bindtapMoreSettingCancel() {
+            this.setData({
+                hiddenMoreSetting: true
+            })
+        },
+        /** END 更多设置 相关 */
+
+
+    },
+
+    /** 组件属性 */
+    /** 组件生命周期 */
+    lifetimes: {
+        created: function () {
+        },
+        ready: async function () {
+
+        }
+    },
+    /** 页面生命周期 */
+    pageLifetimes: {
+        show: function () {
+        },
+        hide: function () {
+            // 页面被隐藏
+        },
+        resize: function (size) {
+            // 页面尺寸变化
+        }
+    }
+})

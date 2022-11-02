@@ -1,0 +1,171 @@
+// pages/creattp/creattp.js
+const object_util = require('../../utils/object_util');
+
+const CONSTANT = require('../../common/constant');
+const COMPONENT_ID_PREFIX = '#option-component-'
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        subjectList: [
+            { formComponentType: CONSTANT.FORM_COMPONENT_TYPE.CHOICE_SELECT },
+        ],
+
+        gjsz: false,
+        date: '请选择',
+        isshow: false,
+    },
+    bindDateChange: function (e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.setData({
+            date: e.detail.value
+        })
+    },
+    gjszchange(e) {
+        let val = e.detail.value
+        console.log(val)
+
+        this.setData({
+            isshow: val
+        })
+    },
+    submit() {
+        let temp = this.selectComponent(COMPONENT_ID_PREFIX + 1).getData();
+        console.log(temp);
+        return;
+        wx.navigateTo({
+            url: '/pages/subscces/subscces',
+        })
+    },
+    /** BEGIN 选择框组件 绑定交互事件 */
+    choiceSelectCopy(e) {
+        this._getAllOptionComponentData();
+        let currentIndex = e.currentTarget.dataset.index;
+        let currentSubjectList = object_util.copyObject(this.data.subjectList);
+        currentSubjectList.splice(currentIndex, 0, object_util.copyObject(this.data.subjectList[currentIndex]));
+        this.setData({
+            subjectList: currentSubjectList,
+        });
+        this._setAllOptionComponentData();
+
+    },
+    choiceSelectMovePrev(e) {
+        this._getAllOptionComponentData();
+        let currentIndex = e.currentTarget.dataset.index;
+        let currentSubjectList = object_util.copyObject(this.data.subjectList);
+        currentSubjectList.splice(currentIndex - 1, 0, object_util.copyObject(this.data.subjectList[currentIndex]));
+        currentSubjectList.splice(currentIndex + 1, 1);
+        this.setData({
+            subjectList: currentSubjectList,
+        });
+        this._setAllOptionComponentData();
+    },
+    choiceSelectMoveNext(e) {
+        this._getAllOptionComponentData();
+        let currentIndex = e.currentTarget.dataset.index;
+        let currentSubjectList = object_util.copyObject(this.data.subjectList);
+        currentSubjectList.splice(currentIndex + 2, 0, object_util.copyObject(this.data.subjectList[currentIndex]));
+        currentSubjectList.splice(currentIndex, 1);
+        // currentSubjectList.splice(currentIndex, 1);
+        this.setData({
+            subjectList: currentSubjectList,
+        });
+        this._setAllOptionComponentData();
+    },
+    choiceSelectDelete(e) {
+        this._getAllOptionComponentData();
+        let currentIndex = e.currentTarget.dataset.index;
+        let currentSubjectList = object_utils.copyObject(this.data.subjectList);
+        currentSubjectList.splice(currentIndex, 1);
+        this.setData({
+            subjectList: currentSubjectList,
+        });
+        this._setAllOptionComponentData();
+    },
+    /** END 选择框组件 绑定交互事件 */
+    // 添加题目
+    bindtapAddSubject(e) {
+        // 目前只有单选/多选
+        let formComponentType = CONSTANT.FORM_COMPONENT_TYPE.CHOICE_SELECT;
+        this.setData({
+            subjectList: this.data.subjectList.concat({ formComponentType: formComponentType }),
+        })
+    },
+
+    /** BEGIN 内部方法 */
+    // 页面与组件 传、赋值  构造 触发事件双向绑定效果
+    _getAllOptionComponentData() {
+        let currentSubjectList = this.data.subjectList;
+        this.setData({
+            subjectList: currentSubjectList.map((v, index) => {
+                return this.selectComponent(COMPONENT_ID_PREFIX + v.formComponentType + '-' + index).getData()
+            }),
+        })
+        console.log(this.data.subjectList);
+    },
+    _setAllOptionComponentData() {
+        let currentSubjectList = this.data.subjectList;
+        currentSubjectList.map((v, index) => {
+            this.selectComponent(COMPONENT_ID_PREFIX + v.formComponentType + '-' + index).buildData(v);
+        });
+    },
+    /** END 内部方法 */
+
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: function (options) {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    }
+})

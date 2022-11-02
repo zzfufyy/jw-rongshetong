@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IRecruitRecordMapper">
+    <resultMap id="BaseResultMap" type="com.shopping.wx.model.RecruitRecord">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="candidate_name" jdbcType="VARCHAR" property="candidateName"/>
+        <result column="candidate_telephone" jdbcType="VARCHAR" property="candidateTelephone"/>
+        <result column="candidate_email" jdbcType="VARCHAR" property="candidateEmail"/>
+        <result column="candidate_birthday" jdbcType="TIMESTAMP" property="candidateBirthday"/>
+        <result column="recruiter_name" jdbcType="VARCHAR" property="recruiterName"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="recruiter_telephone" jdbcType="VARCHAR" property="recruiterTelephone"/>
+        <result column="recruiter_email" jdbcType="VARCHAR" property="recruiterEmail"/>
+        <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
+        <result column="job_address" jdbcType="VARCHAR" property="jobAddress"/>
+        <result column="salary_scope" jdbcType="VARCHAR" property="salaryScope"/>
+        <result column="flag_who_receive" jdbcType="TINYINT" property="flagWhoReceive"/>
+        <result column="flag_view_receive" jdbcType="TINYINT" property="flagViewReceive"/>
+        <result column="flow_recruit" jdbcType="TINYINT" property="flowRecruit"/>
+        <result column="flag_result" jdbcType="TINYINT" property="flagResult"/>
+        <result column="candidate_openid" jdbcType="VARCHAR" property="candidateOpenid"/>
+        <result column="recruiter_openid" jdbcType="VARCHAR" property="recruiterOpenid"/>
+        <result column="company_uuid" jdbcType="VARCHAR" property="companyUuid"/>
+        <result column="job_uuid" jdbcType="VARCHAR" property="jobUuid"/>
+        <result column="category_uuid" jdbcType="VARCHAR" property="categoryUuid"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="ext1" jdbcType="VARCHAR" property="ext1"/>
+        <result column="ext2" jdbcType="VARCHAR" property="ext2"/>
+        <result column="ext3" jdbcType="VARCHAR" property="ext3"/>
+    </resultMap>
+
+    <!--    对于 POJO 中的实体类，需要添加此 ResultMap 来映射字段-->
+    <resultMap id="RecordForCandidateDTO" type="com.shopping.wx.pojo.dto.recruit_record.RecordForCandidateDTO">
+        <result column="flow_recruit" jdbcType="INTEGER" property="flowRecruit"/>
+        <result column="candidate_openid" jdbcType="VARCHAR" property="candidateOpenid"/>
+        <result column="recruiter_openid" jdbcType="VARCHAR" property="recruiterOpenid"/>
+        <result column="company_uuid" jdbcType="VARCHAR" property="companyUuid"/>
+        <result column="job_uuid" jdbcType="VARCHAR" property="jobUuid"/>
+        <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="portrait_path" jdbcType="VARCHAR" property="portraitPath"/>
+        <result column="job_salary_min" jdbcType="INTEGER" property="jobSalaryMin"/>
+        <result column="job_salary_max" jdbcType="INTEGER" property="jobSalaryMax"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="distance" jdbcType="DOUBLE" property="distance"/>
+    </resultMap>
+    <select id="listRecordPlusByCandidateOpenid" resultMap="RecordForCandidateDTO">
+        SELECT
+           rr.flow_recruit          AS flow_recruit,
+           rr.candidate_openid      AS candidate_openid,
+           rr.recruiter_openid      AS recruiter_openid,
+           rr.company_uuid          AS company_uuid,
+           rr.job_uuid              AS job_uuid,
+           rj.job_name              AS job_name,
+           rj.company_name          AS company_name,
+           rc.portrait_path         AS portrait_path,
+           rj.job_salary_max        AS job_salary_max,
+           rj.job_salary_min        AS job_salary_min,
+           ur.telephone             AS telephone,
+           ST_DISTANCE_SPHERE(
+                               POINT(#{location.longitude}, #{location.latitude}),
+                               POINT(rc.`lon`, rc.`lat`)) AS `distance`
+        FROM recruit_record rr
+        LEFT JOIN recruit_job rj
+           ON rr.job_uuid = rj.id
+        LEFT JOIN user_recruiter ur
+           ON rr.recruiter_openid = ur.id
+        LEFT JOIN recruit_company rc
+           ON rr.company_uuid = rc.id
+        WHERE rr.status != -1 AND
+              rj.status != -1 AND
+              rc.status != -1 AND
+              rc.flag_identification = 1 AND
+              rr.candidate_openid = #{candidateOpenid}
+        ORDER BY distance ASC
+    </select>
+
+    <resultMap id="RecordForRecruiterDTO" type="com.shopping.wx.pojo.dto.recruit_record.RecordForRecruiterDTO">
+        <result column="record_uuid" jdbcType="VARCHAR" property="recordUuid"/>
+        <result column="flow_recruit" jdbcType="INTEGER" property="flowRecruit"/>
+        <result column="candidate_openid" jdbcType="VARCHAR" property="candidateOpenid"/>
+        <result column="recruiter_openid" jdbcType="VARCHAR" property="recruiterOpenid"/>
+        <result column="company_uuid" jdbcType="VARCHAR" property="companyUuid"/>
+        <result column="job_uuid" jdbcType="VARCHAR" property="jobUuid"/>
+        <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="job_salary_min" jdbcType="INTEGER" property="jobSalaryMin"/>
+        <result column="job_salary_max" jdbcType="INTEGER" property="jobSalaryMax"/>
+        <result column="real_name" jdbcType="INTEGER" property="realName"/>
+        <result column="gender" jdbcType="INTEGER" property="gender"/>
+        <result column="birthday" jdbcType="TIMESTAMP" property="birthday"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <select id="listRecordPlusByCompanyUuid" resultMap="RecordForRecruiterDTO">
+        SELECT
+           rr.id                    AS record_uuid,
+           rr.flow_recruit          AS flow_recruit,
+           rr.candidate_openid      AS candidate_openid,
+           rr.recruiter_openid      AS recruiter_openid,
+           rr.company_uuid          AS company_uuid,
+           rr.job_uuid              AS job_uuid,
+           rj.job_name              AS job_name,
+           rj.company_name          AS company_name,
+           rj.job_salary_max        AS job_salary_max,
+           rj.job_salary_min        AS job_salary_min,
+           uc.real_name             AS real_name,
+           uc.gender                AS gender,
+           uc.birthday              AS birthday,
+           uc.telephone             AS telephone,
+           rr.create_time           AS create_time
+        FROM recruit_record rr
+        LEFT JOIN recruit_job rj
+           ON rr.job_uuid = rj.id
+        LEFT JOIN user_candidate uc
+           ON rr.candidate_openid = uc.id
+        WHERE rr.status != -1 AND
+              rj.status != -1 AND
+              rr.company_uuid = #{companyUuid}
+        ORDER BY create_time desc
+    </select>
+
+
+    <resultMap id="RecordForCandidatePlusResultMap"
+               type="com.shopping.wx.pojo.dto.recruit_record.RecordForCandidatePlus" extends="BaseResultMap">
+        <result column="recruit_company_name" jdbcType="VARCHAR" property="recruitCompanyName"/>
+        <result column="recruit_juridical_person" jdbcType="INTEGER" property="recruitJuridicalPerson"/>
+        <result column="recruit_juridical_phone" jdbcType="VARCHAR" property="recruitJuridicalPhone"/>
+        <result column="recruit_portrait_path" jdbcType="VARCHAR" property="recruitPortraitPath"/>
+        <result column="recruit_job_name" jdbcType="VARCHAR" property="recruitJobName"/>
+        <result column="recruit_job_salary_min" jdbcType="VARCHAR" property="recruitJobSalaryMin"/>
+        <result column="recruit_job_salary_max" jdbcType="VARCHAR" property="recruitJobSalaryMax"/>
+    </resultMap>
+    <select id="listRecordForCandidatePlus" resultMap="RecordForCandidatePlusResultMap">
+        SELECT
+          rr.*,
+          rc.company_name as recruit_company_name,
+          rc.juridical_person as recruit_juridical_person,
+          rc.juridical_phone as recruit_juridical_phone,
+          rc.portrait_path as recruit_portrait_path,
+          rj.job_name as recruit_job_name,
+          rj.job_salary_min as recruit_job_salary_min,
+          rj.job_salary_max as recruit_job_salary_max
+        FROM recruit_record rr
+        LEFT JOIN recruit_company rc
+          ON rr.company_uuid = rc.id
+        LEFT JOIN recruit_job rj
+          ON rr.job_uuid  = rj.id
+        WHERE rr.candidate_openid = #{candidateOpenid}
+        AND rr.flow_recruit = #{flowRecruit}
+
+    </select>
+
+</mapper>

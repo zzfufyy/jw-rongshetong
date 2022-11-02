@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IViewRecordMapper">
+
+    <!--    对于 POJO 中的实体类，需要添加此 ResultMap 来映射字段-->
+    <resultMap id="ViewRecordDTO" type="com.shopping.wx.pojo.dto.view_record.ViewRecordDTO">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="candidate_openid" jdbcType="VARCHAR" property="candidateOpenid"/>
+        <result column="company_uuid" jdbcType="VARCHAR" property="companyUuid"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="portrait_path" jdbcType="VARCHAR" property="portraitPath"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="distance" jdbcType="DOUBLE" property="distance"/>
+    </resultMap>
+    <select id="pagedByDistance" resultMap="ViewRecordDTO">
+        SELECT
+            vr.id as id,
+            vr.candidate_openid as candidate_openid,
+            vr.company_uuid as company_uuid,
+            rc.company_name as company_name,
+            rc.portrait_path as portrait_path,
+            rc.phone as phone,
+            ST_DISTANCE_SPHERE(
+                POINT(uc.lon, uc.lat),
+                POINT(rc.lon, rc.lat)
+            ) AS distance
+        FROM view_record vr
+        LEFT JOIN user_candidate uc
+        ON vr.candidate_openid = uc.id
+        LEFT JOIN recruit_company rc
+        ON vr.company_uuid = rc.id
+        WHERE candidate_openid = #{candidateOpenid}
+        ORDER BY distance ASC
+    </select>
+
+</mapper>

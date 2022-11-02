@@ -1,0 +1,86 @@
+<view class="clearfloat container">
+	<view class="titwarn">
+		平台提醒：标*为必填项
+	</view>
+	<view class="clearfloat ttbox">
+		<view class="ft leftname">真实姓名*</view>
+		<view class="fr rtip">
+			<input type="text" bindinput="bindinputCompanyName" class="iptqy" placeholder="请输入真实姓名"  value="{{nametrue}}" />
+		</view>
+	</view>
+
+	<view class="clearfloat ttbox">
+		<view class="ft leftname" >手机号码*</view>
+		<!-- <view class="fr rtip" style="color: #3384FD;text-align:right;position: relative;">
+			<button class="hqlxfs " open-type="getUserInfo" open-type="getPhoneNumber" lang="zh_CN" bindgetphonenumber="getPhoneNumber">获取联系方式</button>
+		</view> -->
+		<view class="fr rtip" style="color: #3384FD;text-align:right;position: relative;">
+			<input type="text" style="text-align: right;" bindinput="lxdhip" class="iptqy xyd" value="{{cellphone}}"  placeholder="联系电话"  />
+		</view>
+	</view>
+
+	<view class="clearfloat ttbox">
+		<view class="ft leftname">所属社区*</view>
+		<view class="qyname rtip fr">
+			<picker bindchange="bindPickerChange" range="{{array}}" value="{{index}}" >
+				<view class="picker">
+					{{array[index]}}
+					<image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+				</view>
+			</picker>
+		</view>
+	</view>
+
+	<view class="clearfloat ttbox">
+		<view class="ft leftname">性别</view>
+		<view class="qyname rtip fr">
+			<picker bindchange="bindPickerChange1" range="{{array1}}" value="{{index1}}" >
+				<view class="picker">
+					{{array1[index1]}}
+					<image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+				</view>
+			</picker>
+		</view>
+	</view>
+
+	<view class="clearfloat ttbox">
+		<view class="ft leftname">出生年份</view>
+		<view class="qyname rtip fr">
+			<picker mode="date" value="{{date}}" start="2015-09-01" end="2017-09-01" fields="month" bindchange="bindDateChange2">
+				<view class="picker">
+					{{date}}
+					<image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+				</view>
+			</picker>
+		</view>
+	</view>
+
+	<view class="clearfloat ttbox">
+		<view class="ft leftname">工作时长</view>
+		<view class="qyname rtip fr">
+			<picker bindchange="bindPickerChange3" range="{{array3}}" value="{{index3}}" >
+				<view class="picker">
+					{{array3[index3]}}
+					<image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+				</view>
+			</picker>
+		</view>
+	</view>
+
+	<view class="line10"></view>
+
+	<view class="topbox">
+		<view class="comname">个人头像</view>
+		<view class="comimg">
+			<image src="{{imgsrc}}" class="imgtag" style=""></image>
+			<text class="qybz" bindtap="xgtx">点击上传头像</text>
+		</view>
+		<view class="line1"></view>
+	</view>
+
+
+	
+</view>
+<view class="bcbox">
+	<view class="tijsq" bindtap="bc">保存</view>
+</view>

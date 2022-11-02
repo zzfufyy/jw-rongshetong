@@ -1,0 +1,25 @@
+<!-- qzyx 判断是否隐藏 -->
+<view class="zzc " hidden="{{hiddenPopup}}" bindtap="bindtapMaskLayer"></view>
+<view class="qwzwbox" hidden="{{hiddenPopup}}">
+    <view style="height: 10px;background: #fff;"></view>
+    <view style="background: #fff;">
+        <view class="topbox INinputheader">
+            <icon class="INsearchicon" type="search" size="22" />
+            <input type="text" class="weui-input" bindinput="bindinputSearchJobCategory" confirm-type="done" bindconfirm="bindconfirmSearchJobCategory" placeholder="请输入期望职位" value="{{searchText}}" />
+            <!-- <view bindtap="bindtapCategoryCancel" class="quxiao">取消</view> -->
+        </view>
+        <view class="middlebox">
+            <view wx:for="{{jobCategoryList}}" style="display: {{item.display}};" data-index="{{index}}" wx:key="key" class="wantjob   {{item.checked?'active':''}}" bindtap="bindtapChooseJobCategory">
+                {{item.categoryName}}
+            </view>
+        </view>
+        <view class="middlebox">
+            <text class="hascs">已选择：</text>
+            <text wx:for="{{jobCategoryList}}" bindtap="bindtapRemoveJobCategory" class="hascs active" data-index="{{index}}" wx:key="key" hidden="{{!item.checked}}"> {{item.categoryName}} </text>
+        </view>
+    </view>
+    <view class="btn_box">
+        <view bindtap="bindtapJobCategoryCancel" class="quxiao tijsq">取消</view>
+        <view class="tijsq" bindtap="bindtapChoosedJobCategorySubmit">保存</view>
+    </view>
+</view>

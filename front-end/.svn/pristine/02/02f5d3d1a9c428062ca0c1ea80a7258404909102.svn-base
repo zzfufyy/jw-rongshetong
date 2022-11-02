@@ -1,0 +1,80 @@
+// 加载 工具类
+const Paging = require('../../utils/paging_util');
+
+
+// 加载服务类
+const formInformationService = require('../../common/formInformationService');
+
+
+
+// 定义常量
+const app = getApp();
+
+
+const createPageMethods = () => ({
+    // 分页状态
+    state: {
+        pageConfig: new Paging.PageConfig(5),
+    },
+    // 没有更多页面了
+    _noMoreData() {
+        this.setData({
+            noMoreData: true,
+        });
+    },
+    // 清空内容
+    clearContent: async function () {
+        this.state.pageConfig.reset();
+        // 重置数据内容
+        this.setData({
+            formInformationList: []
+        })
+    },
+
+    // 加载内容
+    loadContent: async function () {
+        // 回调 没有数据的处理方式
+        this.state.pageConfig.setNoMoreDataCallback(this._noMoreData);
+        // 初始化分页配置
+        let pageConfig = this.state.pageConfig;
+            // 加載openid
+            await app.getOpenidReady();
+            let openid = wx.getStorageSync('openid');
+        // 构建查询条件 condition
+        let condition = {
+            userOpenid: openid,
+        }
+        let pagingParam = pageConfig.buildNextParam(condition);
+        if (!pagingParam) {
+            return;
+        }
+        // 获取分页内容
+        let pageInfo;
+        // 请求数据
+        try {
+            pageInfo = (await formInformationService.page(pagingParam)).data;
+            console.debug(pageInfo);
+        } catch (e) {
+            console.error(e);
+        } finally {
+        }
+        let dataList = pageConfig.handlePageInfo(pageInfo);
+        let current = this.data.formInformationList;
+        let newList = dataList.map(v => ({
+           formUuid: v.formUuid,
+           formTitle: v.formTitle,
+           beginTime: v.beginTime,
+           completedCount: v.completedCount, 
+        }));
+
+        // 拼接数据
+        this.setData({
+            formInformationList: current.concat(newList),
+        });
+    },
+
+});
+
+module.exports = {
+    createPageMethods: createPageMethods,
+}

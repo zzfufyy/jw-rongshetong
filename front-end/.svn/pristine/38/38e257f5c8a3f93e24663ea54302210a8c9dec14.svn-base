@@ -1,0 +1,170 @@
+<view class="container" style="padding-bottom: 20px;">
+    <view class="titwarn">
+        平台提醒：标*为必填项
+    </view>
+    <view class="clearfloat ttbox">
+        <view class="ft leftname">企业名称*</view>
+        <view class="fr rtip">
+            <input type="text" bindinput="bindinputCompanyName" class="iptqy" placeholder="请输入企业名称" value="{{companyName}}" />
+        </view>
+    </view>
+    <view class="line10"></view>
+    <view class="clearfloat ttbox">
+        <view class="ft leftname">所属社区*</view>
+        <view class="qyname rtip fr">
+            <picker bindtap="bindtapPopupExpectCommunity" range="{{array1}}" value="{{index1}}" disabled="disabled">
+                <view class="picker">
+                    {{choosedCommunityName}}
+                    <image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+                </view>
+            </picker>
+        </view>
+    </view>
+    <view class="line10"></view>
+    <view class="clearfloat ttbox">
+        <view class="ft leftname">公司地址</view>
+        <view class="fr rtip">
+            <view class="ggdw" bindtap="bindtapChangeLocation">更改定位</view>
+        </view>
+    </view>
+    <view class="clearfloat ttbox local">{{positionData}}</view>
+    <view class="line10"></view>
+    <view class="clearfloat ttbox">
+        <view class="ft leftname">统一社会信用代码</view>
+        <view class="fr rtip" style="color: #3384FD;text-align:right">
+            填写将提升可信度
+        </view>
+    </view>
+    <view class="clearfloat ttbox">
+        <input type="text" bindinput="bindinputLicenseId" class="iptqy xyd" style="" placeholder="请输入社会信用代码" />
+    </view>
+    <view class="line10"></view>
+    <view class="clearfloat ttbox">
+        <view class="ft leftname">公司联系人姓名</view>
+        <!-- <view class="fr rtip" style="color: #3384FD;text-align:right;position: relative;">
+			<button class="hqlxfs " open-type="getUserInfo" open-type="getPhoneNumber" lang="zh_CN" bindgetphonenumber="getPhoneNumber">获取联系方式</button>
+		</view> -->
+        <view class="fr rtip" style="text-align:right;position: relative;">
+            <input type="text" style="text-align: right;" bindinput="bindInputCompanyPerson" class="iptqy xyd" value="{{companyPerson}}" placeholder="联系人姓名" />
+        </view>
+    </view>
+    <view class="clearfloat ttbox">
+        <view class="ft leftname">联系人电话</view>
+        <view class="fr rtip" style="text-align:right;position: relative;">
+            <input type="text" style="text-align: right;" bindinput="bindinputCompanyPhone" class="iptqy xyd" value="{{companyPhone}}" placeholder="公司联系人电话号码" />
+        </view>
+    </view>
+    <view class="line10"></view>
+    <view class="clearfloat ttbox">
+        <view class="ft leftname">招聘人姓名*</view>
+        <view class="fr rtip" style="text-align:right;position: relative;">
+            <input type="text" style="text-align: right;" bindinput="bindtapRecruiterName" class="iptqy xyd" value="{{juridicalPerson}}" placeholder="招聘人姓名" />
+        </view>
+    </view>
+    <view class="clearfloat ttbox">
+        <view class="ft leftname">联系电话*</view>
+        <view class="fr rtip" style="color: #3384FD;text-align:right;position: relative;">
+            <button class="hqlxfs " open-type="getUserInfo" open-type="getPhoneNumber" lang="zh_CN" bindgetphonenumber="bindgetphonenumberRecruiter">授权</button>
+        </view>
+    </view>
+    <view class="clearfloat ttbox">
+        <!-- <input type="text" bindinput="aasss" class="iptqy xyd" value="{{sqrphone}}"  placeholder="联系电话"  /> -->
+        <view class="iptqy xyd" style="line-height: 50px;">{{recruiterTelephone}}</view>
+    </view>
+    <view class="line10"></view>
+    <view class="clearfloat ttbox">
+        <view class="ft leftname">招聘岗位意向</view>
+        <view class="fr rtip" style="text-align: right;width: 20%;" bindtap="tianjaijob">
+            <!-- <image class="imgtj" src="/img/tjimg.png"></image> -->
+        </view>
+    </view>
+    <view class="box">
+		<!-- <view class="top">期望职位</view> -->
+		<view class="bottom" bindtap="bindtapPopupExpectCategory">
+			<text hidden="{{txthide}}">请选择招聘岗位意向</text>
+			<view  hidden="{{arrhide}}" class="clearfloat obbox">
+                <view class="yxjob {{item.checked?'xb':'hide'}}" wx:for="{{wantjob}}" wx:key="key">
+                    <image src="/img/gbimg.png" class="gbimg" data-index="{{index}}" data-id="{{item.categoryUuid}}" catchtap="catchtapCancelCategoryIcon"></image>
+                    <view class="jobbox">{{item.job}}</view>
+                </view>
+            </view>
+		</view>
+	</view>
+
+    <view class="tijsq" bindtap="bindtapSubmit" style="margin: 0 21px;width: auto;margin-top: 25px;">提交审核</view>
+
+
+    <view class="zzc1" hidden="{{hiddenPopupExpectCommunity}}" bindtap="bindtapCommunityMask"></view>
+
+    <view class="qwzwbox1" hidden="{{hiddenPopupExpectCommunity}}">
+        <view style="height: 10px;background: #fff;"></view>
+        <view style="background: #fff;">
+            <view class="cpjs">
+                <view class="clearfloat bigbox">
+                    <view class="ft ltbox">
+                        <scroll-view scroll-y style="height:{{oht}}px;" scroll-y="true">
+                            <block wx:for="{{districtList}}" wx:key="index">
+                                <view id="" class="nav_left_items {{item.checked ? 'activ12' : ''}} ltbtn" bindtap="bindtapChooseDistrict" data-name="{{item.districtName}}">
+                                    {{item.districtName}}
+                                </view>
+                            </block>
+                        </scroll-view>
+                    </view>
+
+                    <view class="ft mdbox">
+                        <scroll-view scroll-y style="height:{{oht}}px;" scroll-y="true">
+                            <block wx:for="{{streetList}}" wx:key="index">
+                                <view class="nav_left_items {{item.checked ? 'activ12' : ''}} ltbtn" bindtap="bindtapChooseStreet" data-name="{{item.streetName}}">
+                                    {{item.streetName}}
+                                </view>
+                            </block>
+                        </scroll-view>
+                    </view>
+                    <view class="ft rtboxjd">
+                        <scroll-view scroll-y style="height:{{oht}}px;" scroll-y>
+                            <block wx:for="{{communityList}}" wx:key="index">
+                                <view class="nav_left_items {{item.checked ? 'active' : ''}} ltbtn1" bindtap="bindtapChooseCommunity" data-index="{{index}}" data-id="{{item.communityUuid}}">
+                                    {{item.communityName}}
+                                </view>
+                            </block>
+                        </scroll-view>
+                    </view>
+                </view>
+                <view class="sqnameboxbig">
+                    <view class="sq" wx:for="{{choosedCommunityList}}" wx:key="key">
+                        {{item.communityName}}
+                        <image src="/img/gbimg.png" data-id="{{item.communityUuid}}" bindtap="bindtapCancelChoosedCommunity" class="gbimg"></image>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view>
+            <view class="tijsq" bindtap="bindtapChoosedCommunitySave">保存</view>
+        </view>
+    </view>
+
+    <!-- 招聘岗位弹框 -->
+    <view class="zzc " bindtap="bindtapCategoryCancel" hidden="{{hiddenPopupExpectCategory}}"></view>
+    <view class="qwzwbox" hidden="{{hiddenPopupExpectCategory}}">
+        <view style="height: 10px;background: #fff;"></view>
+        <view style="background: #fff;">
+            <view class="topbox INinputheader">
+                <icon class="INsearchicon" type="search" size="22" />
+                <input type="text" class="weui-input" bindinput="bindinputJob" confirm-type="done" bindconfirm="bindconfirmSeachCategory" placeholder="请输入期望职位" value="{{searchJobText}}" />
+            </view>
+            <view class="middlebox">
+                <view wx:for="{{wantjob}}" style="display: {{item.display}};" data-job="{{item.job}}" data-id="{{item.id}}" wx:key="key" class="wantjob   {{item.checked?'active':''}}" bindtap="bindtapChooseCategory">
+                    {{item.job}}
+                </view>
+            </view>
+            <view class="middlebox">
+                <text class="hascs">已选择：</text>
+                <text wx:for="{{csjob}}" bindtap="bindtapRemoveCategory" class="hascs active}}" data-id="{{item.id}}" wx:key="key"> {{item.job}} </text>
+            </view>
+        </view>
+        <view class="btn_box">
+            <view bindtap="bindtapCategoryCancel" class="quxiao tijsq">取消</view>
+            <view class="tijsq" bindtap="bindtapCategorySave">保存</view>
+        </view>
+    </view>
+</view>

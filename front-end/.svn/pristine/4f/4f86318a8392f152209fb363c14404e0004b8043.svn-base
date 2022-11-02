@@ -1,0 +1,90 @@
+<view class="container">
+    <!-- <view class="toptitle">示例题型为单选题，点击题目设置可切换为多选题</view> -->
+    <view class="shurtit">
+        <view class="titbox">
+            <view class="tit">
+                <input class="form-title" placeholder="请输入投票活动标题" value="{{formTtitle}}" bindinput="bindinputFormTitle"/>
+            </view>
+            <view class="srtit">
+                <input class="ipt" type="text" placeholder="请输入详细说明" value="{{formIntroduction}}" bindinput="bindinputFormIntroduction"/>
+            </view>
+        </view>
+    </view>
+    <view wx:for="{{subjectList}}">
+        <!-- 表单组件类型值  严格遵照 constant文件 FORM_COMPONENT_TYPE 常量设置  -->
+        <form-completion-builder
+            hiddenEditable="{{false}}"
+            wx:if="{{item.componentType == 1}}"
+            id="option-component-1-{{index}}" 
+            data-index="{{index}}"
+            subjectOrder="{{index}}" 
+            bind:copy="formComponentCopy"
+            bind:movePrev="formComponentMovePrev"
+            bind:moveNext="formComponentMoveNext"
+            bind:delete="formComponentDelete"
+        />
+        <form-choice-select-builder 
+            hiddenEditable="{{false}}"
+            subjectType="{{item.subjectType}}"
+            wx:if="{{item.componentType == 2}}"
+            id="option-component-2-{{index}}" 
+            data-index="{{index}}"
+            subjectOrder="{{index}}" 
+            bind:copy="formComponentCopy"
+            bind:movePrev="formComponentMovePrev"
+            bind:moveNext="formComponentMoveNext"
+            bind:delete="formComponentDelete"
+        />
+        <form-img-upload-builder 
+            hiddenEditable="{{false}}"
+            wx:if="{{item.componentType == 4}}"
+            id="option-component-4-{{index}}" 
+            data-index="{{index}}"
+            subjectOrder="{{index}}" 
+            bind:copy="formComponentCopy"
+            bind:movePrev="formComponentMovePrev"
+            bind:moveNext="formComponentMoveNext"
+            bind:delete="formComponentDelete"
+        />
+        <form-sign-builder 
+            hiddenEditable="{{false}}"
+            wx:if="{{item.componentType == 5}}"
+            id="option-component-5-{{index}}" 
+            data-index="{{index}}"
+            subjectOrder="{{index}}" 
+            bind:copy="formComponentCopy"
+            bind:movePrev="formComponentMovePrev"
+            bind:moveNext="formComponentMoveNext"
+            bind:delete="formComponentDelete"
+        />
+    </view>
+    <view class="addques" bindtap="bindtapAddSubject">
+        <text class="jiah">+</text>添加题目
+    </view>
+
+    <view class="btmsz">
+        <view class="clearfloat gjsz">
+            <view class="ft bd">高级设置</view>
+            <view class="fr an">
+                <switch class="wx-switch-input" checked="{{showAdvancedSetting}}" bindchange="bindchangeShowAdvancedSetting" />
+            </view>
+        </view>
+
+        <view class="clearfloat gjsz" hidden="{{!showAdvancedSetting}}">
+            <view class="line1"></view>
+            <view class="ft bd">截止日期</view>
+            <view class="ft " style="margin-left: 20px;">
+                <picker mode="date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindchangeEndTime">
+                    <view class="picker">
+                        {{endTime==''?'请选择':endTime}}
+                    </view>
+                </picker>
+            </view>
+        </view>
+
+    </view>
+
+    <view class="btmbox">
+        <view class="tijsq" bindtap="bindtapSubmit">发布</view>
+    </view>
+</view>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IFairForCandidateMapper">
+    <resultMap id="FairForCandidateDTOResultMap" type="com.shopping.wx.pojo.dto.fair_for_candidate.FairForCandidateDTO">
+        <id column="candidate_openid" jdbcType="VARCHAR" property="candidateOpenid" />
+        <result column="candidate_name" jdbcType="VARCHAR" property="candidateName" />
+        <result column="candidate_portrait_path" jdbcType="VARCHAR" property="candidatePortraitPath" />
+        <result column="gender" jdbcType="TINYINT" property="gender" />
+        <result column="working_age" jdbcType="TINYINT" property="workingAge" />
+        <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
+        <result column="expect_salary_min" jdbcType="INTEGER" property="expectSalaryMin" />
+        <result column="expect_salary_max" jdbcType="INTEGER" property="expectSalaryMax" />
+        <result column="expect_category_uuid" jdbcType="VARCHAR" property="expectCategoryUuid" />
+        <result column="expect_category_name" jdbcType="VARCHAR" property="expectCategoryName" />
+        <result column="expect_community_uuid" jdbcType="VARCHAR" property="expectCommunityUuid" />
+        <result column="expect_community_name" jdbcType="VARCHAR" property="expectCommunityName" />
+        <result column="community_uuid" jdbcType="VARCHAR" property="communityUuid" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+
+    <select id="pageDTO" resultMap="FairForCandidateDTOResultMap">
+        SELECT candidate_openid,
+               candidate_name,
+               candidate_portrait_path,
+               gender,
+               working_age,
+               birthday,
+               expect_salary_min,
+               expect_salary_max,
+               community_uuid,
+               create_time,
+               GROUP_CONCAT(DISTINCT expect_category_uuid SEPARATOR ',') AS expect_category_uuid,
+               GROUP_CONCAT(DISTINCT expect_category_name SEPARATOR ',') AS expect_category_name,
+               GROUP_CONCAT(DISTINCT expect_community_uuid SEPARATOR ',') AS expect_community_uuid,
+               GROUP_CONCAT(DISTINCT expect_community_name SEPARATOR ',') AS expect_community_name
+        FROM
+          (SELECT tmp.candidate_openid,
+                  tmp.candidate_name,
+                  tmp.candidate_portrait_path,
+                  tmp.gender,
+                  tmp.working_age,
+                  tmp.birthday,
+                  tmp.expect_salary_min,
+                  tmp.expect_salary_max,
+                  tmp.expect_category_uuid,
+                  jc.category_name AS expect_category_name,
+                  tmp.expect_community_uuid,
+                  ci.community_name AS expect_community_name,
+                  tmp.community_uuid,
+                  tmp.create_time
+           FROM
+             (SELECT ffc.candidate_openid AS candidate_openid,
+                     uc.real_name AS candidate_name,
+                     uc.portrait_path AS candidate_portrait_path,
+                     uc.gender AS gender,
+                     uc.working_age AS working_age,
+                     uc.birthday AS birthday,
+                     uc.expect_salary_min AS expect_salary_min,
+                     uc.expect_salary_max AS expect_salary_max,
+                     cfca.category_uuid AS expect_category_uuid,
+                     cfco.community_uuid AS expect_community_uuid,
+                     uc.community_uuid AS community_uuid,
+                     ffc.create_time AS create_time
+              FROM fair_for_candidate ffc
+              LEFT JOIN user_candidate uc ON ffc.candidate_openid = uc.id
+              LEFT JOIN candidate_for_category cfca ON ffc.candidate_openid = cfca.candidate_openid
+              LEFT JOIN candidate_for_community cfco ON ffc.candidate_openid = cfco.candidate_openid
+              WHERE ffc.fair_uuid = #{fairUuid} ) tmp
+           LEFT JOIN community_information ci ON tmp.expect_community_uuid = ci.id
+           LEFT JOIN job_category jc ON tmp.expect_category_uuid = jc.id) a
+        GROUP BY candidate_openid,
+                 candidate_name,
+                 candidate_portrait_path,
+                 gender,
+                 working_age,
+                 birthday,
+                 expect_salary_min,
+                 expect_salary_max,
+                 community_uuid,
+                 create_time
+        ORDER BY create_time ASC
+</select>
+
+</mapper>

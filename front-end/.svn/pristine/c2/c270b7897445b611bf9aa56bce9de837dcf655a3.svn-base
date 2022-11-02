@@ -1,0 +1,86 @@
+<view class="container">
+	<view class="topbox clearfloat">
+		<view class="ft">
+			<!-- <image class="sqzy" src="/img/sqzy.png"></image> -->
+			<image class="sqzy" src="{{communityPortraitPath}}" binderror="binderrorCommunityPortraitPath"></image>
+		</view>
+		<view class="ft lrbox">
+			<view class="sqname">
+				<text class="namesq">{{communityName}}	</text>
+				<image class="phoneimg" bindtap="cellphone" src="/img/phoneimg.png"></image>
+			</view>
+			<view class="local">
+				<image class="localimg" src="/img/localimg.png"></image>
+				<text class="localtt">{{communityAddress}}	</text>
+			</view>
+		</view>
+	</view>
+	<view class="content">
+		<navigator wx:for="{{zhjy}}"  wx:key="key" hover-class="none" bindtap="bindtapGoLink"
+		data-id="{{item.id}}" target="{{item.target}}" 	app-id="{{item.appId}}"
+		class="vcont" style="background: {{item.bac}};">
+			<image class="qyzp" src="{{item.iconimg}}"></image>
+			<text class="qytext" >{{item.name}}</text>
+		</navigator>
+	</view>
+	<view class="line10"></view>
+	<view class="imgbox">
+		<image src="{{ewmimg}}" show-menu-by-longpress="true" style="width: 100%;" mode="widthFix" class="ewmimg"></image>
+	</view>
+	<view class="line10" style="margin-top: -4px;"></view>
+
+	<view class="newsbox">
+		<view class="titbox clearfloat">
+			<view class="ft">
+				<image class="newimg" src="/img/newimg.png"></image>
+				<text class="newtit">新闻公告</text>
+			</view>
+			<view class="fr qbnews" bindtap="bindtapTagNewsAnnouncement">
+				全部 >
+			</view>
+		</view>
+		<block wx:for="{{newsList}}" wx:key="key">
+			<!-- url="/pages/zcxq/zcxq" -->
+			<navigator hover-class="none" id = "{{item.id}}" bindtap="fczcbtnclick" class="mainbox clearfloat">
+				<view class="ft leftimgbox">
+					<image  class="ltimg" src="{{item.articlePortraitPath}}" data-index="{{index}}" 
+                    binderror="binderrorArticlePortraitPath"></image>
+				</view>
+				<view class="fr rightbox">
+					<view class="title">{{item.articleTitle}}</view>
+					<view class="ptit">{{item.articleIntroduction}}</view>
+					<view class="clearfloat">
+						<view class="ptime ft">{{item.articleAuthor}}</view>
+						<view class="ptime fr">{{item.articleReleaseTime}}</view>
+					</view>
+				</view>
+			</navigator>
+			<view class="line1"></view>
+		</block>
+	</view>
+
+	 <!-- 提示用户需要获取用户信息 -->
+	 <view class="" hidden="{{hideUserInfoAuth}}">
+    <view class="zzc"></view>
+    <view class="qzbox">
+      <view class="qusf" style="text-align: center;padding-left: 0;color: #333;">温馨提示</view>
+      <view class="textts">获取头像昵称,需要您的授权，为了提供更好的服务，请在稍后的提示框中点击“允许”</view>
+      <view class="clearfloat" style="margin-top: 20px;display: flex;">
+        <button class="ft  pomis" bindtap="hulue">忽略</button>
+        <button class="tijsq pomis fr" bindtap="bindtapGetUserProfile" style="margin-top: 0px;">允许</button>
+      </view>
+    </view>
+  </view>
+
+
+	  <!-- 选择角色 -->
+		<view class="" hidden="{{juesehide}}">
+    <view class="zzc"></view>
+    <view class="qzbox1">
+      <view class="qusf">请确认你的身份</view>
+      <view class="zsfw">确认后将为你提供专属服务</view>
+      <view class="qzz" bindtap="bindtapChooseCandidate">我是求职者 ></view>
+      <view class="qzz zpf" bindtap="bindtapChooseRecruiter">我是招聘方 ></view>
+    </view>
+  </view>
+</view>

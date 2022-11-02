@@ -1,0 +1,21 @@
+<view class="topsearch">
+    <view class="INinputheader clearfloat">
+        <view class="ft lt">
+            <icon class="INsearchicon" type="search" size="22" color="#999999" />
+            <input class="weui-input" placeholder-class="opl" placeholder="搜索招聘会" bindinput="bindinputSearchNews"  confirm-type="搜索" bindconfirm="bindconfirmSearchNews" value="{{searchTextTemp}}"/>
+        </view>
+        <!-- <view class="nav-name sx fr" bindtap="bindtapCancelSearch">取消</view> -->
+    </view>
+</view>
+<view class="line1"></view>
+<block wx:for="{{zphlist}}" wx:key="key">
+	<view class="mainbox"  bindtap="zphxq">
+		<view class="zphimgbox">
+			<image src="{{item.zphimg}}" mode="widthFix" class="zphimg"></image>
+		</view>
+		<view class="zphtit">{{item.zphtit}}</view>
+		<view class="zphcontnt">{{item.zphcontnt}}</view>
+		<view class="zphtime">{{item.time}}</view>
+	</view>
+	<view class="line1"></view>
+</block>

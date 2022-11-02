@@ -1,0 +1,138 @@
+// pages/personjl/personjl.js
+const Loading = require('../../utils/loading_util');
+const prompt_util = require('../../utils/prompt_util');
+const date_util = require('../../utils/date_util');
+
+// 加载服务
+const userCandidateService = require('../../common/userCandidateService');
+const string_util = require('../../utils/string_util');
+
+const app = getApp();
+
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        openid: '',
+        eduSchoolName: '',
+        eduBackgroundName: '',
+        eduMajor: '',
+        eduBeginTime: '',
+        eduEndTime: '',
+    },
+    /** BEGIN 页面绑定事件 */
+    bindinputEduSchoolName: function (e) {
+        this.setData({
+            eduSchoolName: e.detail.value,
+        })
+    },
+    bindinputEduBackgroundName: function (e) {
+        this.setData({
+            eduBackgroundName: e.detail.value,
+        })
+    },
+    bindinputEduMajor: function (e) {
+        this.setData({
+            eduMajor: e.detail.value,
+        })
+    },
+    bindchangeEduBeginTime: function (e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.setData({
+            eduBeginTime: e.detail.value
+        })
+    },
+    bindchangeEduEndTime: function (e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.setData({
+            eduEndTime: e.detail.value
+        })
+    },
+    // 保存事件
+    bindtapSave: async function (e) {
+        if (string_util.isEmpty(this.data.eduSchoolName)) {
+            prompt_util.showModalPrompt("请填写学校名称");
+            return;
+        }
+        if (string_util.isEmpty(this.data.eduBackgroundName)) {
+            prompt_util.showModalPrompt("请填写学历");
+            return;
+        }
+        if (string_util.isEmpty(this.data.eduMajor)) {
+            prompt_util.showModalPrompt("请填写专业");
+            return;
+        }
+        if (string_util.isEmpty(this.data.eduBeginTime)) {
+            prompt_util.showModalPrompt("请选择开始时间");
+            return;
+        }
+        if (string_util.isEmpty(this.data.eduEndTime)) {
+            prompt_util.showModalPrompt("请选择结束时间");
+            return;
+        }
+        let updateData = {
+            id: this.data.openid,
+            eduSchoolName: this.data.eduSchoolName,
+            eduBackgroundName: this.data.eduBackgroundName,
+            eduMajor: this.data.eduMajor,
+            eduBeginTime: this.data.eduBeginTime,
+            eduEndTime: this.data.eduEndTime,
+        }
+        console.info('Update user candidate edu data: ', updateData);
+        await userCandidateService.updateByEduInfo(updateData);
+        prompt_util.saveSuccessPrompt(() => {
+            wx.navigateBack({
+                delta: 1,
+            })
+        });
+
+    },
+    /** END 页面绑定事件 */
+
+    /** BEGIN 内部事件 */
+    _loadPersonInfo: async function () {
+        let userCandidateData = (await userCandidateService.loadEntityById(this.data.openid)).data;
+        this.setData({
+            eduSchoolName: userCandidateData.eduSchoolName,
+            eduBackgroundName: userCandidateData.eduBackgroundName,
+            eduMajor: userCandidateData.eduMajor,
+            eduBeginTime: string_util.isNotEmpty(userCandidateData.eduBeginTime) ? date_util.dateToYYYYMMDD(userCandidateData.eduBeginTime) : '',
+            eduEndTime: string_util.isNotEmpty(userCandidateData.eduEndTime) ? date_util.dateToYYYYMMDD(userCandidateData.eduEndTime) : '',
+        })
+    },
+
+    /** END 内部事件 */
+
+    onLoad: async function (options) {
+        await app.getOpenidReady();
+        let openid = app.getOpenid();
+        this.setData({
+            openid: openid,
+        })
+
+        console.info(`Now Page user openid: ${openid}`);
+        try {
+            Loading.begin();
+            await this._loadPersonInfo();
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+    },
+
+    onShow: function () {
+
+    },
+
+    onUnload: function (params) {
+
+    },
+
+
+
+
+
+})

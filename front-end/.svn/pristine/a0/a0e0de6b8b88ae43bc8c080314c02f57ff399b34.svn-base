@@ -1,0 +1,49 @@
+<view class="container">
+	<view class='top_nav'>
+		<view class="nav-name {{item.typeId == currentId ? 'nav-hover':''}}" wx:for="{{section}}" wx:key="id" id='{{item.typeId}}' catchtap='handleTap'>
+			{{item.name}}({{item.num}})
+			<view class="linbc"></view>
+		</view>
+	</view>
+
+	<swiper current="{{currentTab}}" data-current="{{currentId}}"  style="height:{{winHeight - 55}}px;" bindchange="switchTab">
+		<swiper-item style="height:100%;overflow-y:scroll;background: #F5F5F5;" >
+			<view class="workbox" wx:for="{{joblistyfb}}" wx:key="key">
+				<view class="jobname">{{item.comname}}</view>
+				<view class="gwyq">所属社区：{{item.sssq}}</view>
+				<view class="gwyq">公司地址：{{item.comlocal}}</view>
+				<view class="gwyq">统一社会信用代码：{{item.tidm}}</view>
+				<view class="gwyq">联系电话：{{item.cellp}}</view>
+				<view class="clearfloat btmbox">
+					<view class="ft ltbox">
+						<view class="bjbox" data-id="{{item.id}}" bindtap="editjob">审核通过</view>
+						<view class="xiajia" data-id="{{item.id}}" bindtap="xiajia">不通过</view>
+					</view>
+					<!-- <view class="fr rtbox">
+						<text class="yl" decode>游览：{{item.yl}}&nbsp;&nbsp;</text>
+						<text class="yl">投递：{{item.td}}</text>
+					</view> -->
+				</view>
+			</view>
+		</swiper-item>
+		<swiper-item style="height:100%;overflow-y:scroll;background: #F5F5F5;" >
+			<view class="workbox" wx:for="{{joblistyxj}}" wx:key="key">
+				<view class="jobname">{{item.comname}}</view>
+				<view class="gwyq">所属社区：{{item.sssq}}</view>
+				<view class="gwyq">公司地址：{{item.comlocal}}</view>
+				<view class="gwyq">统一社会信用代码：{{item.tidm}}</view>
+				<view class="gwyq">联系电话：{{item.cellp}}</view>
+				<view class="clearfloat btmbox">
+					<view class="ft ltbox">
+						<view class="bjbox1" wx:if="{{item.istg == true}}" data-id="{{item.id}}" >已通过</view>
+						<view class="bjbox1 wtg" wx:else="" data-id="{{item.id}}" >未通过</view>
+					</view>
+				</view>
+			</view>
+		</swiper-item>
+
+	</swiper>
+
+</view>
+
+

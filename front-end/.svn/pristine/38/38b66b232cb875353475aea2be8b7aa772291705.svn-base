@@ -1,0 +1,245 @@
+// 加载 工具类
+const Paging = require('../../utils/paging_util');
+const CONSTANT = require('../../common/constant');
+
+const string_util = require('../../utils/string_util');
+const img_util = require('../../utils/img_util');
+const date_util = require('../../utils/date_util');
+const format_util = require('../../utils/format_util');
+
+// 加载服务类
+const userRecruiterService = require('../../common/userRecruiterService');
+const userCandidateService = require('../../common/userCandidateService');
+const recruitCompanyService = require('../../common/recruitCompanyService');
+const recruitJobService = require('../../common/recruitJobService');
+
+
+// 定义常量
+const app = getApp();
+
+
+const createPageMethods = () => ({
+    // 分页状态
+    state: {
+        jobListPageConfig: new Paging.PageConfig(5),
+        companyListPageConfig: new Paging.PageConfig(5),
+        location: CONSTANT.defaultLocation,
+    },
+    // 没有更多页面了
+    _noMoreData() {
+        this.setData({
+            noMoreData: true,
+        });
+    },
+    _loadLocation: async function (openid, userIndentity) {
+        // debugger
+        let location = {
+            longitude: 0,
+            latitude: 0,
+        };
+        let companyUuid = '';
+        // 全局为 求职者
+        if (userIndentity === "user") {
+            try {
+                let userCandidateData = await userCandidateService.loadEntityById(openid);
+                userCandidateData = userCandidateData.data;
+                location = {
+                    longitude: userCandidateData.lon,
+                    latitude: userCandidateData.lat,
+                }
+            } catch (e) {
+                console.error(e)
+            }
+            // 全局为 招聘者
+        } else if (userIndentity === "company") {
+            try {
+
+                let userRecruiterData = await userRecruiterService.loadEntityById(openid);
+                let userRecruiterInfo = userRecruiterData.data;
+
+                let companyData = await recruitCompanyService.loadEntityById(userRecruiterInfo.companyUuid);
+                companyData = companyData.data;
+                companyUuid = companyData.id;
+                location = {
+                    longitude: companyData.lon,
+                    latitude: companyData.lat,
+                }
+            } catch (e) {
+                console.error(e)
+            }
+            this.setData({
+                companyUuid: companyUuid,
+                location: location,
+            })
+        }
+        return location;
+    },
+    clearContent: async function () {
+        let currentTabList = this.data.tabList;
+        if (currentTabList.findIndex(v => { return v.checked }) == 0) {
+            this.state.jobListPageConfig.reset();
+            // 重置数据内容
+            this.setData({
+                jobList: [],
+            })
+        } else {
+            this.state.companyListPageConfig.reset();
+            // 重置数据内容
+            this.setData({
+                companyList: [],
+            })
+        }
+    },
+    // 初始化内容
+    initContent: async function () {
+        await this._loadJobList();
+        await this._loadCompanyList();
+    },
+
+    // 加载内容
+    loadContent: async function () {
+        let currentTabList = this.data.tabList;
+        if (currentTabList.findIndex(v => { return v.checked }) == 0) {
+            await this._loadJobList();
+        } else {
+            await this._loadCompanyList();
+        }
+    },
+    _loadJobList: async function () {
+        // 加载页面 排序参数
+        let orderType = this.data.orderTypeList.find(v => { return v.checked }).type;
+
+        // 加載openid
+        await app.getOpenidReady();
+        let openid = wx.getStorageSync('openid');
+        let userIndentity = await this.stateCompleter.userIdentityCompleter.promise;
+        let communityUuid = await this.stateCompleter.communityUuidCompleter.promise;
+        // 加載位置 location
+        let location = await this._loadLocation(openid, userIndentity);
+        // 回调 没有数据的处理方式
+        this.state.jobListPageConfig.setNoMoreDataCallback(this._noMoreData);
+        // 初始化分页配置
+        let jobListPageConfig = this.state.jobListPageConfig;
+
+        // 构建查询条件 condition
+        let condition = {
+            orderType: orderType,
+            communityUuid: communityUuid,
+            jobName: this.data.searchJobText,
+            jobSalaryMin: this.data.jobSalaryMin,
+            jobSalaryMax: this.data.jobSalaryMax,
+            ...location
+        }
+        let pagingParam = jobListPageConfig.buildNextParam(condition);
+        if (!pagingParam) {
+            return;
+        }
+        // 获取分页内容
+        let pageInfo;
+        // 请求数据
+        try {
+            pageInfo = await recruitJobService.pagedByCondition(pagingParam)
+            pageInfo = pageInfo.data;
+            console.debug(pageInfo);
+        } catch (e) {
+            console.error(e);
+        } finally {
+        }
+        // 设置total数量
+        this.setData({
+            ['tabList[0].number']: pageInfo.total,
+        })
+        let dataList = jobListPageConfig.handlePageInfo(pageInfo);
+        let current = this.data.jobList;
+        let newList = dataList.map(r => ({
+            // { jobUuid: '', jobName: '清洁工', salaryScope: '3000-3800', companyName: '文和友餐饮有限公司', companyPortraitPath: '/img/tx.png', distance: '1.5', phone: '13112345678' },
+            // { jobUuid: '', jobName: '清洁工', salaryScope: '3000-3800', companyName: '文和友餐饮有限公司', companyPortraitPath: '/img/tx.png', distance: '1.5', phone: '13112345678' },
+            jobUuid: r.jobId,
+            jobName: string_util.isEmpty(r.jobName) ? '' : r.jobName.replaceAll(',', '/'),
+            companyName: r.companyName,
+            salaryScope: new CONSTANT.Salary(r.jobSalaryMin, r.jobSalaryMax).value,
+            companyPortraitPath: img_util.handleCompanyPortraitPath(r.portraitPath),
+            communityName: string_util.isEmpty(r.communityName) ? '' : r.communityName,
+            distance: format_util.formatDistance(r.distance),
+            phone: r.telephone,
+        }));
+
+        // 拼接数据
+        this.setData({
+            jobList: current.concat(newList),
+        });
+    },
+
+
+    _loadCompanyList: async function () {
+        // 加载页面 排序参数
+        let orderType = this.data.orderTypeList.find(v => { return v.checked }).type;
+
+        // 加載openid
+        await app.getOpenidReady();
+        let openid = wx.getStorageSync('openid');
+        let userIndentity = await this.stateCompleter.userIdentityCompleter.promise;
+        let communityUuid = await this.stateCompleter.communityUuidCompleter.promise;
+        // 加載位置 location
+        let location = await this._loadLocation(openid, userIndentity);
+
+        // 回调 没有数据的处理方式
+        this.state.companyListPageConfig.setNoMoreDataCallback(this._noMoreData);
+
+        // 初始化分页配置
+        let companyListPageConfig = this.state.companyListPageConfig;
+
+        // 构建查询条件 condition
+        let condition = {
+            orderType: orderType,
+            communityUuid: communityUuid,
+            companyName: this.data.searchCompanyText,
+            ...location
+        }
+        let pagingParam = companyListPageConfig.buildNextParam(condition);
+        if (!pagingParam) {
+            return;
+        }
+        // 获取分页内容
+        let pageInfo;
+        // 请求数据
+        try {
+            pageInfo = await recruitCompanyService.pagedByCondition(pagingParam)
+            pageInfo = pageInfo.data;
+            console.debug(pageInfo);
+        } catch (e) {
+            console.error(e);
+        } finally {
+        }
+        // 设置total数量
+        this.setData({
+            ['tabList[1].number']: pageInfo.total,
+        })
+        let dataList = companyListPageConfig.handlePageInfo(pageInfo);
+        let current = this.data.companyList;
+        let newList = dataList.map(r => ({
+            // { jobUuid: '', jobName: '清洁工', salaryScope: '3000-3800', companyName: '文和友餐饮有限公司', companyPortraitPath: '/img/tx.png', distance: '1.5', phone: '13112345678' },
+            // { jobUuid: '', jobName: '清洁工', salaryScope: '3000-3800', companyName: '文和友餐饮有限公司', companyPortraitPath: '/img/tx.png', distance: '1.5', phone: '13112345678' },
+            companyUuid: r.companyUuid,
+            companyName: r.companyName,
+            recruiterOpenid: r.recruiterOpenid,
+            recruiterName: r.recruiterName,
+            recruiterGender: r.recruiterGender,
+            recruiterPortraitPath: img_util.handlePersonnelPortraitPath(r.recruiterPortraitPath, r.recruiterGender),
+            distance: format_util.formatDistance(r.distance),
+            phone: r.phone,
+        }));
+
+        // 拼接数据
+        this.setData({
+            companyList: current.concat(newList),
+        });
+    },
+
+
+
+});
+
+module.exports = {
+    createPageMethods: createPageMethods,
+}

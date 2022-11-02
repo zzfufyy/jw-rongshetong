@@ -1,0 +1,38 @@
+<view class="container">
+	<!-- 区选择 -->
+	<view hidden="{{localchoose}}" wx:for="{{localchooseList}}">
+		<view bindtap="localchoosetap" hover-class="none" class="heightboxgz clearfloat">
+			<view class="ft">
+				<text class="wggltxt">{{item.localName}}</text>
+			</view>
+			<view class="fr">
+				<image class="rtjtimg" src="/img/jt.png"></image>
+			</view>
+		</view>
+		<view class="line1"></view>
+	</view>
+	<!-- 街道选择 -->
+	<view hidden="{{streetchoose}}" wx:for="{{streetchooseList}}">
+		<view hover-class="none" bindtap="streetchoosetap" class="heightboxgz clearfloat">
+			<view class="ft">
+				<text class="wggltxt">{{item.streetName}}</text>
+			</view>
+			<view class="fr">
+				<image class="rtjtimg" src="/img/jt.png"></image>
+			</view>
+		</view>
+		<view class="line1"></view>
+	</view>
+	<!-- 小区选择 -->
+	<view hidden="{{communitychoose}}" wx:for="{{communityList}}">
+		<navigator hover-class="none" url="/pages/sqfw/sqfw?communityUuid={{item.communityUuid}}" class="heightboxgz clearfloat">
+			<view class="ft">
+				<text class="wggltxt">{{item.communityName}}</text>
+			</view>
+			<view class="fr">
+				<image class="rtjtimg" src="/img/jt.png"></image>
+			</view>
+		</navigator>
+		<view class="line1"></view>
+	</view>
+</view>

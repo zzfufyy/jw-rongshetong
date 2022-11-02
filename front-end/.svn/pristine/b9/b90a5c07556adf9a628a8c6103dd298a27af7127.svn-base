@@ -1,0 +1,12 @@
+<view class="container">
+	<!-- <view class="box">
+		技术支持：长沙市竟网信息科技有限公司
+	</view>
+	<view class="box">
+		当前版本：1.1.1
+    </view> -->
+    
+
+
+	<form-single-select-builder id="form-single-select-builder"></form-single-select-builder>
+</view>

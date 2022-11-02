@@ -1,0 +1,54 @@
+
+const GLOBAL_CONSTANT = require('./globalConstant');
+const { Completer } = require('../utils/function_util');
+
+const userStateService = require('./userStateService');
+
+const app = getApp();
+
+const trySwitchToCandidate = async function () {
+    let switchCompleter = new Completer();
+    await app.getOpenidReady();
+    let openid = app.getOpenid();
+    let userRole = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY);
+    try {
+        if (userRole == 'user') {
+            switchCompleter.resolve(true);
+        } else {
+            let wxModal = wx.showModal({
+                title: '提示',
+                content: '您当前身份不是求职者，需切换为求职者身份',
+            });
+            await wxModal.then(async res => {
+                if (res.confirm) {
+                    console.debug(`用户 确认切换至 求职身份openid:${openid}`)
+                    // 保存本次用户登录信息
+                    let updateUserState = {
+                        id: openid,
+                        userRole: 1,
+                    }
+                    await userStateService.updateByEntity(updateUserState);
+                    // 保存登录角色信息
+                    wx.showToast({
+                        title: '身份切换成功',
+                        duration: 2000,
+                    })
+                    wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY, 'user');
+                    switchCompleter.resolve(true);
+                } else if (res.cancel) {
+                    console.debug('用户 取消切换至求助者身份')
+                    switchCompleter.resolve(false);
+                }
+            });
+        }
+    } catch (e) {
+        console.error("切换身份至求职者 - 程序出错");
+        console.error(e);
+        switchCompleter.resolve(false);
+    }
+    return switchCompleter.promise;
+};
+
+module.exports = {
+    trySwitchToCandidate: trySwitchToCandidate,
+}

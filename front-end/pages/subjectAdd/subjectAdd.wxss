@@ -1,0 +1,72 @@
+page {
+    background: #F7F7F7;
+    padding-top: 15px;
+}
+
+.container {
+    display: block;
+    background: #FFFFFF;
+    margin: 0px 30rpx;
+    border: 2rpx solid #EEEEEE;
+    border-radius: 10rpx 10rpx;
+}
+
+.flex-row-start {
+    display: flex;
+    flex-flow: wrap row;
+    justify-content: flex-start;
+    align-items: center;
+}
+.flex-row-between {
+    display: flex;
+    flex-flow: wrap row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-flow: wrap column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.row-box {
+    width: 100%;
+    border-bottom: 2rpx solid #EEEEEE;
+}
+
+.title-icon {
+    width: 8rpx;
+    height: 28rpx;
+    margin: 30rpx 12rpx 22rpx 30rpx;
+    background: #95BFFE;
+}
+.title-text{
+    color: #999999;
+    font-family: Source Han Sans CN-Regular;
+    font-size: 30rpx;
+}
+.split-line-horizontal {
+    height: 2rpx;
+    width: 100%;
+    background: #EEEEEE;
+}
+
+.option-box {
+    width: 166rpx;
+    height: 166rpx;
+    border-right: 2rpx solid #EEEEEE;
+    border-bottom: 2rpx solid #EEEEEE;
+}
+.option-icon{
+    width: 44rpx;
+    height: 44rpx;
+    margin-top: 40rpx;
+    margin-bottom: 20rpx;
+}
+.option-text{
+    font-family: Source Han Sans CN-Regular;
+    font-size: 28rpx;
+    color: #666666;
+}

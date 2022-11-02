@@ -1,0 +1,47 @@
+const loading = require('../utils/loading_util');
+
+function beginLoading(option) {
+    if (!option) {
+        option = {};
+    }
+    if (!option.title) {
+
+    }
+    wx.showLoading({
+        title: '加载中，请稍后',
+        mask: true,
+    })
+}
+
+function endLoading() {
+    setTimeout(function () {
+        wx.hideLoading()
+    }, 800)
+}
+
+
+function wrapLoading(fn, ...inputArgs) {
+    console.log(fn() instanceof Promise);
+    let handler = {
+        async apply(target, ctx, args) {
+            let rs;
+            try {
+                beginLoading();
+                rs = await Reflect.apply(...arguments);
+            } catch (e) {
+                console.error(e);
+            } finally {
+                endLoading();
+            }
+            return rs;
+        }
+    }
+    let proxy = new Proxy(fn, handler);
+    return proxy(...inputArgs);
+}
+
+module.exports = {
+    begin: beginLoading,
+    end: endLoading,
+    wrap: wrapLoading,
+}

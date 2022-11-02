@@ -1,0 +1,316 @@
+// pages/datdpage/datdpage.js
+const Loading = require('../../utils/loading_util');
+const { Completer } = require('../../utils/function_util');
+const formInformationService = require('../../common/formInformationService');
+
+
+const datdpageEx = require('./datdpageEx');
+const app = getApp();
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        // 表单信息
+        formFillThisDay: 0,
+        formFillThisMonth: 0,
+        formFillTotal: 0,
+
+        // 题目信息
+        formSubjectList:[],
+
+
+
+        tablist: [
+            { listitem: '数据统计', id: 0 },
+            { listitem: '数据详情', id: 1 },
+        ],
+        tabid: 0,
+        currentTab: '0',
+        currentId: '0',
+        fxhide: true,
+        subjectList: [
+            {
+                type: 'input', pindex: 1, listData1: [
+                    { yhname: "1", sxe: "第1份结果填写内容显示，显示.", },
+                    { yhname: "2", sxe: "第1份结果填写内容显示，显示不全内容用......", },
+                    { yhname: "3", sxe: "第1份结果填写内容显示，显示不全内容用......", },
+                    { yhname: "4", sxe: "第1份结果填写内容显示，显示不全内容用......", },
+                    { yhname: "5", sxe: "第1份结果填写内容显示，显示不全内容用......", },
+                    { yhname: "6", sxe: "第1份结果填写内容显示，显示不全内容用......", },
+                    { yhname: "7", sxe: "第1份结果填写内容显示，显示不全内容用......", },
+                    { yhname: "8", sxe: "第1份结果填写内容显示，显示不全内容用......", },
+                ]
+            },
+            {
+                type: 'radio', pindex: 0, listData1: [
+
+                    { yhname: "选项一，超过一定字数显示用...", sxe: "1", bl: '50' },
+                    { yhname: "选项二，超过一定字数显示用...", sxe: "1", bl: '50' },
+                ]
+            },
+            {
+                type: 'img', pindex: 2, listData1: [
+                    {
+                        yhname: "1", sxe: [
+                            { imgsrc: '/img/bigimg.jpg' },
+                            { imgsrc: '/img/byll.png' },
+                        ]
+                    },
+                    {
+                        yhname: "2", sxe: [
+                            { imgsrc: '/img/bigimg.jpg' },
+                            { imgsrc: '/img/byll.png' },
+                        ]
+                    },
+                    {
+                        yhname: "3", sxe: [
+                            { imgsrc: '/img/bigimg.jpg' },
+                            { imgsrc: '/img/byll.png' },
+                        ]
+                    },
+                ]
+            },
+            {
+                type: 'autograph', pindex: 3, listData1: [
+                    { yhname: "头大下雨不用伞", imgsrc: '/img/bigimg.jpg' },
+                    { yhname: "头大下雨不用伞2", imgsrc: '/img/byll.png' },
+                    { yhname: "头大下雨不用伞3", imgsrc: '/img/byll.png' },
+                    { yhname: "头大下雨不用伞4", imgsrc: '/img/byll.png' },
+                    { yhname: "头大下雨不用伞5", imgsrc: '/img/byll.png' },
+                    { yhname: "头大下雨不用伞6", imgsrc: '/img/byll.png' },
+                ]
+            }
+        ],
+        zktext: '展开全部 ↓',
+        sqtext: '收起全部 ↑',
+
+        ishowtkt: false,
+        ishowimg: false,
+        isshowautograph: false,
+
+        datames: [
+            {
+                tjz: "头大下雨不用伞", tjsj: "2022-06-16", formcontent: [
+                    { tmtype: '怎么回去', anserarr: [{ anser: '骑车' }] },
+                    { tmtype: '中午吃什么', anserarr: [{ anser: '鸡蛋' }, { anser: '饺子' }] },
+                    {
+                        tmtype: '垃圾桶实拍', anserarr: [
+                            { anser: '/img/hddz.png', type: 'img' }, { anser: '/img/bigimg.jpg', type: 'img' }
+                        ]
+                    },
+                    { tmtype: '签名照片', anserarr: [{ anser: '/img/cfxd.png', type: 'img' }] },
+                ]
+            }
+        ]
+    },
+    tabbtn(e) {
+        // console.log(e)
+        let id = e.currentTarget.dataset.id
+        this.setData({
+            tabid: id
+        })
+    },
+    switchTab: function (e) {
+        // console.log(e) 
+        var that = this;
+        that.setData({
+            tabid: e.detail.current,
+            currentId: e.detail.current
+        });
+    },
+    fxtp() {
+        let fxhide = !this.data.fxhide
+        this.setData({
+            fxhide: fxhide
+        })
+    },
+    // 图片上传
+    preimg(e) {
+        let subjectList = this.data.subjectList
+        let arrimg = []
+        for (let i = 0; i < subjectList.length; i++) {
+            if (subjectList[i].type == 'img') {
+                for (let j in subjectList[i].listData1) {
+                    for (let k in subjectList[i].listData1[j].sxe) {
+                        arrimg.push(subjectList[i].listData1[j].sxe[k].imgsrc)
+                    }
+                }
+            }
+        }
+        let oimg = e.currentTarget.dataset.src
+        console.log(arrimg)
+        // console.log(oimg)
+        wx.previewImage({
+            current: oimg, // 当前显示图片的http链接
+            urls: arrimg // 需要预览的图片http链接列表
+        })
+    },
+    // 签名
+    shpwimg(e) {
+        let oimg = e.currentTarget.dataset.src
+        let subjectList = this.data.subjectList
+        let arrimg = []
+        for (let i = 0; i < subjectList.length; i++) {
+            if (subjectList[i].type == 'autograph') {
+                for (let j in subjectList[i].listData1) {
+                    arrimg.push(subjectList[i].listData1[j].imgsrc)
+                }
+            }
+        }
+        wx.previewImage({
+            current: oimg, // 当前显示图片的http链接
+            urls: arrimg // 需要预览的图片http链接列表
+        })
+    },
+    //显示全部
+    showall(e) {
+        console.log(e.currentTarget.dataset.type)
+        let type = e.currentTarget.dataset.type
+        let that = this
+        if (type == 'input') {
+            that.setData({
+                ishowtkt: !that.data.ishowtkt
+            })
+        } else if (type == 'img') {
+            that.setData({
+                ishowimg: !that.data.ishowimg
+            })
+        } else if (type == 'autograph') {
+            that.setData({
+                isshowautograph: !that.data.isshowautograph
+            })
+        }
+    },
+    //数据详情图片显示
+    showdataimg(e) {
+        let oimg = e.currentTarget.dataset.src
+        let datames = this.data.datames
+        let arr = []
+        for (let i in datames[0].formcontent) {
+            for (let j in datames[0].formcontent[i].anserarr) {
+                if (datames[0].formcontent[i].anserarr[j].type == 'img') {
+                    arr.push(datames[0].formcontent[i].anserarr[j].anser)
+                }
+            }
+        }
+        console.log(arr)
+        wx.previewImage({
+            current: oimg, // 当前显示图片的http链接
+            urls: arr // 需要预览的图片http链接列表
+        })
+    },
+
+
+    /** BEGIN 内部方法 */
+    _loadFormInformation: async function(){
+        await this.formUuidCompleter.promise;
+        let formInformationData = (await formInformationService.loadInfoWithFilled(this.data.formUuid)).data;
+        console.log(formInformationData);
+        this.setData({
+            formUuid:  formInformationData.formUuid,
+            formFillThisDay: formInformationData.formFillThisDay,
+            formFillThisMonth: formInformationData.formFillThisMonth,
+            formFillTotal: formInformationData.formFillTotal,
+        })
+    },
+
+    /** END 内部方法 */
+    bindscrolltolowerReachBottom: async function(e){
+        try {
+            Loading.begin();
+            await this._loadSubjectList();
+        } catch (e) {
+            console.error(e);
+        }finally{
+            Loading.end();
+        }
+    },
+    formUuidCompleter : new Completer(),
+    onLoad: async function (options) {
+        this.formUuidCompleter = new Completer();
+        let formUuid = options.formUuid;
+        this.formUuidCompleter.resolve(formUuid);
+        this.setData({
+            formUuid: formUuid,
+        })
+
+        try {
+            Loading.begin();
+            // 加载 form信息
+            await this._loadFormInformation();
+            // 加载题目信息
+            await this._clearSubjectList();
+            await this._loadSubjectList();
+        } catch (e) {
+            console.error(e)
+        }finally{
+            Loading.end();
+        }
+
+        let that = this
+        wx.getSystemInfo({
+            success: function (res) {
+                that.setData({
+                    winWidth: res.windowWidth,
+                    winHeight: res.windowHeight,
+                });
+            }
+        })
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    },
+    onShareTimeline(res) {
+        console.log(res)
+    },
+
+    ...datdpageEx.createPageMethods(),
+})

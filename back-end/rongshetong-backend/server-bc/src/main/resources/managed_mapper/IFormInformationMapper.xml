@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IFormInformationMapper">
+
+    <resultMap id="FormInformationPlusResultMap" type="com.shopping.wx.pojo.dto.form_information.FormInformationPlus">
+        <id column="form_uuid" jdbcType="VARCHAR" property="formUuid"/>
+        <result column="form_title" jdbcType="VARCHAR" property="formTitle"/>
+        <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="completed_count" jdbcType="INTEGER" property="completedCount"/>
+    </resultMap>
+
+    <resultMap id="FormInformationWithStatisticResultMap" type="com.shopping.wx.pojo.dto.form_information.FormInformationWithStatisticDTO">
+        <id column="form_uuid" jdbcType="VARCHAR" property="formUuid"/>
+        <result column="form_title" jdbcType="VARCHAR" property="formTitle"/>
+        <result column="form_fill_this_day" jdbcType="INTEGER" property="formFillThisDay"/>
+        <result column="form_fill_this_month" jdbcType="INTEGER" property="formFillThisMonth"/>
+        <result column="form_fill_total" jdbcType="INTEGER" property="formFillTotal"/>
+    </resultMap>
+
+    <select id="listNormalByCondition" resultMap="FormInformationPlusResultMap">
+        SELECT
+            fi.id as form_uuid,
+            fi.form_title as form_title,
+            fi.begin_time as begin_time,
+            fi.end_time as end_time,
+            COUNT( DISTINCT uff.user_openid) as completed_count,
+            fi.`status` as `status`
+        FROM form_information fi
+        LEFT JOIN user_for_form uff
+        ON fi.id = uff.form_uuid
+        WHERE
+            fi.user_openid = #{userOpenid}
+            AND fi.effect_community_uuid != ''
+                AND fi.effect_community_uuid like CONCAT('%',#{communityUuid},'%')
+            AND fi.status in(0,1)
+        GROUP BY form_uuid,form_title,begin_time,end_time,`status`
+        ORDER BY fi.begin_time desc
+    </select>
+
+    <select id="listUnpublishedByCondition" resultMap="FormInformationPlusResultMap">
+        SELECT
+            fi.id as form_uuid,
+            fi.form_title as form_title,
+            fi.begin_time as begin_time,
+            fi.end_time as end_time,
+            COUNT( DISTINCT uff.user_openid) as completed_count,
+            fi.`status` as `status`
+        FROM form_information fi
+        LEFT JOIN user_for_form uff
+        ON fi.id = uff.form_uuid
+        WHERE
+            fi.user_openid = #{userOpenid}
+            AND fi.effect_community_uuid != ''
+            AND fi.effect_community_uuid like CONCAT('%',#{communityUuid},'%')
+            AND fi.status = -1
+        GROUP BY form_uuid,form_title,begin_time,end_time,`status`
+        ORDER BY fi.begin_time desc
+    </select>
+
+    <select id="listPublishedByCondition" resultMap="FormInformationPlusResultMap">
+        SELECT
+            fi.id as form_uuid,
+            fi.form_title as form_title,
+            fi.begin_time as begin_time,
+            fi.end_time as end_time,
+            COUNT( DISTINCT uff.user_openid) as completed_count,
+            fi.`status` as `status`
+        FROM form_information fi
+        LEFT JOIN user_for_form uff
+        ON fi.id = uff.form_uuid
+        WHERE
+            fi.effect_community_uuid != ''
+            AND fi.effect_community_uuid like CONCAT('%',#{communityUuid},'%')
+            AND fi.status = 1
+        GROUP BY form_uuid,form_title,begin_time,end_time,`status`
+        ORDER BY fi.begin_time desc
+    </select>
+
+    <select id="infoWithStatistic" resultMap="FormInformationWithStatisticResultMap">
+         SELECT
+         tmp.form_uuid as form_uuid,
+         tmp.form_title as form_title,
+         COUNT(DISTINCT (CASE WHEN DATE(tmp.create_time) = DATE(now()) THEN user_openid ELSE 0 END )) AS form_fill_this_day,
+         COUNT(DISTINCT (CASE WHEN DATE(tmp.create_time) = DATE(now()) THEN user_openid ELSE 0 END )) AS form_fill_this_month,
+         COUNT(DISTINCT user_openid) as form_fill_total
+         FROM
+         (
+              SELECT
+                  fi.id as form_uuid,
+                  fi.form_title as form_title,
+                  uff.user_openid as user_openid,
+                  DATE(uff.create_time) as create_time
+              FROM form_information fi
+              LEFT JOIN user_for_form uff
+              ON fi.id = uff.form_uuid
+              WHERE fi.id = #{id}
+              GROUP BY form_uuid,form_title,user_openid,create_time
+         ) tmp
+         GROUP BY form_uuid, form_title
+    </select>
+
+
+</mapper>

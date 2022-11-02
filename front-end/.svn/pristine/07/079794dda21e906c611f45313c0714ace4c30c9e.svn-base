@@ -1,0 +1,306 @@
+// pages/sqmanege/sqmanege.js
+const $ = require('../../utils/request_util');
+const Loading = require('../../utils/loading_util');
+const date_util = require('../../utils/date_util');
+const url_util = require('../../utils/url_util');
+const validate_util = require('../../utils/validate_util');
+const { Completer } = require('../../utils/function_util');
+const string_util = require('../../utils/string_util');
+const object_util = require('../../utils/object_util');
+
+const CONSTANT = require('../../common/constant');
+const GLOBAL_CONSTANT = require('../../common/globalConstant');
+const { Salary } = require('../../common/constant');
+// 加载服务
+
+const communityInformationService = require('../../common/communityInformationService');
+const communityCellService = require('../../common/communityCellService');
+const userCommunityService = require('../../common/userCommunityService');
+
+const app = getApp();
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+
+        communityUuid: '',
+        // sqname:'东湖社区 ',
+        cellList: [
+            // 示例
+            // {		
+            // id: "1c7bb555-d050-406e-a193-17005e5f7245" // 小区id
+            //	cellName: "测试zyw0414小区"
+            // communityUuid: "e80cf86d-a8ea-11ec-98aa-5076afbf1539"
+
+            // numBuilding: 12
+            // numLayer: 9
+            // numLayerFamily: 4
+            // numRegistered: 0
+            // numUnregistered: 0
+            // recorderName: "Zzzz&#x1f4bb;"
+            // recorderOpenid: "oIZm34ruIs-pNzroW_3T0X2yQ25g"},
+        ],
+        showfp: true,
+        cellListCopy: [],
+        recorderListCopy: [],
+        recorderList: [
+            { id: 'zs', name: '张三', checked: false, cellUuidList: [] },
+            { id: 'ls', name: '李四', checked: false, cellUuidList: [] },
+        ]
+    },
+    state: {
+        communityUuidCompleter: new Completer(),
+    },
+    // 添加小区
+    bindtapAddCell() {
+        wx.navigateTo({
+            url: '/pages/addxq/addxq?communityUuid=' + this.data.communityUuid,
+        })
+    },
+    catchtapSkipToCellInput(e) {
+        let cellUuid = e.currentTarget.dataset.id
+        wx.navigateTo({
+            url: '/pages/wglrxq/wglrxq?cellUuid=' + cellUuid,
+        })
+    },
+    // 选择小区
+    bindchangeCell(e) {
+        console.log('checkbox发生change事件，携带value值为：', e.detail.value)
+        console.log(this.data.cellList);
+        idList = e.detail.value;
+        let cellList = this.data.cellList;
+        cellList = cellList.map(v => {
+            v.checked = (idList.findIndex(r => r == v.id) == -1) ?
+                false : true;
+            return v;
+        })
+        console.log(cellList);
+        this.setData({
+            cellList: cellList,
+        })
+    },
+    // 选择录入员
+    bindchangeRecorder(e) {
+        console.log('radio发生change事件，携带value值为：', e.detail.value)
+        idList = e.detail.value;
+        let recorderList = this.data.recorderList;
+        recorderList = recorderList.map(v => {
+            v.checked = (v.id == e.detail.value) ? true : false;
+            return v;
+        })
+        console.log(recorderList);
+        this.setData({
+            recorderList: recorderList,
+        });
+        console.log(this.data.recorderListCopy);
+    },
+    //分配管理
+    bindtapManagement() {
+        let showfp = !this.data.showfp
+        this.setData({
+            showfp: showfp
+        })
+        console.log(this.data.recorderList);
+
+        if (showfp == false) {
+            // 建立副本
+            this.setData({
+                cellListCopy: object_util.copyObject(this.data.cellList),
+                recorderListCopy: object_util.copyObject(this.data.recorderList),
+            })
+        } else {
+            // 副本还原
+            this.setData({
+                cellList: object_util.copyObject(this.data.cellListCopy),
+                recorderList: object_util.copyObject(this.data.recorderListCopy),
+            })
+        }
+    },
+    // 确认分配
+    async bindtapAllocateSubmit() {
+        let cellList = this.data.cellList;
+        let recorderList = this.data.recorderList;
+        // 判断是否未选择小区 或者 录入员
+        if (cellList.findIndex(v => {
+            return v.checked == true;
+        }) == -1) {
+            wx.showModal({
+                title: '请选择管理的小区',
+            })
+            return;
+        }
+        if (recorderList.findIndex(v => {
+            return v.checked == true;
+        }) == -1) {
+            wx.showModal({
+                title: '请选择录入员',
+            })
+            return;
+        }
+        // 选择的录入员：
+        let recorder = recorderList.find(v => { return v.checked == true });
+        // 选择的小区：
+        let checkedcellList = cellList.filter(v => { return v.checked == true });
+        let cellUuidList = checkedcellList.map(v => { return v.id })
+
+        try {
+            Loading.begin();
+            // 传入 recorderOpenid 和 cellUuid List
+            await communityCellService.updateByRecorderOpenid(recorder.id, cellUuidList)
+            await this.loadContent();
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+
+        let showfp = !this.data.showfp
+        let that = this
+        wx.showToast({
+            title: '分配成功',
+            icon: '',
+            duration: 1200,
+            success() {
+                that.setData({
+                    showfp: showfp
+                })
+            }
+        })
+
+    },
+    // 修改小区
+    catchtapModifyCell(e) {
+        console.log(e);
+        let cellUuid = e.currentTarget.dataset.id;
+        wx.navigateTo({
+            url: '/pages/addxq/addxq?cellUuid=' + cellUuid,
+        })
+    },
+    // 删除小区
+    catchtapDeleteCell(e) {
+        console.log(e);
+        let that = this;
+        let cellUuid = e.currentTarget.dataset.id;
+        let currentCellList = this.data.cellList;
+        wx.showModal({
+            title: '是否删除该小区？',
+            cancelColor: 'cancelColor',
+            success: async function (res) {
+                if (res.confirm) {
+                    await communityCellService.deleteCascadeById(cellUuid);
+                    that.setData({
+                        cellList: currentCellList.filter(v => {
+                            return v.id != cellUuid;
+                        })
+                    })
+                    console.log(cellUuid);
+                } else if (res.cancel) {
+                    return;
+                }
+            }
+        })
+    },
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: async function (options) {
+        console.log(options.communityUuid);
+        this.state.communityUuidCompleter = new Completer();
+        let communityUuid = options.communityUuid;
+        // 测试
+        communityUuid = 'e80cf86d-a8ea-11ec-98aa-5076afbf1539';
+        this.setData({
+            communityUuid: communityUuid,
+        });
+        this.state.communityUuidCompleter.resolve(communityUuid);
+    },
+
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: function () {
+        try {
+            Loading.begin();
+            this.loadContent();
+        } catch (e) {
+            console.error(e)
+        } finally {
+            Loading.end();
+        }
+    },
+    // 加载内容
+    async loadContent() {
+        let communityUuid = await this.state.communityUuidCompleter.promise;
+        // 加载小区列表
+        let cellList = await communityCellService.listDTOByCommunityUuid(communityUuid);
+        cellList = cellList.data;
+        cellList = cellList.map(v => {
+            v.recorderName = string_util.isEmpty(v.recorderOpenid) ? '暂未分配' : v.recorderName;
+            v.checked = false;
+            return v;
+        });
+        console.log(cellList);
+        this.setData({
+            cellList: cellList,
+        });
+        // 加载该社区的网格录入人员
+        let recorderList = await userCommunityService.loadRecorderListByCommunityUuid(communityUuid);
+        recorderList = recorderList.data;
+        console.log(recorderList);
+        recorderList = recorderList.map(v => {
+            return {
+                id: v.id,
+                name: v.realName,
+                checked: false,
+            }
+        })
+        this.setData({
+            recorderList: recorderList,
+        })
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    }
+})

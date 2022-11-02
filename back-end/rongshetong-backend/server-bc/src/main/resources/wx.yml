@@ -1,0 +1,13 @@
+wx:
+  miniapp:
+    configs:
+#      - appid: wx7741a14f2a4e3776   智慧就业
+      - appid: wxcbe9fba1d2729d13
+#      - appid: wx8a8bbe94ca734afd
+        secret: ff7a10de01fdaab64874617f99777007
+#        secret: a6b106075aabd43c2fc9d369dcc9d4d4 智慧就业
+#        secret: 2b0a3d5c6104fcc261c0a6976a451ae5
+        token: TB0WRxVB0u9SB0FWRxViB03WWRxV
+        aesKey: AS3ohw6YmTaa3zCnM95uRWSIMG4NX85Vq1UQxHQ3A0O
+        msgDataFormat: JSON
+

@@ -1,0 +1,7 @@
+{
+    "navigationBarTitleText": "企业注册",
+
+    "usingComponents": {
+        "choose-community": "/components/chooseCommunity/chooseCommunity"
+    }
+}

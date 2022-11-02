@@ -1,0 +1,117 @@
+// pages/combd/combd.js
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: function (options) {
+		// var params_str = 'sellerid=pmyxQxkkU&token=abcdefg&formid=1234';
+		// wx.navigateTo({
+		// 	url: 'plugin-private://wx00d1e2843c3b3f77/pages/selfform?'+ params_str  
+		// })
+		var selfform_data_params = {
+			data:{
+				sellerid:options.sellerid, 
+				form_token: options.form_token,
+				formid : options.formid,
+				form_type : options.form_type,
+
+			}, 
+			callback:this.__selfform_data_callback};
+
+
+if(options.openid){
+	selfform_data_params.data.openid = options.openid;
+}
+
+if(options.userid){
+	selfform_data_params.data.userid = options.userid;
+}
+if(options.checkstr){
+	selfform_data_params.data.checkstr = options.checkstr;
+}
+
+//引用第三方插件的函数
+var my_plugin = requirePlugin('yyb_selfform_plugin');
+my_plugin.get_selfform_data(selfform_data_params);
+
+
+
+//=====分析参数=====
+if(options){
+	var arr = Object.keys(options);
+
+	var options_len = arr.length;
+
+
+	if (options_len > 0){
+		var params_str = '';
+
+		for(var key in options){
+			params_str += key+'='+options[key]+'&';
+		}
+		params_str = params_str.substr(0, params_str.length - 1);
+
+		this.setData({
+			current_params_str:params_str
+		});
+	}
+}
+	},
+
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	}
+})

@@ -1,0 +1,524 @@
+// pages/wglrxq/wglrxq.js
+const Loading = require('../../utils/loading_util');
+const date_util = require('../../utils/date_util');
+
+const { Completer } = require('../../utils/function_util');
+const string_util = require('../../utils/string_util');
+const object_util = require('../../utils/object_util');
+const format_util = require('../../utils/format_util');
+// 加载服务
+
+const communityInformationService = require('../../common/communityInformationService');
+const communityCellService = require('../../common/communityCellService');
+const communityCellBuildingService = require('../../common/communityCellBuildingService');
+const buildingResidentService = require('../../common/buildingResidentService');
+
+const app = getApp();
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+
+        residentListCopy: [],
+        residentList: [
+            // {
+            //	layer:[
+            //       {   flagRegister: false,
+            // 			id: "801fb106-6792-4770-8f34-7f8950ca61cd",
+            // 			registerTime: null,
+            // 			roomNumber: "0101",
+            // 			whichLayer: 1,
+            // 			whichLayerFamily: 1
+            // 	}]
+            //	}
+        ],
+        communityName: '东湖社区 ',
+        buildingName: '东湖新寓1栋',
+        // 层数
+        numLayer: 0,
+        //每层户数
+        numLayerFamily: 0,
+        // 已登记
+        numRegistered: 0,
+        numRegisteredToday: 0,
+        showStrBottom: '今日已录0户',// 默认
+        choosedRoom: '',
+        zt: 0,
+        filterRegisterList: [
+            { id: "all", tag: '全部', checked: false }, { id: 'unregistered', tag: '未登记', checked: false }, { id: 'registered', tag: '已登记', checked: false }
+        ],
+        // ydjsj: [
+        // 	{ yxmoney: '不限', id: 0 }, { yxmoney: '本日', id: 1 }, { yxmoney: '本月', id: 2 }
+        // ],
+        xxydj: '',
+        hidesx: true,
+        qdhide: true,
+        searchval: '',
+        hidesqxz: true,
+
+        sjLeftItems: [
+            { cellName: '芙蓉区', cellUuid: 0 },
+            { cellName: '天心区', cellUuid: 1 },
+            { cellName: '岳麓区', cellUuid: 2 },
+        ],
+        sjRightItems: [
+            { cellName: '芙蓉区', buildingList: [{ buildingName: '街道一', buildingUuid: 0 }, { buildingName: '街道2', buildingUuid: 1 }, { buildingName: '街道1', buildingUuid: 2 }], cellUuid: 0 },
+            { cellName: '天心区', buildingList: [{ buildingName: '街道一', buildingUuid: 3 }, { buildingName: '街道2', buildingUuid: 4 }, { buildingName: '街道1', buildingUuid: 5 }], cellUuid: 1 },
+        ],
+        curNav: 1,
+        id: 1,
+    },
+    state: {
+        buildingUuidCompleter: new Completer(),
+        cellUuidCompleter: new Completer(),
+    },
+    //筛选
+
+    // 搜索
+    // searchjob(e) {
+    // 	let val = e.detail.value
+    // 	let searchval = this.data.searchval
+    // 	if (val != '') {
+    // 		this.setData({
+    // 			qdhide: false,
+    // 			searchval: val
+    // 		})
+    // 	} else {
+    // 		this.setData({
+    // 			qdhide: true
+    // 		})
+    // 	}
+    // },
+    // //确定搜索
+    // qudssbtn() {
+    // 	let that = this
+    // 	let searchval = that.data.searchval
+    // 	console.log(searchval)
+    // 	let hidesx = !that.data.hidesx
+    // 	that.setData({
+    // 		showIndex: searchval,
+    // 		hidesx: hidesx,
+    // 	})
+    // },
+    // 收起
+
+    // 筛选box 展开
+    bindtapFilterCondtionUnfold() {
+        let hidesx = !this.data.hidesx
+        this.setData({
+            hidesx: hidesx
+        })
+    },
+    // 筛选box 折叠
+    bindtapFilterConditionFold() {
+        let hidesx = !this.data.hidesx
+        this.setData({
+            hidesx: hidesx
+        })
+    },
+    //筛选box 清空
+    bindtapFilterClear() {
+        let tempResidentListCopy = object_util.copyObject(this.data.residentListCopy);
+        this.setData({
+            residentList: tempResidentListCopy,
+            hidesx: hidesx
+        })
+    },
+    //筛选box 确定
+    bindtapFilterSubmit() {
+        // 获取筛选事件
+        let tempResidentListCopy = object_util.copyObject(this.data.residentListCopy);
+        let filterRegister = this.data.filterRegisterList.find(v => { return v.checked == true });
+        switch (filterRegister.id) {
+            case 'all':
+                this.setData({
+                    residentList: tempResidentListCopy,
+                })
+                break;
+            case 'unregistered':
+                this.setData({
+                    residentList: tempResidentListCopy.map(v => {
+                        v.layer = v.layer.filter(r => {
+                            return r.flagRegister == false;
+                        })
+                        return v;
+                    })
+                })
+                break;
+            case 'registered':
+                this.setData({
+                    residentList: tempResidentListCopy.map(v => {
+                        v.layer = v.layer.filter(r => {
+                            return r.flagRegister == true;
+                        })
+                        return v;
+                    })
+                })
+                break;
+            default: break;
+        }
+
+        let hidesx = !this.data.hidesx
+        this.setData({
+            hidesx: hidesx
+        })
+    },
+    //信息是否登记
+    bindtapFilterRegister(e) {
+        let currentTag = e.currentTarget.dataset.tag
+        let filterRegisterList = this.data.filterRegisterList;
+        filterRegisterList = filterRegisterList.map(v => {
+            v.checked = (currentTag == v.tag) ? true : false
+            return v;
+        })
+        this.setData({
+            filterRegisterList: filterRegisterList,
+        })
+    },
+    // 已登记户时间
+    ydjsj(e) {
+        let id = e.currentTarget.dataset.id
+        this.setData({
+            xxydj: id
+        })
+    },
+
+    // 未注册room  点击跳转登记信息页面
+    bindtapGoRegister() {
+        console.log(this.data.choosedRoom);
+        let residentList = this.data.residentList;
+        let residentUuid = '';
+        residentList.forEach(v => {
+            v.layer.forEach(r => {
+                if (r.roomNumber == this.data.choosedRoom) {
+                    residentUuid = r.id;
+                }
+            })
+        });
+        console.log(residentUuid);
+        wx.navigateTo({
+            url: '/pages/sqmdb/sqmdb?residentUuid=' + residentUuid,
+        })
+    },
+
+    // 未登记点击
+    bindtapUnregistered(e) {
+        console.log(e);
+        if (e.currentTarget.dataset.room != this.data.choosedRoom) {
+            let showStrBottom = this.data.buildingName + e.currentTarget.dataset.room
+            this.setData({
+                choosedRoom: e.currentTarget.dataset.room,
+                showStrBottom: showStrBottom,
+                zt: 1
+            })
+        } else {
+            showStrBottom = '今日已录' + this.data.numRegisteredToday + '户';
+            this.setData({
+                choosedRoom: '',
+                showStrBottom: showStrBottom,
+                zt: 0
+            })
+        }
+    },
+    // 已登记点击
+    bindtapRegistered(e) {
+        console.log(e);
+        let residentUuid = e.currentTarget.dataset.id;
+        let tipInfo = this.data.buildingName + e.currentTarget.dataset.room;
+        wx.showModal({
+            title: '提示',
+            content: tipInfo + '已登记信息 是否修改信息？',
+            confirmText: '去修改',
+            success(res) {
+                if (res.confirm) {
+                    wx.navigateTo({
+                        url: '/pages/sqmdb/sqmdb?residentUuid=' + residentUuid,
+                    })
+                } else if (res.cancel) {
+                    console.log('用户点击取消')
+                }
+            }
+        })
+    },
+
+    //社区选择
+    sqchoose() {
+        let hidesqxz = !this.data.hidesqxz
+        this.setData({
+            hidesqxz: hidesqxz
+        })
+    },
+    // 社区选择--左边小区选择
+    switchRightTab1: function (e) {
+        // 获取item项的id，和数组的下标值
+        let id = e.target.dataset.id;
+        console.log(e)
+        let index = parseInt(e.target.dataset.index1);
+        // 把点击到的某一项，设为当前index
+        this.setData({
+            curNav1: id,
+            curIndex1: index,
+            toView1: id
+        })
+    },
+    // 社区选择--右边栋数
+    async bindtapChooseBuilding(e) {
+        let hidesqxz = !this.data.hidesqxz
+        console.log(e)
+        this.setData({
+            hidesqxz: hidesqxz,
+            curentid: e.currentTarget.dataset.id,
+        })
+        this.clearContent();
+        this.loadContent(e.currentTarget.dataset.id);
+    },
+    //社区选择点击遮罩层关闭
+    hidethis() {
+        let hidesqxz = !this.data.hidesqxz
+        this.setData({
+            hidesqxz: hidesqxz
+        })
+    },
+
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: async function (options) {
+        this.state.cellUuidCompleter = new Completer();
+        this.state.buildingUuidCompleter = new Completer();
+
+        // 小区id 加载结束
+        let cellUuid = options.cellUuid;
+        // 测试
+        // cellUuid = '3be6d57f-7a94-4dd5-9f12-23926d9d70a1';
+        this.state.cellUuidCompleter.resolve(cellUuid);
+        // 默认选择第一栋
+        let buildingList = await communityCellBuildingService.listByCellUuid(cellUuid);
+        buildingList = buildingList.data;
+        let firstBuilding = buildingList.find(v => {
+            return v.buildingOrder == 1;
+        })
+        console.log(firstBuilding);
+        // 传入 第一栋id
+        this.state.buildingUuidCompleter.resolve(firstBuilding.id);
+        let that = this;
+
+        wx.getSystemInfo({
+            success: (res) => {
+                console.log(res)
+                let windowHeight = res.windowHeight;
+                let wht = windowHeight * 0.8 - 86
+                let oht = wht;
+                that.setData({
+                    oht: oht
+                })
+            },
+        });
+    },
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: async function () {
+        try {
+            Loading.begin();
+            await this.loadContent();
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+    },
+    async clearContent() {
+        this.setData({
+            residentList: [],
+            communityName: '',
+            buildingName: '',
+            numLayer: 0,
+            numLayerFamily: 0,
+            numRegistered: 0,
+            numRegisteredToday: 0,
+            showStrBottom: '今日已录0户',
+            choosedRoom: '',
+        })
+    },
+
+    async loadContent(choosedBuildingUuid) {
+
+        let buildingUuid;
+        if (string_util.isEmpty(choosedBuildingUuid)) {
+            buildingUuid = await this.state.buildingUuidCompleter.promise;
+        } else {
+            // 接收传参加载页面
+            buildingUuid = choosedBuildingUuid
+        }
+        console.log('加载楼栋信息, id为：' + buildingUuid);
+        // 加载 building  楼栋信息
+        let buildingData = await communityCellBuildingService.loadEntityById(buildingUuid)
+        buildingData = buildingData.data;
+        let numLayer = buildingData.numLayer;
+        let numLayerFamily = buildingData.numLayerFamily;
+
+        // 根据 building - cellUuid 加载小区信息
+        let cellData = await communityCellService.loadEntityById(buildingData.cellUuid);
+        cellData = cellData.data;
+        let buildingName = cellData.cellName.concat(" ", buildingData.buildingName);
+
+        // 根据 cell - communityUuid加载社区信息
+        let communityData = await communityInformationService.loadEntityById(cellData.communityUuid);
+        communityData = communityData.data;
+        let communityName = communityData.communityName;
+
+        this.setData({
+            // 层数 户数
+            numLayer: numLayer,
+            numLayerFamily: numLayerFamily,
+            // 设置小区名字 楼栋名字
+            communityName: communityName,
+            buildingName: buildingName,
+        })
+
+        // 根据 communityUuid 加载小区 列表
+        let communityCellList = await communityCellService.listByCommunityUuid(communityData.id);
+        communityCellList = communityCellList.data;
+        // 根据 communityUuid 加载building列表
+        let communityCellBuildingList = await communityCellBuildingService.listByCommunityUuid(communityData.id);
+        communityCellBuildingList = communityCellBuildingList.data;
+        // 构建上侧选择栏
+        let sjLeftItemsList = communityCellList.map(v => {
+            return {
+                cellName: v.cellName,
+                cellUuid: v.id,
+            }
+        }).sort((a, b) => {
+            // 排序
+            return String(a.cellName).localeCompare(b.cellName);
+        });
+        this.setData({
+            sjLeftItems: sjLeftItemsList,
+        });
+        let sjRightItemsList = object_util.copyObject(sjLeftItemsList.map(v => {
+            v.buildingList = communityCellBuildingList.filter(r => {
+                return v.cellUuid == r.cellUuid
+            }).map(r => {
+                return {
+                    buildingUuid: r.id,
+                    buildingName: r.buildingName,
+                }
+            }).sort((a, b) => {
+                // 排序
+                return isNaN(a.buildingName.slice(0, -1)) ?
+                    a.buildingName.charCodeAt(0) - b.buildingName.charCodeAt(0) :
+                    a.buildingName.slice(0, -1) - b.buildingName.slice(0, -1)
+            });
+            return v;
+        }));
+
+        this.setData({
+            sjLeftItems: sjLeftItemsList,
+            sjRightItems: sjRightItemsList,
+        });
+
+        // 根据 buildingUuid 加载居民信息
+        let buildingResidentListData = await buildingResidentService.loadListByBuildingUuid(buildingUuid);
+        buildingResidentList = buildingResidentListData.data;
+        console.debug(buildingResidentList);
+        // 构建residentList
+        let residentList = [];
+        for (let i = 1; i <= numLayer; i++) {
+            let currentLayerList = buildingResidentList.filter(v => {
+                return v.whichLayer == i;
+            });
+            currentLayerList.sort((a, b) => { return a.whichLayerFamily - b.whichLayerFamily })
+            // 截取构建数据
+            currentLayerList = currentLayerList.map(v => {
+
+                return {
+                    id: v.id,
+                    roomNumber: format_util.formatRoomNum(v.whichLayer, v.whichLayerFamily),
+                    whichLayer: v.whichLayer,
+                    whichLayerFamily: v.whichLayerFamily,
+                    flagRegister: (v.flagRegister == 0) ? false : true,
+                    registerTime: v.registerTime,
+                }
+            })
+            // 排序
+            residentList.push({ layer: currentLayerList });
+        }
+        // 获取今日登记用户
+        let numRegisteredToday = 0;
+        residentList.forEach(v => {
+            v.layer.forEach(r => {
+                if (r.flagRegister && date_util.isToday(r.registerTime)) {
+                    numRegisteredToday++;
+                }
+            })
+        })
+        this.setData({
+            numRegisteredToday: numRegisteredToday,
+            showStrBottom: '今日已录' + numRegisteredToday + '户',
+            residentList: residentList,
+            // 副本 建立 便于筛选操作
+            residentListCopy: object_util.copyObject(residentList),
+        })
+
+        // 设定宽度
+        let gradeOne_new = []
+        for (let i = 0; i < this.data.residentList.length; i++) {
+            let lgh = this.data.residentList[i].layer.length
+            gradeOne_new.push(lgh)
+        }
+        console.log(Math.max(...gradeOne_new))
+        //最大值
+        let max = Math.max(...gradeOne_new)
+        this.setData({
+            wd: max * 48
+        })
+        console.log(residentList);
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    }
+})

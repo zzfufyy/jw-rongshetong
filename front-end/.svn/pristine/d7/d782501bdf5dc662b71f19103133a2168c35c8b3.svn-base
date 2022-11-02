@@ -1,0 +1,234 @@
+// 加载常量
+const GLOBAL_CONSTANT = require('../../common/globalConstant');
+// 加载工具类
+const $ = require('../../utils/request_util');
+const Loading = require('../../utils/loading_util');
+// 加载服务
+const userCandidateService = require("../../common/userCandidateService");
+const userRecruiterService = require("../../common/userRecruiterService");
+const userCommunityService = require("../../common/userCommunityService");
+const userStateService = require("../../common/userStateService");
+const { Completer } = require('../../utils/function_util');
+
+const app = getApp();
+Component({
+    options: {
+        multipleSlots: true // 在组件定义时的选项中启用多slot支持
+    },
+    /**
+     * 组件的属性列表
+     */
+    properties: {
+    },
+
+    /** 组件数据 */
+    data: {
+        hiddenPopup: true,
+    },
+
+    /** 组件方法 */
+    methods: {
+        //隐藏弹框
+        hidePopup: function () {
+            this.setData({
+                hiddenPopup: true,
+            })
+        },
+        //展示弹框
+        showPopup() {
+            this.setData({
+                hiddenPopup: false,
+            })
+        },
+        //  暴露方法接口  引导用户授权  */
+        doAuthorize: async function (scene) {
+            var that = this;
+            // 获取状态码
+            try {
+                let loginRes = await wx.login({
+                    timeout: 10000,// 10秒login
+                });
+                let authData = await $.request({
+                    url: '/wx/user/' + app.globalData.appId + '/login',
+                    data: {
+                        code: loginRes.code,
+                        loginType: 'openid'
+                    },
+                    header: app.globalData.header,
+                })
+                console.log(authData);
+                if (JSON.stringify(authData.data.userWx) == undefined) {
+                    // 用户未授权 popup授权框
+                    that.setData({
+                        hiddenPopup: false,
+                    });
+                    wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY, 'vistor');
+                    // 显示 授权页面 authCompleter在授权页面完成
+                } else {
+                    // 用户已授权
+                    that.setData({
+                        hiddenPopup: true,
+                    });
+                    let userState = await userStateService.loadEntityById(wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_OPENID));
+                    userState = userState.data;
+                    if (typeof (userState) != 'undefined') {
+                        wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY, GLOBAL_CONSTANT.userStateNameList[userState.userRole]);
+                    }
+                    this.authCompleter.resolve(true);
+                }
+            } catch (e) {
+                console.error("authorize失败 程序出错")
+                console.error(e);
+                this.authCompleter.resolve(false);
+            }
+            return this.authCompleter.promise;
+        },
+        // 用户点击取消
+        async bindtapCancel(e){
+            this.setData({
+                hiddenPopup: true,
+            })
+            this.authCompleter.resolve(false);
+        },
+        //获取微信用户信息
+        async bindtapGetUserProfile(e) {
+            const scene = this.data.scene;
+            var that = this;
+            wx.getUserProfile({
+                desc: "获取你的昵称、头像、地区及性别", // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+                success: async (res) => {
+                    console.log(res);
+                    this.setData({
+                        userInfo: res.userInfo,
+                    })
+                    // 如果用户同意
+                    this.setData({
+                        hiddenPopup: true,
+                    });
+                    try {
+                        Loading.begin();
+                        await that._saveUserInfo(res.userInfo, res.iv, res.signature, res.encryptedData, res.rawData, scene);
+                    } catch (e) {
+                        console.error(e)
+                    } finally {
+                        Loading.end();
+                    }
+                    this.authCompleter.resolve(true);
+                }, fail: (res) => {
+                    this.setData({
+                        hiddenPopup: true,
+                    });
+                    console.error("用户没有给予授权，需要授权后赋以操作功能");
+                    this.authCompleter.resolve(false);
+                },
+            });
+        },
+
+        // /* 保存用户信息到后台 */
+        _saveUserInfo: async function (userInfo, iv, signature, encryptedData, rawData, scene) {
+            const that = this;
+            let loginRes = await wx.login({
+                timeout: 5000, // 5s超时
+            })
+            if (loginRes.code) {
+                let wxloginRes = await $.request({
+                    url: '/wx/user/' + app.globalData.appId + '/login',
+                    data: {
+                        code: loginRes.code,
+                        loginType: 'openid'
+                    },
+                    header: app.globalData.header,
+                });
+                console.log(wxloginRes);
+
+                wx.setStorageSync('sessionKey', wxloginRes.data.sessionKey);
+                var name = wx.getStorageSync('user').nickname;
+                if (name) {
+                    that.setData({
+                        nickName: name
+                    })
+                }
+                //判断是否存在token,不存在则说明该用户没有注册,需要弹出用户登录页面,有则不需要进行页面跳转
+                if (!wxloginRes.data.Token && userInfo) {
+                    //保存用户信息 到bc_user
+                    var openid = wx.getStorageSync('openid');
+                    console.log(openid);
+                    let wxInfo = await $.request({
+                        url: '/wx/user/' + app.globalData.appId + '/info',
+                        data: {
+                            sessionKey: wxloginRes.data.sessionKey,
+                            iv: iv,
+                            signature: signature,
+                            encryptedData: encryptedData,
+                            rawData: rawData,
+                            openid: openid
+                        },
+                        header: app.globalData.header,
+                    });
+                    wx.setStorageSync('user', wxInfo.data);
+                    // 求职者用户初始化
+                    let insertCandidateData = {
+                        id: openid,
+                        realName: userInfo.nickName,
+                        gender: userInfo.gender,
+                        portraitPath: userInfo.avatarUrl,
+                        communityUuid: that.data.communityUuid
+                    }
+                    await userCandidateService.insertByEntity(insertCandidateData);
+                    // 招聘人用户初始化
+                    let insertRecruiterData = {
+                        id: openid,
+                        realName: userInfo.nickName,
+                        portraitPath: userInfo.avatarUrl,
+                    }
+                    await userRecruiterService.insertByEntity(insertRecruiterData);
+                    // 社区用户初始化
+                    let insertUserCommunityData = {
+                        id: openid,
+                        realName: userInfo.nickName,
+                        portraitPath: userInfo.avatarUrl,
+                    }
+                    await userCommunityService.insertByEntity(insertUserCommunityData);
+                    let insertUserStateData = {
+                        id: openid,
+                    }
+                    await userStateService.insertByEntity(insertUserStateData);
+                } else {
+                    //放在请求头里
+                    app.globalData.header.Token = res.data.data.Token
+                }
+            } else {
+                console.error("接口调用失败!");
+            }
+        },
+
+    },
+    authCompleter: new Completer(),
+
+    /** 组件生命周期 */
+    lifetimes: {
+        created: function () {
+            this.authCompleter = new Completer();
+        },
+        attached: function () {
+
+        },
+        ready: async function () {
+
+        }
+    },
+
+
+
+    /** 页面生命周期 */
+    pageLifetimes: {
+        show: function () {
+        },
+        hide: function () {
+            // 页面被隐藏
+        },
+        resize: function (size) {
+            // 页面尺寸变化
+        }
+    }
+})

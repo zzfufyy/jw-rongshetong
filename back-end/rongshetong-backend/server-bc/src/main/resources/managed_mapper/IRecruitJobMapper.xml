@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IRecruitJobMapper">
+
+    <!--    对于 POJO 中的实体类，需要添加此 ResultMap 来映射字段-->
+    <resultMap id="JobInfoDTO" type="com.shopping.wx.pojo.dto.recruit_job.JobInfoDTO">
+        <result column="job_id" jdbcType="INTEGER" property="jobId"/>
+        <result column="company_id" jdbcType="VARCHAR" property="companyId"/>
+        <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
+        <result column="category_uuid" jdbcType="VARCHAR" property="categoryUuid"/>
+        <result column="company_uuid" jdbcType="VARCHAR" property="companyUuid"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="portrait_path" jdbcType="VARCHAR" property="portraitPath"/>
+        <result column="job_salary_min" jdbcType="INTEGER" property="jobSalaryMin"/>
+        <result column="job_salary_max" jdbcType="INTEGER" property="jobSalaryMax"/>
+        <result column="recruiter_openid" jdbcType="VARCHAR" property="recruiterOpenid"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="juridical_person" jdbcType="VARCHAR" property="juridicalPerson"/>
+        <result column="flag_apply" jdbcType="INTEGER" property="flagApply"/>
+        <result column="flag_call" jdbcType="INTEGER" property="flagCall"/>
+        <result column="distance" jdbcType="DOUBLE" property="distance"/>
+        <result column="job_begin_time" jdbcType="VARCHAR" property="jobBeginTime"/>
+        <result column="job_end_time" jdbcType="VARCHAR" property="jobEndTime"/>
+        <result column="job_require_major" jdbcType="VARCHAR" property="jobRequireMajor"/>
+    </resultMap>
+
+    <select id="pagedByDistance" resultMap="JobInfoDTO">
+        SELECT
+            rj.`id`             AS `job_id`,
+            rc.`id`             AS `company_id`,
+            rj.`job_name`       AS `job_name`,
+            rj.`category_uuid`   AS `category_uuid`,
+            rj.`company_uuid`   AS `company_uuid`,
+            rj.`company_name`   AS `company_name`,
+            rc.`portrait_path`  AS `portrait_path`,
+            rj.`job_salary_min` AS `job_salary_min`,
+            rj.`job_salary_max` AS `job_salary_max`,
+            rj.`job_begin_time` AS `job_begin_time`,
+            rj.`job_end_time` AS `job_end_time`,
+            rj.`job_require_major` as `job_require_major`,
+            ur.`id`             AS `recruiter_openid`,
+            rj.`recruiter_telephone`          AS `telephone`, -- 公司电话
+            rj.`create_time`    AS `create_time`,
+            <if test = "candidateOpenid != null and candidateOpenid != ''">
+                rr.`flag_who_receive` as flag_apply,
+                cfj.`flag_call`       as flag_call,
+            </if>
+            rj.`recruiter_name`         AS `juridical_person`, -- 公司联系人
+            (
+                CASE WHEN rc.`lon` = 0 THEN 10000 * 1000
+                WHEN  #{location.longitude} = 0 THEN 10000 * 1000
+                ELSE ST_DISTANCE_SPHERE(
+                          POINT(#{location.longitude}, #{location.latitude}),
+                          POINT(rc.`lon`, rc.`lat`)
+                ) END
+            )AS `distance`
+        FROM recruit_job rj
+        LEFT JOIN recruit_company rc ON rj.`company_uuid` = rc.`id`
+        LEFT JOIN user_recruiter ur  ON rj.`recruiter_openid` = ur.`id`
+        <if test = "candidateOpenid != null and candidateOpenid != ''">
+            --  是否已投递简历
+            LEFT JOIN recruit_record rr ON rj.id = rr.job_uuid AND rr.candidate_openid = #{candidateOpenid} AND rr.flag_who_receive = 1
+            LEFT JOIN candidate_for_job cfj ON rj.id = cfj.job_uuid AND cfj.candidate_openid =#{candidateOpenid}
+        </if>
+        WHERE 1=1
+        <if test="communityUuid != null and communityUuid != ''">
+            AND rc.community_uuid = #{communityUuid}
+        </if>
+        AND rj.`status` != - 1
+        AND rc.`status` != - 1
+        AND rc.`flag_identification` = 1
+        <if test = "jobName != null and jobName != ''">
+            AND rj.job_name like concat('%',#{jobName},'%')
+        </if>
+        -- 薪资条件拼接
+        <if test="salaryCompareState == 0">
+            AND job_salary_min = 0
+            AND job_salary_max = 0
+        </if>
+        <if test="salaryCompareState == 1">
+            AND job_salary_min = 0
+            AND job_salary_max > 0
+            AND job_salary_max <![CDATA[ <=  ]]> #{jobSalaryMax}
+
+        </if>
+        <if test="salaryCompareState == 2">
+            AND job_salary_min > 0
+            AND job_salary_max = 0
+            AND job_salary_min <![CDATA[ >=  ]]> #{jobSalaryMin}
+        </if>
+        <if test="salaryCompareState == 3">
+            AND job_salary_min != 0
+            AND job_salary_max != 0
+            AND job_salary_min <![CDATA[ >=  ]]> #{jobSalaryMin}
+            AND job_salary_max <![CDATA[ <=  ]]> #{jobSalaryMax}
+        </if>
+        <if test="orderType == 0">
+            ORDER BY `distance` asc
+        </if>
+        <if test="orderType == 1">
+            ORDER BY create_time desc
+        </if>
+    </select>
+
+
+
+    <update id="increaseCountView">
+        UPDATE recruit_job SET count_view = count_view +1 WHERE id = #{id};
+    </update>
+    <update id="increaseCountApply">
+        UPDATE recruit_job SET count_apply = count_apply +1 WHERE id = #{id};
+    </update>
+
+</mapper>

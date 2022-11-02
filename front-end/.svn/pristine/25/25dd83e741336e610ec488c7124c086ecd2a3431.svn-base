@@ -1,0 +1,258 @@
+// 加载 工具类
+const Paging = require('../../utils/paging_util');
+const CONSTANT = require('../../common/constant');
+
+const string_util = require('../../utils/string_util');
+const url_util = require('../../utils/url_util');
+const img_util = require('../../utils/img_util');
+const format_util = require('../../utils/format_util');
+
+// 加载服务类
+const userCandidateService = require('../../common/userCandidateService');
+const recruitJobService = require('../../common/recruitJobService');
+const recruitCompanyService = require('../../common/recruitCompanyService');
+const loading_util = require('../../utils/loading_util');
+const { page } = require('../../common/recruitJobService');
+// 定义常量
+const app = getApp();
+
+const createPageMethods = () => ({
+    // 分页状态
+    state: {
+        pageConfig: new Paging.PageConfig(5),
+        companyListPageConfig: new Paging.PageConfig(6),
+        location: CONSTANT.defaultLocation,
+    },
+    // const defaultLocation = {
+    //     name: "五一广场",
+    //     address: "湖南省长沙市芙蓉区黄兴中路",
+    //     latitude: 28.19635,
+    //     longitude: 112.97733,
+    // }
+
+    // 没有更多页面了
+    _noMoreData() {
+        this.setData({
+            noMoreData: true,
+        });
+    },
+    _loadLocation: async function (openid) {
+        // 获取求职用户信息
+        if (JSON.stringify(this.data.location) === '{}') {
+            let loadUserPromise = userCandidateService.loadEntityById(openid);
+            await loadUserPromise.then(r => {
+
+                // 加载用户信息
+                this.setData({
+                    userOpenid: openid,
+                    location: {
+                        longitude: r.data.lon,
+                        latitude: r.data.lat
+                    }
+                })
+            }).catch(r => {
+                console.error(r);
+            });
+        }
+        let currentLocation = this.data.location;
+        this.state.location = currentLocation;
+    },
+    // 清空内容
+    clearContent: async function () {
+        this.state.pageConfig.reset();
+        this.state.companyListPageConfig.reset();
+        // 重置数据内容
+        this.setData({
+            joblist: [],
+            companyList: [],
+        })
+    },
+    loadContent: async function () {
+        // debugger;
+        // 4种搜索类型情况
+        let currentSearchTypeList = this.data.searchTypeList;
+        if ((currentSearchTypeList[0].checked && currentSearchTypeList[1].checked) 
+            || (!currentSearchTypeList[0].checked && !currentSearchTypeList[1].checked)) {
+            // 默认选择  职位和公司
+            if (this.data.flagChangeToCompanyList == false) {
+                this.setData({
+                    hiddenJobList: false,
+                })
+                let hasFirstPageResult = await this.loadJobListContent();
+                if(hasFirstPageResult == false){
+                    this.setData({
+                        flagChangeToCompanyList: true
+                    })
+                }
+            }
+            if(this.data.flagChangeToCompanyList == true){
+                await this.clearContent();
+                this.setData({
+                    hiddenJobList: true,
+                })
+                await this.loadCompanyListContent()
+            }
+
+            
+        } else if (currentSearchTypeList[0].checked && !currentSearchTypeList[1].checked) {
+            // 选择职位
+            this.setData({
+                hiddenJobList: false,
+            })
+            await this.loadJobListContent();
+        } else if (!currentSearchTypeList[0].checked && currentSearchTypeList[1].checked) {
+            // 选择公司
+            this.setData({
+                hiddenJobList: true,
+            })
+            await this.loadCompanyListContent()
+        }
+
+    },
+    // 加载内容
+    loadJobListContent: async function () {
+        // 加載openid
+        await app.getOpenidReady();
+        let openid = wx.getStorageSync('openid');
+
+        // 回调 没有数据的处理方式
+        this.state.pageConfig.setNoMoreDataCallback(this._noMoreData);
+
+        // 初始化分页配置
+        let pageConfig = this.state.pageConfig;
+        ;
+        // 加載位置 location
+        await this._loadLocation(openid);
+        let location = this.state.location;
+
+        // 构建查询条件 condition
+        let condition = {
+            longitude: location.longitude,
+            latitude: location.latitude,
+        }
+
+
+        let searchCondition = {
+            jobName: this.data.searchText,
+            jobSalaryMin: this.data.jobSalaryMin,
+            jobSalaryMax: this.data.jobSalaryMax,
+            ...condition,
+        }
+        let pagingParam = pageConfig.buildNextParam(searchCondition);
+        if (!pagingParam) {
+            return;
+        }
+        // 获取分页内容
+        let pageInfo;
+        // 请求数据
+        try {
+            pageInfo = await recruitJobService.pagedByCondition(pagingParam)
+            pageInfo = pageInfo.data;
+            console.log(pageInfo);
+        } catch (e) {
+            console.error(e);
+        } finally {
+        }
+        let dataList = pageConfig.handlePageInfo(pageInfo);
+        console.log(dataList);
+        // 拼接数据示例
+        // joblist: [
+        // 	{ jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+        let current = this.data.joblist;
+        let newList = dataList.map(jobInfo => ({
+            jobUuid: jobInfo.jobId,
+            jobname: jobInfo.jobName,
+            jobmoney: new CONSTANT.Salary(
+                jobInfo.jobSalaryMin,
+                jobInfo.jobSalaryMax,
+            ).value,
+            companyname: jobInfo.companyName,
+            companytx: img_util.handleCompanyPortraitPath(jobInfo.portraitPath),
+            jl: jobInfo.distance == CONSTANT.UNKNOWN_DISTANCE ? '未知距离' : (jobInfo.distance / 1000).toFixed(1) + '公里',
+            phonenum: jobInfo.telephone,
+            recruiterOpenid: jobInfo.recruiterOpenid,
+            companyUuid: jobInfo.companyId,
+        }));
+
+        // 拼接数据
+        this.setData({
+            joblist: current.concat(newList),
+        });
+        try {
+            if (pagingParam.page.page == 1 && dataList.length == 0) {
+                return false;
+            }
+        } catch (error) {
+            console.error(e)
+        }
+        return true;
+
+    },
+    loadCompanyListContent: async function () {
+        // 加載openid
+        await app.getOpenidReady();
+        let openid = wx.getStorageSync('openid');
+        // 加載位置 location
+        await this._loadLocation(openid);
+        let location = this.state.location;
+        location = {
+            longitude: location.longitude,
+            latitude: location.latitude,
+        }
+
+        // 回调 没有数据的处理方式
+        this.state.companyListPageConfig.setNoMoreDataCallback(this._noMoreData);
+
+        // 初始化分页配置
+        let companyListPageConfig = this.state.companyListPageConfig;
+
+        // 构建查询条件 condition
+        let condition = {
+            companyName: this.data.searchText,
+            ...location
+        }
+        console.log(condition);
+        let pagingParam = companyListPageConfig.buildNextParam(condition);
+        console.log(pagingParam);
+        if (!pagingParam) {
+            return;
+        }
+        // 获取分页内容
+        let pageInfo;
+        // 请求数据
+        try {
+            pageInfo = await recruitCompanyService.pagedByCondition(pagingParam)
+            pageInfo = pageInfo.data;
+            console.debug(pageInfo);
+        } catch (e) {
+            console.error(e);
+        } finally {
+        }
+        // 设置total数量
+        this.setData({
+            ['tabList[1].number']: pageInfo.total,
+        })
+        let dataList = companyListPageConfig.handlePageInfo(pageInfo);
+        let current = this.data.companyList;
+        let newList = dataList.map(r => ({
+            companyUuid: r.companyUuid,
+            companyName: r.companyName,
+            recruiterOpenid: r.recruiterOpenid,
+            recruiterName: string_util.isEmpty(r.recruiterName) ? '未知' : r.recruiterName,
+            recruiterGender: r.recruiterGender,
+            recruiterPortraitPath: img_util.handlePersonnelPortraitPath(r.recruiterPortraitPath, r.recruiterGender),
+            distance: format_util.formatDistance(r.distance),
+            phone: r.phone,
+        }));
+
+        // 拼接数据
+        this.setData({
+            companyList: current.concat(newList),
+        });
+
+    },
+});
+
+module.exports = {
+    createPageMethods: createPageMethods,
+}

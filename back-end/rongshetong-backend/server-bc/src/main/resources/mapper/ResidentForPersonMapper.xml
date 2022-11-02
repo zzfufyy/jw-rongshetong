@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.ResidentForPersonMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.ResidentForPerson">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="person_name" jdbcType="VARCHAR" property="personName" />
+    <result column="person_idcard" jdbcType="VARCHAR" property="personIdcard" />
+    <result column="person_phone" jdbcType="VARCHAR" property="personPhone" />
+    <result column="person_address" jdbcType="VARCHAR" property="personAddress" />
+    <result column="person_gender" jdbcType="TINYINT" property="personGender" />
+    <result column="person_birthday" jdbcType="DATE" property="personBirthday" />
+    <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="district_name" jdbcType="VARCHAR" property="districtName" />
+    <result column="party_institution" jdbcType="VARCHAR" property="partyInstitution" />
+    <result column="person_special" jdbcType="TINYINT" property="personSpecial" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="person_type" jdbcType="TINYINT" property="personType" />
+    <result column="resident_uuid" jdbcType="VARCHAR" property="residentUuid" />
+    <result column="building_uuid" jdbcType="VARCHAR" property="buildingUuid" />
+    <result column="cell_uuid" jdbcType="VARCHAR" property="cellUuid" />
+    <result column="community_uuid" jdbcType="VARCHAR" property="communityUuid" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+    <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+    <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, person_name, person_idcard, person_phone, person_address, person_gender, person_birthday, 
+    province_name, city_name, district_name, party_institution, person_special, remark, 
+    person_type, resident_uuid, building_uuid, cell_uuid, community_uuid, status, create_time, 
+    ext1, ext2, ext3
+  </sql>
+</mapper>

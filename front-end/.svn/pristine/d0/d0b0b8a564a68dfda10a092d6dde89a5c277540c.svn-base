@@ -1,0 +1,33 @@
+<view class="topsearch">
+    <view class="INinputheader clearfloat">
+        <view class="ft lt">
+            <icon class="INsearchicon" type="search" size="22" color="#999999" />
+            <input class="weui-input" placeholder-class="opl" placeholder="搜索资讯" bindinput="bindinputSearchCategory"  confirm-type="搜索" bindconfirm="bindconfirmSearchCategory" />
+        </view>
+        <view class="nav-name sx fr" bindtap="sx">取消</view>
+    </view>
+</view>
+<view class="container">
+
+
+    <scroll-view scroll-y="true" bindscrolltolower="bindscrolltolowerReachBottom" style="height: {{winHeight-10}}px" disable="{{}}">
+        <!-- <view style="border-top: 1px solid #D9D9D9;"></view> -->
+        <block wx:for="{{newsList}}" wx:key="index">
+            <!-- url="/pages/zcxq/zcxq" -->
+            <navigator hover-class="none" id="{{item.newsUuid}}" bindtap="bintapNewsDetail" class="mainbox clearfloat">
+                <view class="ft leftimgbox">
+                    <image src="{{item.articlePortraitPath}}" data-index="{{index}}" class="ltimg" binderror="binderrorArticlePortraitPath"></image>
+                </view>
+                <view class="fr rightbox">
+                    <view class="title">{{item.articleTitle}}</view>
+                    <view class="ptit">{{item.articleIntroduction}}</view>
+                    <view class="clearfloat">
+                        <view class="ptime ft">{{item.articleAuthor}}</view>
+                        <view class="ptime fr">{{item.articleReleaseTime}}</view>
+                    </view>
+                </view>
+            </navigator>
+            <!-- <view class="linebox"></view> -->
+        </block>
+    </scroll-view>
+</view>

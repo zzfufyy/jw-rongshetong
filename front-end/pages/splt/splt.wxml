@@ -1,0 +1,16 @@
+<!--pages/splt/splt.wxml-->
+<view class="page-body">
+  <view class="page-section tc">
+    <view class="btn-area">
+      <!-- <button bindtap="bindPlay" class="page-body-button" type="primary">生成二维码</button> -->
+      <!-- <image show-menu-by-longpress="true"   src="{{ewm}}"></image> -->
+    </view>
+  </view>
+</view>
+
+
+<view class="contbox">
+	<image src="{{ewm}}" show-menu-by-longpress="true" style="width: 183px;margin-top: 63px" mode="widthFix" class="ewmimg"></image>
+	<text class="ca">长按可下载社区专属小程序码</text>
+</view>
+

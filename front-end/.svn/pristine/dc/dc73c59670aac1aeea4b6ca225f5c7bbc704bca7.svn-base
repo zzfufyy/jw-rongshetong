@@ -1,0 +1,76 @@
+<view class="container">
+	<view class="topbox">
+		<view class="">
+			<image class="byszc" src="/img/byszc.png"></image>
+		</view>
+		<view class="titbox">
+			<view class="tit">{{tit}}</view>
+		</view>
+		<view class="clearfloat sjbox">
+			<view class="ft ftks">
+				<view class="sj">开始时间:{{kssj}}</view>
+				<view class="sj">结束时间:{{jssj}}</view>
+			</view>
+			<view class="fr">
+				<view class="bmcj {{isbm == true?'isbm':'nobm'}}" bindtap="bmcj">{{bmcj}}</view>
+			</view>
+		</view>
+	</view>
+	<view class="middlebox">
+		<view class='top_nav'>
+			<view class="nav-name {{item.typeId == currentId ? 'nav-hover':''}}" wx:for="{{section}}" wx:key="id" id='{{item.typeId}}' catchtap='handleTap'>
+				{{item.name}}({{item.num}})
+				<view class="linbc"></view>
+			</view>
+		</view>
+		<swiper current="{{currentTab}}" data-current="{{currentId}}"  style="height:{{winHeight - 55}}px;" bindchange="switchTab">
+			<!-- 招聘岗位 -->
+			<swiper-item style="height:100%;overflow-y:scroll;" >
+				<view class="jobbigbox">
+					<navigator hover-class="none"  wx:for="{{joblistyfb}}"
+					wx:key="index"  bindtap="bindtapChooseJob" data-index="{{index}}">
+						<view class="jobbox1 clearfloat" >
+							<view class="ft ltbox">
+								<view class="jobname">{{item.jobname}}</view>
+								<view class="jobmoney">{{item.jobmoney}}</view>
+								<view class="companyname1">
+									<image src="{{item.companytx}}" class="companytx"></image>
+									{{item.companyname}}
+								</view>
+							</view>
+							<view class="fr lrbox">
+								<view class="far">{{item.jl}}公里</view>
+								<view class="phonecall" catchtap="callphone" data-phonenum="{{item.phonenum}}">电话沟通</view>
+							</view>
+						</view>
+						<view class="line1"></view>
+					</navigator>
+				</view>
+			</swiper-item>
+			<!-- 招聘企业  -->
+			<swiper-item style="height:100%;overflow-y:scroll;" >
+				<view class="jobbigbox">
+					<navigator hover-class="none"  wx:for="{{joblistyxj}}"
+					wx:key="index"  bindtap="bindtapChoosecom" data-index="{{index}}">
+						<view class="jobbox2 clearfloat" >
+							<view class="ft ltbox">
+								<view class="jobname">{{item.comname}}</view>
+								<!-- <view class="jobmoney">{{item.jobmoney}}</view> -->
+								<view class="companyname2">
+									<image src="{{item.companytx}}" class="companytx"></image>
+									{{item.companylxr}}
+								</view>
+							</view>
+							<view class="fr lrbox">
+								<view class="far">{{item.jl}}公里</view>
+								<view class="phonecall1" catchtap="callphone" data-phonenum="{{item.phonenum}}">电话沟通</view>
+							</view>
+						</view>
+						<view class="line1"></view>
+					</navigator>
+				</view>
+			</swiper-item>
+
+		</swiper>
+	</view>
+</view>

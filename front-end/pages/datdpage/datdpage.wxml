@@ -1,0 +1,256 @@
+<view class="container">
+    <view class="toptx">
+        <view class="fleitem">
+            <text class="txname">今日填写</text>
+            <view class="num">{{formFillThisDay}}</view>
+        </view>
+        <view class="bor"></view>
+        <view class="fleitem ">
+            <text class="txname">本月填写</text>
+            <view class="num">{{formFillThisMonth}}</view>
+        </view>
+        <view class="bor"></view>
+        <view class="fleitem">
+            <text class="txname">累计填写</text>
+            <view class="num">{{formFillTotal}}</view>
+        </view>
+    </view>
+    <view class="line10"></view>
+    <view class="tabbox clearfloat">
+        <view class="tabitem ft {{tabid==item.id?'activeitem':''}}" bindtap="tabbtn" wx:for="{{tablist}}" wx:key="key" data-id="{{index}}">
+            {{item.listitem}}
+        </view>
+    </view>
+    <swiper current="{{tabid}}" data-current="{{currentId}}" style="height:{{winHeight - 155}}px;" bindchange="switchTab">
+        <swiper-item>
+            <scroll-view scrollY="true" bindscrolltolower="bindscrolltolowerReachBottomStatistic" style="height:100%;">
+                <view class="empty" wx:if="{{subjectList.length == 0}}" style="background: #fff;">
+                    <text class="wjg">本问卷暂无结果数据可供展示请先进行问卷收集</text>
+                    <view class="tijsq" bindtap="fxtp">分享</view>
+                </view>
+                <view class="empty notempty" wx:if="{{subjectList.length != 0}}">
+                    <block wx:for="{{formSubjectList}}" wx:key="key">
+                        <!-- 选择题数据展示示范 -->
+                        <view class="tmbox" wx:if="{{item.componentType==2}}">
+                            <view class="toptit">
+                                {{index+1}}. {{item.subjectTitle}} （{{item.subjectType==2?'单选':'多选'}}）
+                            </view>
+                            <view class="table radio" style="width:{{tablewid}}px">
+                                <view class="tr bg-w">
+                                    <view class="th">选项</view>
+                                    <view class="th">计数</view>
+                                    <view class="th">比例</view>
+                                </view>
+                                <block wx:for="{{item.dataList}}" wx:key="key" wx:for-item="dataItem">
+                                    <view class="tr ">
+                                        <view class="td">{{dataItem.optionTitle}}</view>
+                                        <view class="td">{{dataItem.countOptionNum}}</view>
+                                        <view class="td">{{dataItem.countOptionNumRatio}}</view>
+                                    </view>
+                                </block>
+                            </view>
+                            <view class=" clearfloat jgbox">
+                                <view class="ft jg">收集结果：{{item.dataList[0].totalUserNum}}条</view>
+                            </view>
+                        </view>
+                        <!-- 填空题数据展示示范 -->
+                        <view class="tmbox" wx:if="{{item.componentType==1}}">
+                            <view class="toptit">{{index+1}}. {{item.subjectTitle}}</view>
+                            <view class="table tkt showtkt" style="width:{{tablewid}}px">
+                                <view class="tr bg-w">
+                                    <view class="th">序号</view>
+                                    <view class="th">内容</view>
+                                </view>
+                                <block wx:for="{{item.dataList}}" wx:key="key" wx:for-item="dataItem">
+                                    <view class="tr">
+                                        <view class="td">{{index+1}}</view>
+                                        <view class="td">{{dataItem.subjectAnswer}}</view>
+                                    </view>
+                                </block>
+                            </view>
+                            <view class="clearfloat jgbox">
+                                <view class="pagination-box">
+                                    <view class="pagination-item pagination-item-total">
+                                        共{{item.pages}}页
+                                    </view>
+                                    <view class="pagination-item bgcolor-eee" data-index="{{index}}" bindtap="bindtapPrevPage">
+                                        上一页
+                                    </view>
+                                    <input class="pagination-page-num-input" data-index="{{index}}" value="{{item.pageNum}}" bindinput="bindinputGoPageNum" />
+                                    <view class="pagination-page-go bgcolor-eee" data-index="{{index}}" bindtap="bindtapGoPage">
+                                        GO
+                                    </view>
+                                    <view class="pagination-item bgcolor-eee" data-index="{{index}}" bindtap="bindtapNextPage">
+                                        下一页
+                                    </view>
+                                </view>
+                                <view class="ft jg">收集结果：{{item.total}}条</view>
+                            </view>
+                        </view>
+                        <!-- 图片上传题数据展示示范 -->
+                        <view class="tmbox" wx:if="{{item.componentType==4}}">
+                            <view class="toptit">{{index+1}}. {{item.subjectTitle}}</view>
+                            <view class="table imgbox showimg" style="width:{{tablewid}}px">
+                                <view class="tr bg-w">
+                                    <view class="th">序号</view>
+                                    <view class="th">内容</view>
+                                </view>
+                                <block wx:for="{{item.dataList}}" wx:key="key" wx:for-index="itemIndex">
+                                    <view class="tr">
+                                        <view class="td">{{itemIndex + 1}}</view>
+                                        <view class="td">
+                                            <block wx:for="{{item.uploadImgList}}" wx:key="key" wx:for-item="imgItem">
+                                                <image bindtap="preimg" class="imgnr" data-src="{{imgItem}}" src="{{imgItem}}"></image>
+                                            </block>
+                                        </view>
+                                    </view>
+                                </block>
+                            </view>
+                            <view class="clearfloat jgbox">
+                                <view class="pagination-box">
+                                    <view class="pagination-item pagination-item-total">
+                                        共{{item.pages}}页
+                                    </view>
+                                    <view class="pagination-item bgcolor-eee" data-index="{{index}}" bindtap="bindtapPrevPage">
+                                        上一页
+                                    </view>
+                                    <input class="pagination-page-num-input" data-index="{{index}}" value="{{item.pageNum}}" bindinput="bindinputGoPageNum" />
+                                    <view class="pagination-page-go bgcolor-eee" data-index="{{index}}" bindtap="bindtapGoPage">
+                                        GO
+                                    </view>
+                                    <view class="pagination-item bgcolor-eee" data-index="{{index}}" bindtap="bindtapNextPage">
+                                        下一页
+                                    </view>
+                                </view>
+                                <view class="ft jg">收集结果：{{item.total}}条</view>
+                            </view>
+                        </view>
+                        <!-- 签名题数据展示示范 -->
+                        <view class="tmbox" wx:if="{{item.componentType==5}}">
+                            <view class="toptit">{{index+1}}. {{item.subjectTitle}}</view>
+                            <view class="table imgbox showgraph" style="width:{{tablewid}}px">
+                                <block wx:for="{{item.dataList}}" wx:key="key" wx:for-item="dataItem">
+                                    <view class="graphbox">
+                                        <image class="grafimg" bindtap="shpwimg" data-src="{{dataItem.uploadImg}}" src="{{dataItem.uploadImg}}"></image>
+                                        <text class="graphdesign">{{dataItem.userName}} 的签名</text>
+                                    </view>
+                                </block>
+                            </view>
+                            <view class="clearfloat jgbox">
+                                <view class="pagination-box">
+                                    <view class="pagination-item pagination-item-total">
+                                        共{{item.pages}}页
+                                    </view>
+                                    <view class="pagination-item bgcolor-eee" data-index="{{index}}" bindtap="bindtapPrevPage">
+                                        上一页
+                                    </view>
+                                    <input class="pagination-page-num-input" data-index="{{index}}" value="{{item.pageNum}}" bindinput="bindinputGoPageNum" />
+                                    <view class="pagination-page-go bgcolor-eee" data-index="{{index}}" bindtap="bindtapGoPage">
+                                        GO
+                                    </view>
+                                    <view class="pagination-item bgcolor-eee" data-index="{{index}}" bindtap="bindtapNextPage">
+                                        下一页
+                                    </view>
+                                </view>
+                                <view class="ft jg">收集结果：{{item.total}}条</view>
+                            </view>
+                        </view>
+                    </block>
+                </view>
+            </scroll-view>
+        </swiper-item>
+        <swiper-item style="height:100%;overflow-y:scroll;background: #fff;">
+            <scroll-view scrollY="true" bindscrolltolower="bindscrolltolowerReachBottomDetail" style="height:100%;">
+                <view class="empty" wx:if="{{detailUserFormList.length == 0}}" style="background: #fff;">
+                    <text class="wjg">本问卷暂无结果数据可供展示请先进行问卷收集</text>
+                    <view class="tijsq" bindtap="fxtp">分享</view>
+                </view>
+                <view class="empty notempty" wx:if="{{detailUserFormList.length != 0}}" style="background: #F5F5F5;">
+                    <view class="pagination-box" style="background: #FFFFFF;">
+                        <view class="pagination-item pagination-item-total">
+                            共{{detailUserFormList[0].pages}}页
+                        </view>
+                        <view class="pagination-item bgcolor-eee" bindtap="bindtapPrevPageDetail">
+                            上一页
+                        </view>
+                        <input class="pagination-page-num-input" value="{{detailUserFormList[0].pageNum}}" bindinput="bindinputGoPageNumDetail" />
+                        <view class="pagination-page-go bgcolor-eee" bindtap="bindtapGoPageDetail">
+                            GO
+                        </view>
+                        <view class="pagination-item bgcolor-eee" bindtap="bindtapNextPageDetail">
+                            下一页
+                        </view>
+                    </view>
+                    <!-- <pagenation /> -->
+                    <view class="tmbox" wx:for="{{datames}}" wx:key="key" style="margin-top: 40rpx;">
+                        <view class="tjz ltwd">
+                            提交者：
+                            <text class="tjs">{{detailUserFormList[0].userName}}</text>
+                        </view>
+                        <view class="tjz ltwd">
+                            提交时间：
+                            <text class="tjs">{{detailUserFormList[0].submitTime}}</text>
+                        </view>
+                        <!-- TODO  分为 选择 填空       图片 一类 -->
+                        <block wx:for="{{detailFormSubjectList}}" wx:key="key">
+                            <!-- 填空题 -->
+                            <view wx:if="{{item.componentType==1}}">
+                                <view class="tmname">{{index+1}}. {{item.subjectTitle}}</view>
+                                <view class="tmanser">
+                                    <block wx:for="{{item.dataList}}" wx:for-item="dataItem">
+                                        <view>{{dataItem.subjectAnswer}}</view>
+                                    </block>
+                                </view>
+                            </view>
+                            <!-- 选择题(单选多选) -->
+                            <view wx:if="{{item.componentType==2}}">
+                                <view class="tmname">{{index+1}}. {{item.subjectTitle}}</view>
+                                <view class="tmanser">
+                                    <block wx:for="{{item.dataList}}" wx:for-item="dataItem">
+                                        <view>{{dataItem.optionTitle}}</view>
+                                    </block>
+                                </view>
+                            </view>
+                            <!-- 图片上传题（） -->
+                            <view wx:if="{{item.componentType==4}}">
+                                <view class="tmname">{{index+1}}. {{item.subjectTitle}}</view>
+                                <view class="tmanser">
+                                    <block wx:for="{{item.dataList}}" wx:for-item="dataItem">
+                                        <image class="anseimg" data-src="{{dataItem.uploadImg}}" bindtap="showdataimg" src="{{dataItem.uploadImg}}" mode="aspectFill"></image>
+                                    </block>
+                                </view>
+                            </view>
+                            <!-- 签名题 -->
+                            <view wx:if="{{item.componentType==5}}">
+                                <view class="tmname">{{index+1}}. {{item.subjectTitle}}</view>
+                                <view class="tmanser">
+                                    <block wx:for="{{item.dataList}}" wx:for-item="dataItem">
+                                        <image class="anseimg" data-src="{{dataItem.uploadImg}}" bindtap="showdataimg" src="{{dataItem.uploadImg}}" mode="aspectFill"></image>
+                                    </block>
+                                </view>
+                            </view>
+                        </block>
+                    </view>
+                </view>
+            </scroll-view>
+        </swiper-item>
+    </swiper>
+</view>
+<view class="zzc" hidden="{{fxhide}}" bindtap="fxtp"></view>
+<view class="sxbox" hidden="{{fxhide}}">
+    <view class="fxhy">分享到</view>
+    <view class="fxbox">
+        <view class="wxhy">
+            <button class="button" open-type="share">
+                <image src="/img/wxhy.png" class="hyimg"></image>
+                <view style="margin-top: 10px;">微信好友</view>
+            </button>
+        </view>
+        <view class="wxhy">
+            <button class="button">
+                <image src="/img/ewming.png" class="hyimg"></image>
+                <view style="margin-top: 10px;">二维码</view>
+            </button>
+        </view>
+    </view>
+</view>

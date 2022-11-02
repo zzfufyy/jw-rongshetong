@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IFairForCompanyMapper">
+    <resultMap id="FairForCompanyDTOResultMap" type="com.shopping.wx.pojo.dto.fair_for_company.FairForCompanyDTO">
+        <id column="company_uuid" jdbcType="VARCHAR" property="companyUuid" />
+        <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+        <result column="count_job" jdbcType="INTEGER" property="countJob" />
+        <result column="recruiter_openid" jdbcType="VARCHAR" property="recruiterOpenid" />
+        <result column="recruiter_name" jdbcType="VARCHAR" property="recruiterName" />
+        <result column="company_portrait_path" jdbcType="VARCHAR" property="companyPortraitPath" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+
+    <select id="pageDTO" resultMap="FairForCompanyDTOResultMap">
+        SELECT
+            a.company_uuid,
+            a.company_name,
+            a.recruiter_openid,
+            a.recruiter_name,
+            a.company_portrait_path,
+            a.create_time,
+            COUNT(rj.id) as count_job
+        FROM(
+            SELECT
+                ffc.company_uuid as company_uuid,
+                rc.company_name as company_name,
+                rc.recruiter_openid as recruiter_openid,
+                rc.juridical_person as recruiter_name,
+                rc.portrait_path as company_portrait_path,
+                ffc.create_time as create_time
+            FROM fair_for_company ffc
+            LEFT JOIN recruit_company rc
+            ON ffc.company_uuid = rc.id
+                AND rc.status != -1
+            WHERE fair_uuid = #{fairUuid}
+        ) a
+        LEFT JOIN recruit_job rj
+        ON a.company_uuid = rj.company_uuid
+            AND rj.status != -1
+        GROUP BY company_uuid,company_name,recruiter_openid,recruiter_name,company_portrait_path,create_time
+        ORDER BY create_time ASC
+    </select>
+
+    <resultMap id="FairForCompanyJobDTOResultMap" type="com.shopping.wx.pojo.dto.fair_for_company.FairForCompanyJobDTO">
+        <id column="companyUuid" jdbcType="VARCHAR" property="companyUuid" />
+        <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+        <result column="job_uuid" jdbcType="VARCHAR" property="jobUuid" />
+        <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+        <result column="job_salary_min" jdbcType="INTEGER" property="jobSalaryMin" />
+        <result column="job_salary_max" jdbcType="INTEGER" property="jobSalaryMax" />
+        <result column="recruiter_openid" jdbcType="VARCHAR" property="recruiterOpenid" />
+        <result column="recruiter_name" jdbcType="VARCHAR" property="recruiterName" />
+        <result column="recruiter_gender" jdbcType="TINYINT" property="recruiterGender" />
+        <result column="recruiter_portrait_path" jdbcType="VARCHAR" property="recruiterPortraitPath" />
+        <result column="recruiting_number" jdbcType="VARCHAR" property="recruitingNumber" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+    <select id="pageJobDTO" resultMap="FairForCompanyJobDTOResultMap">
+        SELECT
+            a.company_uuid,
+            a.company_name,
+            rj.id AS job_uuid,
+            rj.job_name,
+            rj.recruiting_number,
+            rj.job_salary_min,
+            rj.job_salary_max,
+            a.recruiter_openid,
+            a.recruiter_name,
+            a.recruiter_gender,
+            a.recruiter_portrait_path,
+            rj.create_time
+        FROM(
+            SELECT
+                ffc.company_uuid AS company_uuid,
+                rc.company_name AS company_name,
+                ffc.recruiter_openid AS recruiter_openid,
+                ur.real_name AS recruiter_name,
+                ur.gender AS recruiter_gender,
+                ur.portrait_path AS recruiter_portrait_path
+            FROM fair_for_company ffc
+            LEFT JOIN recruit_company rc
+            ON ffc.company_uuid = rc.id
+              AND  rc.status != -1
+            LEFT JOIN user_recruiter ur
+            ON ffc.recruiter_openid = ur.id
+            WHERE ffc.fair_uuid = #{fairUuid}
+        ) a
+        LEFT JOIN recruit_job rj
+        ON a.company_uuid = rj.company_uuid
+            AND rj.status != -1
+        WHERE  rj.id != '' and  rj.id is not null
+        <if test="companyName!=null and companyName!=''">
+        and a.company_name like concat('%',#{companyName},'%')
+        </if>
+        ORDER BY create_time ASC
+    </select>
+
+
+</mapper>

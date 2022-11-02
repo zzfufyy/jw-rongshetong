@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "毕业生留长就业服务平台",
+    "usingComponents": {
+        "authorize": "/components/authorize/authorize"
+    }
+}

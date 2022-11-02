@@ -1,0 +1,10 @@
+{
+    "navigationBarTitleText": "创建投票",
+
+    "usingComponents": {
+        "form-choice-select-builder": "/components/formBuilder/formChoiceSelectBuilder/formChoiceSelectBuilder",
+        "form-completion-builder": "/components/formBuilder/formCompletionBuilder/formCompletionBuilder",
+        "form-img-upload-builder":"/components/formBuilder/formImgUploadBuilder/formImgUploadBuilder",
+        "form-sign-builder": "/components/formBuilder/formSignBuilder/formSignBuilder"
+    }
+}

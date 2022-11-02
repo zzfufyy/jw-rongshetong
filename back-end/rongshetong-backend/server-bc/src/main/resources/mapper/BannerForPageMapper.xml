@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.BannerForPageMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.BannerForPage">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="banner_name" jdbcType="VARCHAR" property="bannerName" />
+    <result column="banner_img_path" jdbcType="VARCHAR" property="bannerImgPath" />
+    <result column="page_path" jdbcType="VARCHAR" property="pagePath" />
+    <result column="user_role" jdbcType="TINYINT" property="userRole" />
+    <result column="community_uuid" jdbcType="VARCHAR" property="communityUuid" />
+    <result column="is_global" jdbcType="TINYINT" property="isGlobal" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+    <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+    <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, banner_name, banner_img_path, page_path, user_role, community_uuid, is_global, 
+    priority, status, create_time, ext1, ext2, ext3
+  </sql>
+</mapper>

@@ -1,0 +1,11 @@
+
+<!-- <view class="contbox">
+	<image src="{{syewm}}" show-menu-by-longpress="true" style="width: 183px;margin-top: 63px" mode="widthFix" class="ewmimg"></image>
+	<text class="ca">长按识别即可进入诉源治理</text>
+
+
+</view> -->
+<canvas class="contbox" style="margin-top: 51px;width: 270px;height: 330px;z-index: -1;opacity: 1;" canvas-id="mycanvas" />
+<button class='baocun' bindtap='baocun'>保存相册，分享到朋友圈</button>
+<!-- <canvas style="width: 375px;height:734px;z-index: -1;opacity: 1;" canvas-id="mycanvas" /> -->
+<!--生成海报  -->

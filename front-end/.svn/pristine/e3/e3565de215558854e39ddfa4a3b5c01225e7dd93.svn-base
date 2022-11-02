@@ -1,0 +1,39 @@
+<view class="container">
+	<view class="tit">{{tit}}</view>
+	<view class="shxq">说明详情</view>
+	<view class="line10"></view>
+	<view class="chekbox_big">
+		<view class="ochekbox" wx:for="{{formlist}}" wx:key="key">
+			<!-- <view>{{item.title}}</view> -->
+
+			<view class="pd" wx:if="{{item.type == 'radio'}}">
+				<view class="itemtit">{{index+1}}.{{item.title}}【单选题】</view>
+				<radio-group bindchange="radioChange">
+					<label class="weui-cell weui-check__label" 
+					wx:for="{{item.radiochek}}" wx:for-item="items" wx:key="{{items.value}}">
+						<view class="weui_cell__hd clearfloat">
+							<view class="ft ltbox"><radio  value="{{items.value}}" checked="true"/></view>
+							<view class="rttext ft">{{items.checkitem}}</view>
+						</view>
+						<!-- <view class="weui-cell__bd">{{items.checkitem}}</view> -->
+					</label>
+				</radio-group>
+			</view>
+
+			<view class="pd" wx:if="{{item.type == 'checkbox'}}">
+				<view class="itemtit">{{index+1}}.{{item.title}}【多选题】</view>
+				<checkbox-group bindchange="checkboxChange">
+					<label class="weui-cell weui-check__label" 
+					wx:for="{{item.radiochek}}" wx:for-item="items" wx:key="{{items.value}}">
+						<view class="weui_cell__hd clearfloat">
+							<view class="ft ltbox"><checkbox value="{{items.value}}"checked="{{item.checked}}"/></view>
+							<view class="rttext ft">{{items.checkitem}}</view>
+						</view>
+						<!-- <view class="weui-cell__bd">{{items.checkitem}}</view> -->
+					</label>
+				</checkbox-group>
+			</view>
+
+		</view>
+	</view>
+</view>

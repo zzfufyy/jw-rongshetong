@@ -1,0 +1,119 @@
+// pages/news/news.js
+const Loading = require('../../utils/loading_util')
+
+const newsEx = require('./newsEx');
+
+const app = getApp();
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+		newsList: [
+			// { newsUuid:'',articleTitle: '春风送温暖 就业送真情', articleIntroduction: '【湖南省】关于印发《湖南省“十四五”金融业发展规划》的通知湖南省地方金融监督管理局关于印发《湖南省“十四五”金融业发展规划》的通知', articleAuthor: '岳麓区就业服务中心', articleReleaseTime: '3月02日', articlePortraitPath: 'http://frqryb.oss-accelerate.aliyuncs.com/headphoto/16297916583243346b1330ea-9a71-4ea4-85d0-02c7556c3b40.jpeg' },
+			// { articleTitle: '春风送温暖 就业送真情', articleIntroduction: '【湖南省】关于印发《湖南省“十四五”金融业发展规划》的通知湖南省地方金融监督管理局关于印发《湖南省“十四五”金融业发展规划》的通知', articleAuthor: '岳麓区就业服务中心', articleReleaseTime: '3月02日', articlePortraitPath: 'http://frqryb.oss-accelerate.aliyuncs.com/headphoto/16297916583243346b1330ea-9a71-4ea4-85d0-02c7556c3b40.jpeg' },
+		]
+	},
+	fczcbtnclick(e) {
+		console.log(e);
+		let newsUuid = e.currentTarget.id;
+		wx.navigateTo({
+			url: '/pages/zxxq/zxxq?newsUuid=' + newsUuid,
+		})
+	},
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: async function (options) {
+        await app.getOpenidReady();
+        
+        await this.clearContent();
+        await this.loadContent();
+		// // 加载list
+		// let loadListPromise = informationNewsService.loadList();
+		// let tempList = [];
+		// await loadListPromise.then(r => {
+		// 	r.data.forEach(v =>{
+		// 		tempList.push({
+		// 			newsUuid: v.id,
+		// 			articleTitle: v.articleTitle,
+		// 			articleIntroduction: v.articleIntroduction,
+		// 			articleAuthor: v.articleAuthor,
+		// 			articleReleaseTime: date_util.dateToCN(v.articleReleaseTime),
+		// 			articlePortraitPath:app.globalData.web_path+ v.articlePortraitPath,
+		// 		})
+		// 	})
+		// 	console.log(r);
+		// }).catch(r => {
+		// 	console.error(r)
+		// });
+		// this.setData({
+		// 	newsList: tempList,
+		// })
+
+	},
+    /**
+		 * 页面上拉触底事件的处理函数
+		 */
+	onReachBottom: async function () {
+		try {
+			Loading.begin();
+			await this.loadContent();
+		} catch (e) {
+			console.error(e)
+		} finally {
+			Loading.end();
+		}
+	},
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+    },
+    // 加载分页
+    ...newsEx.createPageMethods(),
+})

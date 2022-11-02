@@ -1,0 +1,56 @@
+// 图像处理工具
+const url_util = require('./url_util');
+const string_util = require('./string_util');
+const CONSTANT = require('../common/constant');
+const app = getApp();
+
+function handleCompanyPortraitPath(portraitPath) {
+    return string_util.isEmpty(portraitPath) ?
+        CONSTANT.STATIC_IMG_URL.portrait_company :
+        url_util.isImageUrlInServer(portraitPath) ?
+            app.globalData.web_path + portraitPath : portraitPath
+}
+function handleCompanyPhotoPath(photoPaths) {
+    if(string_util.isEmpty(photoPaths)){
+        return [];
+    }
+    let arr = photoPaths.split(";");
+    return arr.map(v => {
+        return string_util.isEmpty(v) ?
+            CONSTANT.STATIC_IMG_URL.portrait_company :
+            url_util.isImageUrlInServer(v) ?
+                app.globalData.web_path + v : v
+    })
+}
+
+
+function handlePersonnelPortraitPath(portraitPath, gender) {
+    return string_util.isEmpty(portraitPath) ?
+        (Boolean(gender) ? CONSTANT.STATIC_IMG_URL.portrait_personal_female : CONSTANT.STATIC_IMG_URL.portrait_personal_male) :
+        url_util.isImageUrlInServer(portraitPath) ?
+            app.globalData.web_path + portraitPath : portraitPath
+}
+
+function handleArticlePortraitPath(portraitPath) {
+    return string_util.isEmpty(portraitPath) ?
+        CONSTANT.STATIC_IMG_URL.portrait_news :
+        url_util.isImageUrlInServer(portraitPath) ?
+            app.globalData.web_path + portraitPath : portraitPath
+}
+
+function handleCommunityPortraitPath(portraitPath) {
+    return string_util.isEmpty(portraitPath) ?
+        CONSTANT.STATIC_IMG_URL.portrait_community :
+        url_util.isImageUrlInServer(portraitPath) ?
+            app.globalData.web_path + portraitPath : portraitPath
+}
+
+
+
+module.exports = {
+    handleCompanyPortraitPath: handleCompanyPortraitPath,
+    handleCompanyPhotoPath: handleCompanyPhotoPath,
+    handlePersonnelPortraitPath: handlePersonnelPortraitPath,
+    handleArticlePortraitPath: handleArticlePortraitPath,
+    handleCommunityPortraitPath: handleCommunityPortraitPath,
+}

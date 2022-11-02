@@ -1,0 +1,203 @@
+/* tab样式 */
+.tab-list-container {
+    display: flex;
+    padding: 50rpx 15rpx 0rpx 15rpx;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.tab-item {
+    width: 128rpx;
+    margin: 0rpx 26rpx 50rpx 26rpx;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+}
+
+.tab-img {
+    width: 90rpx;
+    height: 90rpx;
+    margin-bottom: 20rpx;
+}
+
+.tab-text {
+    color: #707070;
+    font-size: 30rpx;
+}
+
+
+
+/**  BEGIN 选择身份弹出样式 */
+/* 遮罩层 */
+.full-mask-layer {
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    opacity: 0.3;
+    position: fixed;
+    z-index: 99990;
+    top: 0;
+}
+
+.identity-box {
+    width: 85%;
+    margin: 0 auto;
+    background: #fff;
+    top: 20%;
+    position: fixed;
+    z-index: 99991;
+    left: 0;
+    right: 0;
+    border-radius: 10px 10px 10px 10px;
+    padding-bottom: 20px;
+}
+
+.identity-line-1 {
+    font-size: 24px;
+    font-family: SimHei-Regular, SimHei;
+    font-weight: 400;
+    color: #333333;
+    padding: 25px 0 0 24px;
+}
+
+.identity-line-2 {
+    font-size: 16px;
+    font-family: SimHei-Regular, SimHei;
+    font-weight: 400;
+    color: #999999;
+    padding: 9px 0 0 24px;
+
+}
+
+.identity-item {
+    margin: 18px 20px 9px 20px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 18px;
+    font-family: SimHei-Regular, SimHei;
+    font-weight: 400;
+    background: #EAF2FF;
+    border-radius: 5px 5px 5px 5px;
+    padding-left: 20px;
+    color: #3384FD;
+}
+
+.margin-top-9px {
+    margin-top: 9px;
+}
+
+/**  END 选择身份弹出样式 */
+
+
+/** 尝试绑定公司信息 弹出样式 begin */
+.qzbox {
+    width: 85%;
+    margin: 0 auto;
+    background: #fff;
+    top: 10%;
+    position: fixed;
+    z-index: 99991;
+    left: 0;
+    right: 0;
+    border-radius: 10px 10px 10px 10px;
+    padding-bottom: 20px;
+}
+
+.qusf {
+    font-size: 24px;
+    font-family: SimHei-Regular, SimHei;
+    font-weight: 400;
+    color: #333333;
+    padding: 25px 0 0 24px;
+}
+
+.zsfw {
+    font-size: 16px;
+    font-family: SimHei-Regular, SimHei;
+    font-weight: 400;
+    color: #999999;
+    padding: 9px 0 0 24px;
+
+}
+
+.zpf {
+    margin-top: 9px;
+}
+
+.smrz {
+    padding-right: 23px;
+}
+
+.qzz1 {
+    margin: 0 22px;
+    height: 34px;
+    line-height: 34px;
+    font-size: 18px;
+    font-family: SimHei-Regular, SimHei;
+    margin-top: 18px;
+    font-weight: 400;
+    border-radius: 5px 5px 5px 5px;
+    font-size: 16px;
+    position: relative;
+}
+
+.iptnam {
+    border-bottom: 1px solid #E2E2E2;
+    height: 34px;
+    font-size: 16px;
+}
+
+.comlefttxt {
+    font-size: 18px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #333333;
+}
+
+.comrightipt {
+    margin-top: 11px;
+    text-align: right;
+}
+
+.tijsq {
+    height: 46px;
+    background: #4376E4;
+    opacity: 1;
+    border-radius: 4px;
+    width: 94%;
+    margin: 0 auto;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 46px;
+    margin-top: 17px;
+}
+
+
+.tiaoguo {
+    text-align: center;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
+}
+
+.hqlxfs {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    width: 46px !important;
+    padding: 2px 0px;
+    right: 0;
+    position: absolute;
+    margin-left: 0px !important;
+    margin-right: 0 !important;
+    bottom: 8px;
+    color: #3384FD;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid #3384FD;
+}
+
+/** 尝试绑定公司信息 弹出样式 end */

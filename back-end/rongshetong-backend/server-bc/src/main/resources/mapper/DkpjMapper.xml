@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.DkpjMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Dkpj">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dkid" jdbcType="VARCHAR" property="dkid" />
+    <result column="pf" jdbcType="VARCHAR" property="pf" />
+    <result column="pjyj" jdbcType="VARCHAR" property="pjyj" />
+    <result column="dkbankid" jdbcType="VARCHAR" property="dkbankid" />
+    <result column="yl1" jdbcType="VARCHAR" property="yl1" />
+    <result column="yl2" jdbcType="VARCHAR" property="yl2" />
+    <result column="pjtime" jdbcType="TIMESTAMP" property="pjtime" />
+    <result column="sltime" jdbcType="TIMESTAMP" property="sltime" />
+    <result column="wctime" jdbcType="TIMESTAMP" property="wctime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, dkid, pf, pjyj, dkbankid, yl1, yl2, pjtime, sltime, wctime
+  </sql>
+</mapper>

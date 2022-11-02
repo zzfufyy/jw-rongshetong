@@ -1,0 +1,144 @@
+<view class="container">
+	<view class="clearfloat sxb">
+		<view class="sqname ft" bindtap="sqchoose">{{communityName}} ></view>
+		<view class="sx fr" bindtap="bindtapFilterCondtionUnfold">筛选</view>
+	</view>
+	<view class="mzsq">
+		<text class="dsmz">{{buildingName}}</text>
+		<view class="wdj dj"></view>
+		<text class="djtxt">未登记</text>
+		<view class="ydj dj"></view>
+		<text class="djtxt">已登记</text>
+		<view class="xz dj"></view>
+		<text class="djtxt">选中状态</text>
+	</view>
+	<movable-area class="box">
+		<view class="clearfloat conbox">
+			<block>
+				<view class="ft ftbox">
+					<view class="mrbox" wx:for="{{numLayer}}" wx:key="key">
+						<view class="lcbox">{{item + 1}}</view>
+					</view>
+				</view>
+				<view class="ft frbox">
+					<view class="seatbox" style="width:{{wd}}px;" wx:for="{{residentList}}" wx:key="key">
+						<block wx:for="{{item.layer}}" wx:key="key">
+							<view wx:if="{{item.flagRegister == false}}" data-room="{{item.roomNum}}"
+								data-id="{{item.id}}" class="seatitem {{choosedRoom==item.roomNum?'active':''}}"
+								bindtap="bindtapUnregistered" wx:key="key">
+								{{item.roomNum}}
+							</view>
+							<view wx:elif="{{item.flagRegister == true}}" class="seatitem isdj"
+								data-room="{{item.roomNum}}" data-id="{{item.id}}" bindtap="bindtapRegistered"
+								wx:key="key">
+								{{item.roomNum}}
+							</view>
+
+						</block>
+					</view>
+				</view>
+			</block>
+		</view>
+	</movable-area>
+
+	<view class="btmbox">
+		<view class="yxz">
+			<text class="tt">
+				{{showStrBottom}}
+			</text>
+		</view>
+		<view wx:if="{{zt == 0}}" class="tijsq">未选择房号</view>
+		<view wx:if="{{zt == 1}}" class="tijsq" bindtap="godj">去登记信息</view>
+	</view>
+
+</view>
+
+<view class="zzc" hidden="{{hidesx}}"></view>
+<view class="sxbox" hidden="{{hidesx}}">
+	<view class="clearfloat sssx">
+		<view class="ft lt">
+			<!-- <icon class="INsearchicon" type="search" size="22" color="#999999" />
+			<input class="weui-input" placeholder-class="opl" placeholder="搜索某户" bindinput="searchjob"
+				confirm-type="search" /> -->
+			<view class="qudssbtn" bindtap="qudssbtn" hidden="{{qdhide}}">确定</view>
+		</view>
+		<view class=" fr sxac" bindtap="bindtapFilterConditionFold">收起 </view>
+	</view>
+	<view class="topjlsg">
+		<view class="yxyq clearfloat">
+			<view class="yx ft">信息是否登记</view>
+		</view>
+		<view class="yxbox">
+			<view class="yxforbox {{item.checked?'active1':'xb'}}" bindtap="bindtapFilterRegister" data-tag="{{item.tag}}"
+				wx:for="{{filterRegisterList}}" wx:key="key">{{item.tag}}</view>
+		</view>
+		<!-- <view class="yxyq clearfloat">
+			<view class="yx ft">已登记户时间</view>
+		</view>
+		<view class="yxbox">
+			<view class="yxforbox {{xxydj==item.id?'active1':'xb'}}" bindtap="ydjsj" data-id="{{item.id}}"
+				wx:for="{{ydjsj}}" wx:key="key">{{item.yxmoney}}</view>
+		</view> -->
+	</view>
+	<view class="btmbtnbox">
+		<view class="clear" bindtap="bindtapFilterClear">清空</view>
+		<view class="qd" bindtap="bindtapFilterSubmit">确定</view>
+	</view>
+</view>
+
+<view class="zzc" hidden="{{hidesqxz}}" bindtap="hidethis"></view>
+<view class="sxbox" hidden="{{hidesqxz}}">
+	<view class="clearfloat sxb" style="border-bottom: 1px solid #EEEEEE;">
+		<view class="sqname ft">{{communityName}} ></view>
+	</view>
+	<view style="height: 10px;background: #fff;"></view>
+	<view style="background: #fff;">
+		<!-- <view class="middlebox">
+			<view wx:for="{{qwchoose}}" data-job="{{item.job}}" data-id="{{item.id}}" wx:key="key" class="wantjob {{item.checked?'active':''}} {{item.active}}" bindtap="wantjob">
+				{{item.job}}
+			</view>
+		</view> -->
+		<view class="cpjs">
+			<view class="clearfloat bigbox">
+				<view class="ft ltbox">
+					<scroll-view scroll-y style="height:{{oht}}px;" scroll-y>
+						<block wx:for="{{sjLeftItems}}" wx:key="index">
+							<!--当前项的id等于item项的id，那个就是当前状态-->
+							<!--用data-index记录这个数据在数组的下标位置，使用data-id设置每个item的id值，供打开2级页面使用-->
+							<view id="zmzsj{{item.cellUuid}}"
+								class="nav_left_items {{curNav1 == item.cellUuid ? 'activ12' : ''}} ltbtn"
+								bindtap="switchRightTab1" data-index1="{{index}}" data-id="{{item.cellUuid}}">
+								{{item.cellName}}
+							</view>
+						</block>
+					</scroll-view>
+				</view>
+
+				<view class="fr rtbox">
+					<scroll-view class="scroll-view_H" scroll-y style="width:100%;height:{{oht}}px;"
+						scroll-into-view="zmzsj{{toView1}}" scroll-y scroll-top="{{scrollTop}}"
+						scroll-with-animation="true">
+						<block wx:for="{{sjRightItems}}" wx:key="index" wx:for-item="item">
+							<!-- <view class="type" id="zmzsj{{item.typeid}}">{{item.typename}}</view> -->
+							<view class="zmz-scroll-content-item" id="zmzsj{{item.cellUuid}}">
+								<view class="zmz-grid-content">
+									<view class="zmz-grid-row zmz-grid-row-clear">
+										<view wx:for="{{item.buildingList}}" wx:key="index"
+											class="zmz-grid-row-item {{curentid == item.buildingUuid?'activert':''}}"
+											data-id="{{item.buildingUuid}}" bindtap="bindtapChooseBuilding">
+											<text class="zmz-grid-row-label">{{item.buildingName}}</text>
+											<!-- <view class="line1"></view> -->
+										</view>
+									</view>
+								</view>
+							</view>
+						</block>
+					</scroll-view>
+				</view>
+			</view>
+		</view>
+	</view>
+	<view>
+		<!-- <view class="tijsq" bindtap="zwbc">保存</view> -->
+	</view>
+</view>

@@ -1,0 +1,16 @@
+<view class="container">
+
+	<view class="box">
+		技术支持：长沙市竟网信息科技有限公司
+	</view>
+
+	<view class="box" bindtap="bindtapChooseCommunity">
+		当前版本：1.1.1
+    </view>
+
+</view>
+
+
+<!-- 选择社区组件  -->
+<choose-street id='choose-street' max_choosed_number="2" choosedStreetList="{{choosedStreetList}}" bind:submit="submitChooseStreet">
+</choose-street>

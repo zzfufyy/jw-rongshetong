@@ -1,0 +1,605 @@
+// index.js
+const { GlobalKey } = require('../../service/global_service');
+
+// 求职者模块
+const recruitee = require('./recruitee');
+// 招聘者模块
+const recruiter = require('./recruiter');
+// 启动引导模块（引导用户授权、选择角色、注册角色等）
+const bootstrap = require('./bootstrap');
+// 监听器模块
+const listener = require('./listener');
+// 内容加载模块
+const CONSTANT = require('../../common/constant');
+const GLOBAL_CONSTANT = require('../../common/globalConstant');
+const content = require('./content');
+const Loading = require('../../utils/loading_util');
+const string_util = require('../../utils/string_util');
+
+const userCandidateService = require('../../common/userCandidateService');
+const jobCategoryService = require('../../common/jobCategoryService');
+const recruitJobService = require('../../common/recruitJobService');
+const viewRecordService = require('../../common/viewRecordService');
+const recruitRecordService = require('../../common/recruitRecordService');
+const candidateForJobService = require('../../common/candidateForJobService');
+const { Completer } = require('../../utils/function_util');
+// 获取应用实例
+const app = getApp();
+
+// 日志首名
+const PAGENAME = 'index.js - ';
+Page({
+	data: {
+		candidateTelephone: "",
+		isll: false,
+		...recruitee.createRecruiteeInfo(),
+		backgroundimg1: [
+			{ imgsrc: '/img/indexbg.png', url: '' }, { imgsrc: '/img/indexbg.png', url: '' }
+		],
+		backgroundimg: [
+			{ imgsrc: '/img/indexbg.png', url: '' }, { imgsrc: '/img/indexbg.png', url: '' }
+		],
+		indicatorDots: true,
+		vertical: false,
+		autoplay: false,
+		interval: 2000,
+		duration: 500,
+		topnav: [
+			{ name: '投递记录', imsrc: '/img/tdjl.png', url: '' },
+			{ name: '个人简历', imsrc: '/img/grjl.png', url: '' },
+			{ name: '邀约面试', imsrc: '/img/yyms.png', url: '' },
+			{ name: '修改定位', imsrc: '/img/xgdw.png', url: '' },
+		],
+		//判断用户是求职者还是企业  user/company
+		ident: 'user',
+		nowsf: "",
+		animated: false,
+		compangjob: [
+			// {
+			//   jobname: '服务员/保洁', usertag: [{ tagbq: '女' }, { tagbq: '29岁' }, { tagbq: '3000-5000/月' }],
+			//   name: '张三', tximg: '/img/tx.png', hxtime: '10分钟前', sqname: '天源社区', companyjuli: '1.2',
+			// },
+			// {
+			//   jobname: '服务员/保洁', usertag: [{ tagbq: '女' }, { tagbq: '29岁' }, { tagbq: '3000-5000/月' }],
+			//   name: '李四', tximg: '/img/tx.png', hxtime: '10分钟前', sqname: '天源社区', companyjuli: '1.2',
+			// },
+			// {
+			//   jobname: '服务员/保洁', usertag: [{ tagbq: '女' }, { tagbq: '29岁' }, { tagbq: '3000-5000/月' }],
+			//   name: '王二', tximg: '/img/tx.png', hxtime: '10分钟前', sqname: '天源社区', companyjuli: '1.2',
+			// },
+
+		],
+		scene: "",
+		nianl: [
+			{ nal: '30-40岁' }, { nal: '40-50岁' }, { nal: '50-60岁' },
+		],
+		num2: '',
+
+		xzyq: [
+			{ xz: '3K-5K' }, { xz: '5K-8K' }, { xz: '8K-10K' },
+		],
+		ht: '',
+
+		// 用户授权
+		isUserAuthorized: false, // 用户是否授权
+		// 授权框隐藏
+		hideUserInfoAuth: true,
+		// 角色选择
+		juesehide: true,
+		// 实名认证
+		smhide: true,
+		// 求职者完善信息
+		infows: true,
+		sqrphone: "",
+		companyUuid: '',
+		//企业登录
+		qydl: true,
+		//提示用户需要获取手机号
+		sjh: true,
+
+		isShow: false,
+		arrshow: true,
+
+		// joblist: [
+		//   { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+		//   { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+		//   { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+		// ],
+		recruiterOpenid: "",
+		companyUuid: "",
+		categoryUuid: "",
+	},
+
+	state: {
+		flagRefreshCompleter: new Completer(),
+	},
+	//社区服务
+	sqfw() {
+		// wx.showToast({
+		// 	title: '暂未开放',
+		// 	icon:'none'
+		// })
+		wx.navigateTo({
+			url: '/pages/xzsq/xzsq',
+		})
+	},
+	//打电话
+	async callphone(e) {
+		console.log(e)
+		let job = e.currentTarget.dataset.item
+		let phonenum = e.currentTarget.dataset.phonenum;
+		console.log(e.currentTarget)
+		if (string_util.isEmpty(phonenum)) {
+			wx.showToast({
+				title: '公司暂未留电话',
+			})
+			return;
+		}
+		// 生成 打过电话记录
+		let candidateOpenid = wx.getStorageSync('openid');
+		try {
+			Loading.begin()
+			await candidateForJobService.insertFlagCall(candidateOpenid, job.jobUuid);
+			// 这里不需要更新页面数据， makephone 再进来会触发 onShow() 事件
+		} catch (e) {
+			console.error(e)
+		} finally {
+			Loading.end();
+		}
+		wx.makePhoneCall({
+			phoneNumber: phonenum //仅为示例，并非真实的电话号码
+		})
+	},
+	//投递简历
+	async catchtapSendResume(e) {
+		let that = this;
+		let currentItem = e.currentTarget.dataset.item
+		let candidateOpenid = wx.getStorageSync('openid');
+		console.log(e.currentTarget)
+		console.log(this.data.candidateTelephone)
+
+		if (currentItem.flagApply) {
+			wx.showToast({
+				title: '您已投递',
+				duration: 1500,
+			})
+			return;
+		} else {
+			let HasCandidatePhone = false;
+			// 判断是否 已填写电话
+			if (string_util.isEmpty(this.data.candidateTelephone)) {
+				let showModalPromise = wx.showModal({
+					title: '提示',
+					content: '请先在个人简历中填写联系方式',
+					confirmText: "跳转",
+				});
+				await showModalPromise.then(v => {
+					if (v.confirm) {
+						wx.navigateTo({
+							url: '/pages/jlxg/jlxg?nowsf=' + that.data.nowsf,
+						})
+					} else if (v.cancel) {
+						return
+					}
+				}).catch(e => console.error(e));
+			} else {
+				HasCandidatePhone = true;
+			}
+			if (!HasCandidatePhone) {
+				return;
+			}
+			// 投递简历生成应聘信息
+
+		}
+		// 生成简历记录
+		let insertData = {
+			flagWhoReceive: 1,
+			flowRecruit: 0,
+			candidateOpenid: candidateOpenid,
+			recruiterOpenid: currentItem.recruiterOpenid,
+			companyUuid: currentItem.companyUuid,
+			jobUuid: currentItem.jobUuid,
+			categoryUuid: currentItem.categoryUuid,
+		}
+		try {
+			Loading.begin();
+			await recruitRecordService.insertByEntity(insertData);
+			// 投递简历 次数 ++
+			await recruitJobService.increaseCountApply(currentItem.jobUuid);
+			// 优化用户体验 这里修改页面数据
+			this.setData({
+				jobInfoList: this.data.jobInfoList.map(v => {
+					if (v.jobUuid == currentItem.jobUuid) {
+						v.flagApply = true;
+					}
+					return v;
+				})
+			})
+			wx.showToast({
+				title: '投递成功',
+				duration: 2000,
+			})
+		} catch (e) {
+			console.error(e);
+			wx.showToast({
+				title: '投递失败',
+				duration: 2000,
+			})
+		} finally {
+			Loading.end();
+		}
+	},
+	// 点击跳转到岗位详情
+	async bindtapCandidateJobInfo(e) {
+		let recruitJobUuid = this.data.jobInfoList[e.currentTarget.dataset.index].jobUuid;
+		// 增加浏览量 再跳转
+		try {
+			Loading.begin();
+			await recruitJobService.increaseViewCount(recruitJobUuid);
+		} catch (e) {
+			console.error(e)
+		} finally {
+			Loading.end();
+		}
+		wx.navigateTo({
+			url: '/pages/zwxq/zwxq?recruitJobUuid=' + recruitJobUuid,
+		})
+	},
+	// 点击跳转到求职者详情
+	async bindtapRecruiterJobInfo(e) {
+		let candidateOpenid = this.data.compangjob[e.currentTarget.dataset.index].candidateOpenid;
+		try {
+			Loading.begin();
+			// 增加浏览量
+			await userCandidateService.increaseCountView(candidateOpenid);
+			// 构建ViewRecord
+			let viewRecord = {
+				candidateOpenid: candidateOpenid,
+				recruiterOpenid: '',
+				companyUuid: this.data.companyUuid,
+			}
+			await viewRecordService.insertByEntity(viewRecord);
+		} catch (e) {
+			console.error(e);
+		} finally {
+			Loading.end();;
+		}
+		// 跳转到求职详情
+		wx.navigateTo({
+			url: '/pages/loojl/lookjl?candidateOpenid=' + candidateOpenid,
+		})
+	},
+	//求职者搜索函数
+	searchjob() {
+		wx.navigateTo({
+			url: '/pages/searchpage/searchpage',
+		})
+	},
+	//企业搜索函数
+	searchjob1() {
+		wx.navigateTo({
+			url: '/pages/qysearch/qysearch',
+		})
+	},
+	//添加意向
+	btnExpectJob() {
+		wx.navigateTo({
+			url: '/pages/wantjob/wantjob',
+		})
+	},
+	//＋发布招聘
+	btnPostJob() {
+		wx.navigateTo({
+			url: '/pages/fbjob/fbjob',
+		})
+	},
+	// 错误 公司头像
+	binderrorCompanyPortrait(e) {
+		console.error(e);
+		let img = 'jobInfoList[' + e.currentTarget.dataset.index + '].companytx';
+		this.setData({
+			[img]: CONSTANT.STATIC_IMG_URL.portrait_company,
+		})
+	},
+	// 错误 求职者头像
+	binderrorCandidatePortrait(e) {
+		console.error(e);
+		let img = 'compangjob[' + e.currentTarget.dataset.index + '].tximg';
+		this.setData({
+			[img]: Boolean(this.data.compangjob[e.currentTarget.dataset.index].gender) ?
+				CONSTANT.STATIC_IMG_URL.portrait_personal_female : CONSTANT.STATIC_IMG_URL.portrait_personal_male,
+		})
+	},
+	// 选择求职者
+	qzz: async function () {
+		wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY, 'user');
+		this.setData({
+			ident: 'user',
+			nowsf: '求职者',
+		})
+		await this._handleRecruiteeSelected();
+		// 重新加载内容
+		await this.reloadContent();
+
+
+	},
+
+	//招聘方
+	zpf: async function () {
+		this.setData({
+			ident: 'company',
+			nowsf: '招聘方',
+		})
+		wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY, 'company');
+		await this._handleRecruiterSelected();
+		// 重新加载内容
+		this.reloadContent();
+
+
+	},
+
+
+
+	//完善信息
+	wsxnhide() {
+		let infows = this.data.infows
+		this.setData({
+			infows: true
+		})
+	},
+	//提示用户需要获取手机号*确认*
+	setPhone(openid, phone) {
+		var that = this;
+		wx.request({
+			url: app.globalData.web_path + '/gywm/setWxuserandCompPhone',
+			data: {
+				openid: openid,
+				phone: phone,
+			},
+			header: app.globalData.header,
+			success: function (res) {
+				console.log(res)
+				// that._init();
+				// that.openAlert(scene);
+			},
+			fail: function (res) {
+			}
+		})
+	},
+	getPhoneNumber(e) {
+		let that = this
+		var sessionKey = wx.getStorageSync('sessionKey')
+		var openid = wx.getStorageSync('openid')
+		console.log(openid)
+		console.log(e)
+		console.log(sessionKey)
+		wx.request({
+			url: app.globalData.web_path + '/wx/user/' + app.globalData.appId + '/phoneNumberInfo',
+			data: {
+				sessionKey: sessionKey,
+				iv: e.detail.iv,
+				encryptedData: e.detail.encryptedData,
+			},
+			header: app.globalData.header,
+			success: function (res) {
+				console.log(res)
+				console.log(res.data.data.phoneNumber)
+				that.setData({
+					sqrphone: res.data.data.phoneNumber
+				})
+				that.setPhone(openid, res.data.data.phoneNumber);
+				wx.setStorageSync('phone', res.data.data.phoneNumber)
+			},
+			fail: function (res) {
+			}
+		})
+	},
+	//提示用户需要获取手机号*忽略*
+	hulue() {
+		this.setData({
+			hideUserInfoAuth: true,
+			// juesehide:false
+		})
+	},
+
+	//实名认证跳过
+	passbtn() {
+		this.setData({
+			smhide: true,
+			// juesehide:false
+		})
+	},
+	//求职者完善信息跳过
+	passbtnwsxx() {
+		this.setData({
+			infows: true,
+			// juesehide:false
+		})
+	},
+
+
+
+
+	// 年龄选择
+	nlxz(e) {
+		let that = this;
+		let index = e.currentTarget.dataset.index2;
+		that.setData({
+			num2: index
+		})
+	},
+
+
+	// 求职者完善信息end
+	//企业登录
+	qydltijsq() {
+		let qydl = this.data.qydl
+		this.setData({
+			qydl: true
+		})
+	},
+
+	onUnload() {
+		// wx.getStorageSync(GLOBAL_CONSTANT.LISTENABLE_SEND_RESUME).removeListener(this.sendResumeListener);
+	},
+
+	async onLoad(options) {
+		console.log('index onLoad');
+		console.log(getCurrentPages());
+		console.log(app.globalMonitors);
+		app.globalMonitors.sendResumeMonitor.addListener(this.sendResumeListener);
+
+		pages = getCurrentPages()
+		console.log(pages[pages.length - 1])
+		wx.getSetting({
+			success(res) {
+				if (!res.authSetting['scope.record']) {
+					wx.authorize({
+						scope: 'scope.record',
+						success() {
+							// 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
+							wx.startRecord()
+							wx.authorize({
+								scope: 'scope.camera',
+								success() {
+									// 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
+									wx.setEnable1v1Chat({
+										enable: true,
+										success: (e) => {
+										},
+										fail: (e) => {
+											console.log(e)
+										}
+									})
+
+								}
+							})
+						}
+					})
+				}
+			}
+		})
+		let that = this
+		//自定义头部方法
+		this.setData({
+			navH: app.globalData.navHeight,
+			margtop: app.globalData.navHeight
+		});
+		this.data.wantjob[0].checked = true;
+		this.setData({
+			wantjob: this.data.wantjob,
+		})
+		//设置scroll-view的高度
+		console.log(app.globalData.arrij.screenHeight)
+
+		that.setData({
+			ht: app.globalData.arrij.screenHeight - 119
+		})
+		// 加载完善信息 的工作选择列表
+		let jobCategoryListResult = await jobCategoryService.loadList();
+		console.log(jobCategoryListResult)
+		let wantjobList = jobCategoryListResult.data.map(r => {
+			return {
+				job: r.categoryName,
+				id: r.id,
+				checked: false,
+			};
+		})
+		wantjobList.splice(4, wantjobList.length - 5);
+		this.setData({
+			wantjob: wantjobList,
+		})
+		this.refresh()
+
+	},
+
+	async onShow() {
+	},
+
+	async refresh() {
+		console.log('index onshow');
+		// 全局
+		let that = this;
+		this.setData({
+			ident: wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY),
+		});
+		console.log(this.data.ident);
+		await app.getOpenidReady();
+		// 如果全局已经初始化 则不再初始化
+		if (!wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_COMPLETE_BOOTSTRAP)) {
+			console.log('index bootstrap');
+			await this.bootstrap();
+			wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_COMPLETE_BOOTSTRAP, true);
+		}
+		// 尝试加载求职者电话信息
+		let loadCandidatePromise = userCandidateService.loadEntityById(wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_OPENID));
+		await loadCandidatePromise.then(r => {
+			that.setData({
+				candidateTelephone: r.data.telephone,
+			});
+		}).catch(e => { console.error(e) });
+	},
+	// 修改定位
+	async changeLocation(e) {
+		let that = this
+		let wxChooseLocation = wx.chooseLocation({
+			type: 'gcj02',
+		});
+		wxChooseLocation.then(async res => {
+			that.setData({
+				mapLocation: {
+					longitude: res.longitude,
+					latitude: res.latitude,
+				},
+			});
+			if (that.data.ident == 'user') {
+				let updateData = {
+					id: that.data.openid,
+					lon: res.longitude,
+					lat: res.latitude,
+					address: res.address + res.name,
+				}
+				try {
+					Loading.begin();
+					await userCandidateService.updateByEntity(updateData);
+					await this.reloadContent();
+				} catch (e) {
+					console.error(e);
+				} finally {
+					Loading.end();
+				}
+			} else if (that.data.ident == 'company') {
+				let updateData = {
+					id: that.data.companyUuid,
+					lon: res.longitude,
+					lat: res.latitude,
+					address: res.address + res.name,
+					addressDetail: '', // 清空详细地址（门牌号等）
+				}
+				try {
+					Loading.begin();
+					await recruitCompanyService.updateRecruitCompany(updateData);
+					await this.reloadContent();
+				} catch (e) {
+					console.error(e);
+				} finally {
+					Loading.end();
+				}
+			}
+		}).catch(e => {
+			console.info('用户取消  修改定位')
+		})
+	},
+
+	onReachBottom: async function () {
+		this.loadContent();
+	},
+
+
+	...bootstrap.createBootstrapMethod(),
+	...recruitee.createRecruiteeMethods(),
+	...recruiter.createRecruiterMethods(),
+	...content.createContentMethods(),
+	...listener.createListenrMethods(),
+
+})

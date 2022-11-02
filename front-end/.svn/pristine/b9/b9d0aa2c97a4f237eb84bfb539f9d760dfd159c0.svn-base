@@ -1,0 +1,206 @@
+// pages/sqmanege/sqmanege.js
+const $ = require('../../utils/request_util');
+const Loading = require('../../utils/loading_util');
+const date_util = require('../../utils/date_util');
+const url_util = require('../../utils/url_util');
+const validate_util = require('../../utils/validate_util');
+const { Completer } = require('../../utils/function_util');
+const string_util = require('../../utils/string_util');
+
+const CONSTANT = require('../../common/constant');
+const GLOBAL_CONSTANT = require('../../common/globalConstant');
+const { Salary } = require('../../common/constant');
+// 加载服务
+
+const communityInformationService = require('../../common/communityInformationService');
+const communityCellService = require('../../common/communityCellService');
+const userCommunityService = require('../../common/userCommunityService');
+
+
+
+const app = getApp();
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+
+		communityUuid: '',
+		// sqname:'东湖社区 ',
+		cellList: [
+			// 示例
+			// {cellName: "测试zyw0414小区"
+			// communityUuid: "e80cf86d-a8ea-11ec-98aa-5076afbf1539"
+			// id: "1c7bb555-d050-406e-a193-17005e5f7245"
+			// numBuilding: 12
+			// numLayer: 9
+			// numLayerFamily: 4
+			// numRegistered: 0
+			// numUnregistered: 0
+			// recorderName: "Zzzz&#x1f4bb;"
+			// recorderOpenid: "oIZm34ruIs-pNzroW_3T0X2yQ25g"},
+			{ cellName: '东湖新寓1', numBuilding: '8', numLayer: '31', numLayerFamily: '8', numRegistered: '1234', numUnregistered: '1200', recorderName: '张三' },
+		],
+		showfp: true,
+		recorderList: [
+			{ id: 'zs', name: '张三', checked: false, cellUuidList: [] },
+			{ id: 'ls', name: '李四', checked: false, cellUuidList: [] },
+		]
+	},
+	state: {
+		communityUuidCompleter: new Completer(),
+	},
+	// 添加小区
+	addxq() {
+		wx.navigateTo({
+			url: '/pages/addxq/addxq?communityUuid=' + this.data.communityUuid,
+		})
+	},
+	//分配管理
+	fpgl() {
+		let showfp = !this.data.showfp
+		this.setData({
+			showfp: showfp
+		})
+	},
+	wglrxq() {
+		wx.navigateTo({
+			url: '/pages/wglrxq/wglrxq',
+		})
+	},
+	change(e) {
+		// 2022-04-15 TODO
+		console.log('checkbox发生change事件，携带value值为：', e.detail.value)
+		const items = this.data.items
+		const values = e.detail.value
+		for (let i = 0, lenI = items.length; i < lenI; ++i) {
+			items[i].checked = false
+			for (let j = 0, lenJ = values.length; j < lenJ; ++j) {
+				if (items[i].value === values[j]) {
+					items[i].checked = true
+					break
+				}
+			}
+		}
+		this.setData({
+			items
+		})
+	},
+	radioChange(e) {
+		console.log('radio发生change事件，携带value值为：', e.detail.value)
+		const items = this.data.items
+		for (let i = 0, len = items.length; i < len; ++i) {
+			items[i].checked = items[i].value === e.detail.value
+		}
+		this.setData({
+			items
+		})
+	},
+	tijsq() {
+		let showfp = !this.data.showfp
+		let that = this
+		wx.showToast({
+			title: '分配成功',
+			icon: '',
+			duration: 2000,
+			success() {
+				that.setData({
+					showfp: showfp
+				})
+			}
+		})
+
+	},
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: async function (options) {
+		console.log(options.communityUuid);
+		let communityUuid = options.communityUuid;
+		// 测试
+		communityUuid = 'e80cf86d-a8ea-11ec-98aa-5076afbf1539';
+		this.setData({
+			communityUuid: communityUuid,
+		});
+		this.state.communityUuidCompleter.resolve(communityUuid);
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: function () {
+		this.loadContent();
+	},
+	async loadContent() {
+		let communityUuid = await this.state.communityUuidCompleter.promise;
+		// 加载小区列表
+		let cellList = await communityCellService.listByCommunityUuid(communityUuid);
+		cellList = cellList.data;
+		console.log(cellList)
+		cellList = cellList.map(v => {
+			v.recorderName = string_util.isEmpty(v.recorderOpenid) ? '暂未分配' : v.recorderName
+			return v;
+		})
+		this.setData({
+			cellList: cellList,
+		});
+		// 加载该社区的网格录入人员
+		let recoderList = await userCommunityService.loadRecorderListByCommunityUuid(communityUuid);
+		recoderList = recoderList.data;
+		console.log(recoderList);
+		recoderList = recoderList.map(v => {
+			return {
+				id: v.id,
+				name: v.realName,
+				checked: false,
+			}
+		})
+		this.setData({
+			recorderList: recoderList,
+		})
+	},
+
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	}
+})

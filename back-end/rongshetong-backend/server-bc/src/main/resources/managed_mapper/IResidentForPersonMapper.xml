@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IResidentForPersonMapper">
+
+    <delete id="deleteByCellUuid">
+        DELETE  FROM resident_for_person
+        WHERE cell_uuid = #{cellUuid}
+        AND resident_uuid not in(
+          SELECT DISTINCT id FROM building_resident
+          WHERE cell_uuid = #{cellUuid}
+        )
+
+    </delete>
+
+</mapper>

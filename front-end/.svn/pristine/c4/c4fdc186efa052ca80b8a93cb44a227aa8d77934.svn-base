@@ -1,0 +1,58 @@
+const $ = require('../utils/request_util')
+
+
+const insertByEntity = function (insertData) {
+    return $.request({
+        url: '/user-recruiter/add',
+        data: insertData,
+        method: $.RequestMethod.POST,
+        header: $.jsonHeader,
+    });
+}
+
+const loadEntityById = function (id) {
+    return $.request({
+        url: '/user-recruiter/info?id=' + id,
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader,
+    });
+}
+
+const loadEntityPlusById = function (id) {
+    return $.request({
+        url: '/user-recruiter/infoPlus?id=' + id,
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader,
+    });
+}
+
+
+
+const uploadPortrait = function (openid, filePath) {
+    return $.upload({
+        url: '/user-recruiter/uploadPortrait?id=' + openid,
+        filePath: filePath,
+        formData: {},
+        name: 'file',
+        header: $.jsonHeader,
+    });
+}
+
+const updateByEntity = function (updateData) {
+    return $.request({
+        url: '/user-recruiter/modify',
+        data: updateData,
+        method: $.RequestMethod.POST,
+        header: $.jsonHeader
+    });
+}
+
+module.exports = {
+    insertByEntity: insertByEntity,
+    loadEntityById: loadEntityById,
+    loadEntityPlusById: loadEntityPlusById,
+    uploadPortrait: uploadPortrait,
+    updateByEntity: updateByEntity,
+}

@@ -1,0 +1,106 @@
+// pages/messgecollect2/messgecollect2.js
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+		isba:[
+			{value: 'USA', name: '是'},
+      {value: 'CHN', name: '否', },
+		],
+		sxlx:[
+			{value: 'USA', name: '建设用地规划许可证'},
+			{value: 'CHN', name: '国有土地使用权证', },
+			{value: 'USA', name: '集体建设用地使用权证'},
+			{value: 'CHN', name: '竣工验收手续', },
+			{value: 'USA', name: '消防竣工验收手续'},
+			{value: 'CHN', name: '施工许可证', },
+			{value: 'USA', name: '宅基地批准书'},
+			{value: 'CHN', name: '乡村建设规划许可证', },
+			{value: 'USA', name: '不动产登记证'},
+			{value: 'CHN', name: '公共聚集场所营业前消防行政许可', },
+			{value: 'USA', name: '市场主体登记（营业执照）'},
+			{value: 'CHN', name: '经营许可证', },
+		],
+		iswf:[
+			{value: 'USA', name: '是'},
+      {value: 'CHN', name: '否', },
+		],
+		wfjyzk:[
+			{value: 'USA', name: '违法占地'},
+      {value: 'CHN', name: '违法建设', },
+      {value: 'CHN', name: '违法改扩建', },
+      {value: 'CHN', name: '违规经营', },
+		],
+	},
+	prew(){
+		wx.navigateBack({
+			delta: 1,
+			success: (res) => {},
+			fail: (res) => {},
+			complete: (res) => {},
+		})
+	},
+	next(){
+		wx.navigateTo({
+			url: '/pages/messgecollect3/messgecollect3',
+		})
+	},
+
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: function (options) {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	}
+})

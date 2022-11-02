@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "关于我们",
+    "usingComponents": {
+        "form-single-select-builder": "/components/formBuilder/formSingleSelectBuilder/formSingleSelectBuilder"
+    }
+}

@@ -1,0 +1,236 @@
+// pages/xzsq/xzsq.js
+const $ = require('../../utils/request_util');
+const Loading = require('../../utils/loading_util')
+const CONSTANT = require('../../common/constant');
+const sort_util = require('../../utils/sort_util');
+// 加载服务
+const communityInformationService = require('../../common/communityInformationService');
+
+const app = getApp();
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+		localchoose: false,
+		streetchoose: true,
+		communitychoose: true,
+		showDistrictName: '',
+		showStreetName: '',
+		districtList: [
+			// {
+			// 	districtName: '芙蓉区', streetNameList: [
+			// 		{
+			// 			streetName: '望岳街道', communityList: [
+			// 				{ communityName: '社区一', }, { communityName: '社区er', }, { communityName: '社区3', }
+			// 			]
+			// 		},
+			// 		{
+			// 			streetName: '桔子街道', communityList: [
+			// 				{ communityName: '社区一', }, { communityName: '社区er', }, { communityName: '社区3', }
+			// 			]
+			// 		},
+			// 		{
+			// 			streetName: '银盆岭街道', communityList: [
+			// 				{ communityName: '社区一', }, { communityName: '社区er', }, { communityName: '社区3', }
+			// 			]
+			// 		}
+			// 	]
+			// },
+			// {
+			// 	districtName: '岳麓区', streetNameList: [
+			// 		{
+			// 			streetName: '望岳街道', communityList: [
+			// 				{ communityName: '社区一', }, { communityName: '社区er', }, { communityName: '社区3', }
+			// 			]
+			// 		},
+			// 		{
+			// 			streetName: '桔子街道', communityList: [
+			// 				{ communityName: '社区一', }, { communityName: '社区er', }, { communityName: '社区3', }
+			// 			]
+			// 		},
+			// 		{
+			// 			streetName: '银盆岭街道', communityList: [
+			// 				{ communityName: '社区一', }, { communityName: '社区er', }, { communityName: '社区3', }
+			// 			]
+			// 		}
+			// 	]
+			// },
+		],
+		
+	},
+	// 选择市辖区 -> 加载街道列表
+	async bindtapChooseDistrict(e) {
+		let currentDistrictName = e.currentTarget.dataset.name;
+		let districtList = this.data.districtList;
+		if (e.currentTarget.dataset.name != this.data.showDistrictName) {
+			// 加载街道列表
+			let streetNameList = await communityInformationService.listStreetNameByDistrictName(currentDistrictName);
+			streetNameList = streetNameList.data;
+			districtList = districtList.map(v => {
+				if (v.districtName == currentDistrictName) {
+					streetNameList.forEach(r => {
+						v.streetNameList.push({
+							streetName: r,
+							communityList: [],
+						})
+					})
+				}
+				return v;
+			})
+			console.log(districtList);
+			this.setData({
+				districtList: districtList,
+				showDistrictName: e.currentTarget.dataset.name,
+			})
+		} else {
+			// 清空街道列表
+			districtList = districtList.map(v => {
+				if (v.districtName == currentDistrictName) {
+					v.streetNameList = [];
+				}
+				return v
+			})
+			this.setData({
+				districtList: districtList,
+				showDistrictName: '',
+			})
+		}
+	},
+	// 选择街道 加载社区列表
+	async streetchoosetap(e) {
+		let currentDistrictName = this.data.showDistrictName;
+		let currentStreetName = e.currentTarget.dataset.name;
+		console.log(e.currentTarget)
+		let districtList = this.data.districtList;
+		if (e.currentTarget.dataset.name != this.data.showStreetName) {
+			let communityList = await communityInformationService.listByStreetName(currentStreetName);
+			communityList = communityList.data;
+			// 加载社区列表
+			districtList = districtList.map(v => {
+				if (v.districtName == currentDistrictName) {
+					v.streetNameList = v.streetNameList.map(r => {
+						if (r.streetName == currentStreetName) {
+							communityList.forEach(d => {
+								r.communityList.push({
+									communityUuid: d.id,
+									communityName: d.communityName,
+								})
+							})
+						}
+						return r;
+					});
+				}
+				return v;
+			})
+			this.setData({
+				districtList: districtList,
+				showStreetName: e.currentTarget.dataset.name,
+			})
+		} else {
+			// 清空
+			districtList = districtList.map(v =>{
+				if(v.districtName == currentDistrictName){
+					v.streetNameList = v.streetNameList.map(r =>{
+						if(r.streetName == currentStreetName){
+							r.communityList = [];
+						}
+						return r;
+					})
+				}
+				return v;
+			})
+			this.setData({
+				showStreetName: '',
+			})
+		}
+	},
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: function (options) {
+
+	},
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: async function () {
+		try {
+			Loading.begin();
+			await this.clearContent();
+			await this.loadContent();
+		} catch (e) {
+			console.error(e);
+		} finally {
+			Loading.end();
+		}
+
+	},
+	async clearContent(){
+		this.setData({
+			localchoose: false,
+			streetchoose: true,
+			communitychoose: true,
+			showDistrictName: '',
+			showStreetName: '',
+			districtList: []
+		})
+	},
+	async loadContent() {
+		let districtNameList = await communityInformationService.listDistrictNameByCityName(CONSTANT.CURRENT_CITY);
+		districtNameList = districtNameList.data;
+		let districtList = districtNameList.map(v => {
+			return {
+				districtName: v,
+				streetNameList: [],
+			}
+		});
+		districtList = sort_util.sortChangshaDistrict(districtList);
+		// 加载 市辖区列表
+		this.setData({
+			districtList: districtList,
+		})
+	},
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	}
+})

@@ -1,0 +1,164 @@
+// pages/schoolHomePage/schoolHomePage.js
+const CONSTANT = require('../../common/constant');
+const date_util = require('../../utils/date_util');
+const img_util = require('../../utils/img_util');
+const prompt_util = require('../../utils/prompt_util');
+const string_util = require('../../utils/string_util');
+const Loading = require('../../utils/loading_util');
+const {
+    Completer
+} = require('../../utils/function_util');
+
+const informationNewsService = require('../../common/informationNewsService');
+const functionTagService = require('../../common/functionTagService');
+
+const app = getApp();
+Page({
+
+    data: {
+        functionTagList: [],
+
+        communityUuid: '',
+
+    },
+    /** BEGIN 页面事件 */
+    bindtapTagNewsAnnouncement() {
+        wx.navigateTo({
+            url: `/pages/newsms/newsms?communityUuid=${this.data.communityUuid}&communityType=${CONSTANT.COMMUNITY_TYPE.SCHOOL}`,
+        })
+    },
+    bindtapGoLink(e) {
+        let id = e.currentTarget.dataset.id;
+        let linkUrl = this.data.functionTagList.find(v => {
+            return id == v.tagId;
+        }).pagePathLink;
+        console.info(`Choose the functionTag: ${id}`);
+        switch (id) {
+            // 企业招聘  求职就业
+            case 'tagRecruitCompany':
+                linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                break;
+            case 'tagRecruitCandidate':
+                linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                break;
+            case 'tagRecruitFair':
+                break;
+            case 'tagPersonalCenterSchool':
+                break;
+            default:
+                break;
+        }
+        console.info(`page navigateTo the page: ${linkUrl}`);
+        wx.navigateTo({
+            url: linkUrl,
+        })
+    },
+    /** END  页面事件 */
+
+    /** BEGIN 内部方法 */
+    // 加载新闻列表 - limit 3
+    _loadNewsList: async function () {
+        await this.communityUuidCompleter.promise;
+        let newsData = (await informationNewsService.loadListByCommunityUuid(this.data.communityUuid, 3)).data;
+        let newsList = newsData.map(v => {
+            return {
+                id: v.id,
+                articleTitle: v.articleTitle,
+                articleIntroduction: v.articleIntroduction,
+                articleAuthor: v.articleAuthor,
+                articleReleaseTime: date_util.dateToCN(v.articleReleaseTime),
+                articlePortraitPath: img_util.handleArticlePortraitPath(v.articlePortraitPath),
+            }
+        });
+        // 构造newsList
+        this.setData({
+            newsList: newsList,
+        })
+    },
+    // 加载功能列表 - 特定
+    _loadFunctionTagList: async function () {
+        let functionTagAllList = (await functionTagService.listAll()).data;
+        let functionTagList = CONSTANT.FUNCTION_TAG_LIST_SCHOOL.map(v => {
+            return functionTagAllList.find(r => {
+                return r.tagId == v;
+            })
+        })
+        console.log(functionTagList);
+        this.setData({
+            functionTagList: functionTagList,
+        })
+
+    },
+    /** END 内部方法 */
+
+
+
+    communityUuidCompleter: new Completer(),
+    onLoad: async function (options) {
+        this.communityUuidCompleter = new Completer();
+        await app.getOpenidReady();
+        let communityUuid = 'ea8a6853-fd9f-11ec-9be3-525401030264';
+        this.setData({
+            communityUuid: communityUuid,
+        })
+        this.communityUuidCompleter.resolve(communityUuid);
+        // 用户授权
+        this.authorize = this.selectComponent("#authorize");
+        let authorizeRs = await this.authorize.doAuthorize();
+        if (!authorizeRs) {
+            prompt_util.authorizeNamePortraitFailPrompt();
+        }
+        try {
+            Loading.begin();
+            // 构建新闻列表
+            await this._loadNewsList();
+
+            // 构建功能列表
+            await this._loadFunctionTagList();
+
+        } catch (e) {
+            console.error(e)
+        } finally {
+            Loading.end();
+        }
+
+    },
+
+
+
+    onShow: async function () {
+
+    },
+
+
+    onReady: function () {
+
+    },
+
+
+
+
+    onHide: function () {
+
+    },
+
+
+    onUnload: function () {
+
+    },
+
+
+    onPullDownRefresh: function () {
+
+    },
+
+
+    onReachBottom: function () {
+
+    },
+
+
+    onShareAppMessage: function () {
+
+    }
+})

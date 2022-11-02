@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "form-single-select-builder": "/components/formBuilder/formSingleSelectBuilder/formSingleSelectBuilder"
+  }
+}

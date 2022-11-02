@@ -1,0 +1,280 @@
+// pages/qzjy/qzjy.js
+// pages/searchpage/searchpage.js
+const $ = require('../../utils/request_util');
+const Loading = require('../../utils/loading_util');
+const CONSTANT = require('../../common/constant');
+const { Salary } = require('../../common/constant');
+// 加载服务
+const recruitJobService = require('../../common/recruitJobService');
+const viewRecordService = require('../../common/viewRecordService');
+
+// 附加模块
+const searchpageEx = require('./searchpageEx');
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+    vedio_data: [
+			{bac:'linear-gradient(180deg, #7CCCFB 0%, #1BA2F6 100%)',xdname:'春风行动线上专区',url: '', id: 0,img: '/img/cfxd.png'},
+			{bac:'linear-gradient(180deg, #FFDC69 0%, #FFAC30 100%)',xdname:'高校毕业生专场',url: '', id: 1,img: '/img/gxzc.png'},
+			{bac:'linear-gradient(180deg, #FFDC69 0%, #FFAC30 100%)',xdname:'高校毕业生专场',url: '', id: 1,img: '/img/gxzc.png'}
+		],
+		currentId: '0',
+		currentTab:'0',
+		zxfj:[{zx:'最新',id:'0'},{zx:'附近',id:'1'},],
+		yzqytab:[{zx:'最新',id:'0'},{zx:'附近',id:'1'},],
+		section: [],
+		joblistyfb:[
+			{ jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' }
+		],
+		joblistyxj:[
+			{comname:'长沙竟网信息科技有限公司',companytx: '/img/tx.png',companylxr:'张经理', jl: '1.5', phonenum: '13112345678' },
+			{comname:'长沙竟网信息科技有限公司',companytx: '/img/tx.png',companylxr:'张经理', jl: '1.5', phonenum: '13112345678' },
+		],
+		canhgeid:'0',
+		yzqygeid:'',
+		// 距离
+		nyxz: [
+			{ nl: '不限', id: 0, checked: true }, { nl: '距离最近', id: 1 }
+		],
+		oid: 0,
+		hidesx: true,
+	},
+	//专场招聘
+	zczp(){
+		wx.navigateTo({
+			url: '/pages/zpzhuanc/zpzhuanc',
+		})
+	},
+	//点击头部导航的点击事件
+	handleTap: function (e) {
+		let id = e.currentTarget.id;
+		if (id) {
+			this.setData({
+				currentId: id,
+				currentTab: id,
+			})
+		}
+	},
+	// 滚动切换标签样式 
+	switchTab: function (e) {
+		// console.log(e) 
+		var that = this;
+		that.setData({
+			currentTab: e.detail.current,
+			currentId: e.detail.current
+		});
+	},
+  //点击查看专题
+  preimg(e){
+	},
+	//在招职业最新附近筛选事件
+	chagethis(e){
+		console.log(e)
+		let id = e.currentTarget.dataset.id
+		this.setData({
+			canhgeid:id
+		})
+	},
+	//优质企业最新附近筛选事件
+	chagethis1(e){
+		console.log(e)
+		let id = e.currentTarget.dataset.id
+		this.setData({
+			yzqygeid:id
+		})
+	},
+	// 点击跳转到对应岗位
+	async bindtapChooseJob(e) {
+		let jobData = this.data.joblist[e.currentTarget.dataset.index]
+		let recruitJobUuid = jobData.jobUuid;
+		// TODO 生成浏览记录  +  浏览量+1
+		try {
+			Loading.begin();
+			await recruitJobService.increaseViewCount(recruitJobUuid);
+			console.log('increasecountview完成');
+			// // 构建ViewRecord
+			// let viewRecord = {
+			// 	candidateOpenid: this.data.userOpenid,
+			// 	recruiterOpenid: jobData.recruiterOpenid,
+			// 	companyUuid: jobData.companyUuid,
+			// }
+			// await viewRecordService.insertByEntity(viewRecord)
+		} catch (e) {
+			console.log(e);
+		} finally {
+			Loading.end();
+			wx.navigateTo({
+				url: "/pages/zwxq/zwxq?recruitJobUuid=" + jobData.jobUuid,
+			})
+		}
+
+	},
+	//	点击跳转到对应公司
+	bindtapChoosecom(e){
+		wx.navigateTo({
+			url: '/pages/commessxq/commessxq',
+		})
+	},
+	// 筛选事件
+	sx() {
+		let hidesx = !this.data.hidesx
+		this.setData({
+			hidesx: hidesx
+		})
+	},
+	//月薪
+	yxxz(e) {
+		let id = e.currentTarget.dataset.id
+		let yxyq_list = this.data.yxyq.map((v, i) => {
+			v.checked = (i == id) ? true : false;
+			return v;
+		})
+		this.setData({
+			yxyq: yxyq_list
+		})
+	},
+	//距离
+	nlfw(e) {
+
+		let id = e.currentTarget.dataset.id
+		console.log(id)
+		for (let i = 0; i < this.data.nyxz.length; i++) {
+			if (this.data.nyxz[i].id == id) {
+				this.setData({
+					oid: id
+				})
+			}
+		}
+
+	},
+	//打电话
+	callphone(e) {
+		let phonenum = e.currentTarget.dataset.phonenum
+		wx.makePhoneCall({
+			phoneNumber: phonenum, //仅为示例，并非真实的电话号码
+		})
+	},
+	//清空
+	clear() {
+		console.log(this.data.yxyq)
+		let yxyqList = this.data.yxyq.map((v) => {
+			v.checked = false;
+			return v;
+		})
+		console.log(yxyqList);
+		for (let q = 0; q < this.data.nyxz.length; q++) {
+			this.setData({
+				oid: 100
+			})
+		}
+		this.setData({
+			yxyq: yxyqList
+		})
+	},
+	//确定
+	async qd() {
+		// 获取薪资范围参数
+		let yxyqList = this.data.yxyq.filter((v) => {
+			return v.checked == true;
+		})
+
+		let currentYxyq = yxyqList[0];
+		this.setData({
+			currentYxyq: currentYxyq,
+		})
+
+		if (currentYxyq == undefined || currentYxyq.id == 0) {
+			await this.clearContent();
+			await this.loadContent(this.data.searchText,'','');
+
+		} else {
+			await this.clearContent();
+			console.log(this.data.searchText);
+			await this.loadContent(this.data.searchText, currentYxyq.min, currentYxyq.max);
+		}
+
+		let hidesx = !this.data.hidesx
+		this.setData({
+			hidesx: hidesx
+		})
+	},
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: function (options) {
+		let that = this
+		wx.getSystemInfo({
+			success: function (res) {
+				that.setData({
+					winWidth: res.windowWidth,
+					winHeight: res.windowHeight - 133,
+				});
+			}
+		})
+		let fblg = that.data.joblistyfb.length
+		let xjlg = that.data.joblistyxj.length
+		let section1 = [
+			{name: '在招职位',typeId: '0',num:fblg}, 
+			{name: '入驻企业',typeId: '1',num:xjlg},
+		]
+		that.setData({
+			section:section1
+		});
+	},
+
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	},
+	// 页面分页内容相关
+	...searchpageEx.createPageMethods(),
+})

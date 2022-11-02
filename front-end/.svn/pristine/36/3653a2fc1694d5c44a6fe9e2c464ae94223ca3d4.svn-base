@@ -1,0 +1,153 @@
+// pages/test/test.js
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+		joblistyfb:[
+			{ jobname: '清洁工', jobmoney: '3000-3800',companylxr:'张经理', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800',companylxr:'张经理', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companylxr:'张经理',companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companylxr:'张经理',companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companylxr:'张经理',companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companylxr:'张经理',companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+			{ jobname: '清洁工', jobmoney: '3000-3800', companylxr:'张经理',companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' },
+		],
+		list: [
+      {id: '1',name: '中央球机',nameIcon:'/img/more.png',},
+      {id: '2',name: '2号地',nameIcon:'/img/more.png',},
+      {id: '3',name: '3号地',nameIcon:'/img/more.png',},
+      {id: '4',name: '4号地',nameIcon:'/img/more.png',},
+      {id: '5',name: '5号地',nameIcon:'/img/more.png',},
+      {id: '6',name: '6号地',nameIcon:'/img/more.png',},
+    ],
+    isSelect: {id: '2',name: '4号地',nameIcon:'/img/more.png',},
+    dialogShow: false,
+    buttons: [{text: '取消'}, {text: '确定'}],
+    showTopTips:false,
+    inputText:'',
+    showkelong:false,
+    kelong: {
+			top: 0,
+			name: '',
+			id: '2',
+			name: '4号地',
+			nameIcon:'/img/more.png',
+		},
+    replace: {
+        name: '',
+      },
+	},
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: function (options) {
+
+	},
+
+  dragStart: function(e) {
+    var that = this
+    var kelong = that.data.kelong
+    var i = e.currentTarget.dataset.index
+    kelong.name = this.data.list[i].name
+    var query = wx.createSelectorQuery();
+    //选择id
+    query.select('.list').boundingClientRect(function(rect) {
+      kelong.top = e.changedTouches[0].clientY - rect.top
+      console.log("dragStart",kelong.top)
+      that.setData({
+        kelong: kelong,
+        showkelong: true
+      })
+    }).exec();
+  },
+  dragMove: function(e) {
+    var that = this
+    var query = wx.createSelectorQuery();
+    var kelong = that.data.kelong
+    query.select('.list').boundingClientRect(function(rect) {
+      kelong.top = e.changedTouches[0].clientY - rect.top
+      if(kelong.top < 60) {
+        kelong.top = 60
+      } else if (kelong.top > rect.height - 40) {
+        kelong.top = rect.height - 40
+      }
+      that.setData({
+        kelong: kelong,
+      })
+    }).exec();
+  },
+  dragEnd: function(e) {
+    var that = this
+    var i = e.currentTarget.dataset.index
+    var query = wx.createSelectorQuery();
+    var kelong = that.data.kelong
+    // var listnum = that.data.list.length
+    var list = that.data.list
+    query.select('.list').boundingClientRect(function (rect) {
+      kelong.top = e.changedTouches[0].clientY - rect.top
+      var target = parseInt(kelong.top / 48)-1
+      var replace = that.data.replace
+      // console.log("dragEnd",target,i)
+      if (target >= 0) {
+        replace = list.splice(i,1);
+        list.splice(target,0,replace[0]);
+        // console.log("dragEnd",target,i,replace,list)
+      }
+      that.setData({
+        list: list,
+        showkelong:false
+      })
+		}).exec();
+		console.log(list)
+  },
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	}
+})

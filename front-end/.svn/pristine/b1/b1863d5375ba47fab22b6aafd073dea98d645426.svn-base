@@ -1,0 +1,11 @@
+<view class="container">
+    <view class="line-box">
+        <text class="num-box">1.</text> <input class="input-box" placeholder="请输入投票题目标题" bindinput="bindinputSujectTitle"/>
+    </view>
+    <radio-group bindchange="bindchangeRadioGroup">
+        <view class="radio-box clearfloat" wx:for="{{optionList}}">
+            <radio class="float-left" checked="{{item.checked}}" value="{{index}}" />
+            <input class="input-box float-left" placeholder="请输入选项1" value="{{item.optionTitle}}" data-index="{{index}}" bindinput="bindinputOptionTitle" />
+        </view>
+    </radio-group>
+</view>

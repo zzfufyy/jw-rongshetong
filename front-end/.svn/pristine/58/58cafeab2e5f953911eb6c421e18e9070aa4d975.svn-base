@@ -1,0 +1,24 @@
+const $ = require('../utils/request_util')
+
+function insertByList(list) {
+    return $.request({
+        url: '/form-subject/addList',
+        data: list,
+        method: $.RequestMethod.POST,
+        header: $.jsonHeader,
+    })
+}
+function loadEntityListByFormUuid(formUuid){
+    return $.request({
+        url: '/form-subject/listByFormUuid?formUuid=' + formUuid,
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader,
+    })
+}
+
+
+module.exports = {
+    insertByList: insertByList,
+    loadEntityListByFormUuid: loadEntityListByFormUuid,
+}

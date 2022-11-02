@@ -1,0 +1,62 @@
+<view class="container">
+    <view style="background: #FFFFFF;">
+	    <view class="tit">{{formTitle}}</view>
+        <view class="shxq">{{formIntroduction}}</view>
+    </view>
+    <view class="line10"></view>
+	<view class="chekbox_big">
+	    <view wx:for="{{subjectList}}" wx:key="id">
+            <!-- 表单组件类型值  严格遵照 constant文件 FORM_COMPONENT_TYPE 常量设置  -->
+            <form-completion-builder
+                hiddenEditable="{{true}}"
+                wx:if="{{item.componentType == 1}}"
+                id="option-component-1-{{index}}" 
+                data-index="{{index}}"
+                subjectOrder="{{index}}" 
+                bind:copy="formComponentCopy"
+                bind:movePrev="formComponentMovePrev"
+                bind:moveNext="formComponentMoveNext"
+                bind:delete="formComponentDelete"
+            />
+            <form-choice-select-builder 
+                hiddenEditable="{{true}}"
+                subjectType="{{item.subjectType}}"
+                wx:if="{{item.componentType == 2}}"
+                id="option-component-2-{{index}}" 
+                data-index="{{index}}"
+                subjectOrder="{{index}}" 
+                bind:copy="formComponentCopy"
+                bind:movePrev="formComponentMovePrev"
+                bind:moveNext="formComponentMoveNext"
+                bind:delete="formComponentDelete"
+            />
+            <form-img-upload-builder 
+                hiddenEditable="{{true}}"
+                wx:if="{{item.componentType == 4}}"
+                id="option-component-4-{{index}}" 
+                data-index="{{index}}"
+                subjectOrder="{{index}}" 
+                bind:copy="formComponentCopy"
+                bind:movePrev="formComponentMovePrev"
+                bind:moveNext="formComponentMoveNext"
+                bind:delete="formComponentDelete"
+            />
+            <form-sign-builder 
+                hiddenEditable="{{true}}"
+                wx:if="{{item.componentType == 5}}"
+                id="option-component-5-{{index}}" 
+                data-index="{{index}}"
+                subjectOrder="{{index}}" 
+                bind:copy="formComponentCopy"
+                bind:movePrev="formComponentMovePrev"
+                bind:moveNext="formComponentMoveNext"
+                bind:delete="formComponentDelete"
+            />
+        </view>
+    </view>
+	<view class="submit-box">
+        <view class="submit-button" bindtap="bindtapSubmitForm">
+            提交
+        </view>
+    </view>
+</view>

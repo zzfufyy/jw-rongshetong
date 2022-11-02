@@ -1,0 +1,268 @@
+// pages/msinvite/msinvite.js
+const Loading = require('../../utils/loading_util');
+const CONSTANT = require('../../common/constant');
+const userRecruiterService = require('../../common/userRecruiterService');
+const recruitCompanyService = require('../../common/recruitCompanyService');
+const recruitJobService = require('../../common/recruitJobService');
+const userCandidateService = require('../../common/userCandidateService');
+const recruitRecordService = require('../../common/recruitRecordService');
+const app = getApp();
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        pages: 1,
+        currentId: '0',
+        currentTabIndex: 0,
+        sectionTabList: [
+            {
+                id: 0,
+                tagName: '面试通过',
+                checked: true,
+                num: 0,
+            }, {
+                id: 1,
+                tagName: '面试不合格',
+                checked: false,
+                num: 0,
+            }
+        ],
+        joblist: [{
+            jobname: '清洁工',
+            jobmoney: '3000-3800',
+            companyname: '文和友餐饮有限公司',
+            companytx: '/img/tx.png',
+            jl: '1.5',
+            phonenum: '13112345678',
+            juridicalPerson: '张三'
+        },
+        {
+            jobname: '清洁工',
+            jobmoney: '3000-3800',
+            companyname: '文和友餐饮有限公司',
+            companytx: '/img/tx.png',
+            jl: '1.5',
+            phonenum: '13112345678',
+            juridicalPerson: '李四'
+        },
+        {
+            jobname: '清洁工',
+            jobmoney: '3000-3800',
+            companyname: '文和友餐饮有限公司',
+            companytx: '/img/tx.png',
+            jl: '1.5',
+            phonenum: '13112345678',
+            juridicalPerson: '王五'
+        },
+        ],
+        comnum: 2,
+
+        msyq: [
+            // { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678',juridicalPerson:'张三' },
+            // { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' ,juridicalPerson:'李四'},
+            // { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' ,juridicalPerson:'王五'},
+        ],
+        mstg: [
+            // { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678',juridicalPerson:'张三' },
+            // { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' ,juridicalPerson:'李四'},
+            // { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' ,juridicalPerson:'王五'},
+        ],
+        bhs: [
+            // { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678',juridicalPerson:'张三' },
+            // { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' ,juridicalPerson:'李四'},
+            // { jobname: '清洁工', jobmoney: '3000-3800', companyname: '文和友餐饮有限公司', companytx: '/img/tx.png', jl: '1.5', phonenum: '13112345678' ,juridicalPerson:'王五'},
+        ],
+
+    },
+    //打电话
+    callphone(e) {
+        console.log(e.currentTarget.dataset.phonenum)
+        let phonenum = e.currentTarget.dataset.phonenum
+        wx.makePhoneCall({
+            phoneNumber: phonenum //仅为示例，并非真实的电话号码
+        })
+    },
+    //点击头部导航的点击事件
+    catchtapSwitchTab: function (e) {
+        console.log(e);
+        let changeIndex = e.currentTarget.dataset.index;
+        if (changeIndex == this.data.currentTabIndex) {
+            return;
+        }
+        this.setData({
+            currentTabIndex: changeIndex,
+        })
+    },
+    // 滚动切换标签样式 
+    bindchangeSwitchTab: function (e) {
+        let changeTabIndex;
+        let sectionTabList = this.data.sectionTabList.map((v, index) => {
+            v.checked = !v.checked;
+            if (v.checked) {
+                changeTabIndex = index;
+            }
+            return v;
+        });
+        this.setData({
+            sectionTabList: sectionTabList,
+            currentTabIndex: changeTabIndex,
+        })
+    },
+
+    /** 内部方法 begin  */
+    /** 内部方法 end  */
+
+    //沟通中不合适点击事件
+    async gtzbhs(e) {
+        let that = this;
+        console.log(e.currentTarget);
+        // 获取记录id
+        let recordUuid = e.currentTarget.dataset.ckid;
+        let updateData = {
+            id: recordUuid,
+            flowRecruit: -1, // 不合适
+        }
+        try {
+            Loading.begin();
+            await recruitRecordService.updateByEntity(updateData);
+            // that.loadContent();	
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+    },
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: function (options) {
+        let that = this;
+        let msyq = this.data.msyq
+        let mstg = this.data.mstg
+        let section1 = [
+            {
+                name: '面试通过',
+                typeId: '1',
+                num: mstg.length
+            },
+            {
+                name: '不合适',
+                typeId: '2',
+            },
+        ]
+        this.setData({
+            section: section1
+        })
+        wx.getSystemInfo({
+            success: function (res) {
+                that.setData({
+                    winWidth: res.windowWidth,
+                    winHeight: res.windowHeight,
+                });
+            }
+        })
+        let openid = wx.getStorageSync('openid')
+        wx.request({
+            url: app.globalData.web_path + '/cand-job/ckyq',
+            data: {
+                openid: wx.getStorageSync('openid'),
+                pagess: this.data.pages
+            },
+            header: app.globalData.header,
+            success: async function (res) {
+                console.log(res)
+                let arr = res.data.obj
+                let yq = [];
+                let tg = [];
+                let bhs = [];
+                for (var i = 0; i < arr.length; i++) {
+                    let userCandidateData = await userCandidateService.loadEntityById(arr[i].candidateOpenid);
+                    let bruser = await userCandidateService.loadEntityById(openid);
+                    let uc = userCandidateData.data;
+                    let userRecruiter = await userRecruiterService.loadEntityById(arr[i].recruiterOpenid);
+                    console.log(userRecruiter.data)
+                    let companyJob = await recruitCompanyService.loadEntityById(arr[i].companyUuid);
+                    console.log(companyJob.data)
+                    let Job = await recruitJobService.loadEntityById(arr[i].jobUuid);
+                    console.log(Job.data)
+                    let money = new CONSTANT.Salary(Job.data.jobSalaryMin, Job.data.jobSalaryMax)
+                    console.log(money)
+                    let jobyq = {
+                        jobname: Job.data.jobName,
+                        jobmoney: money.value,
+                        companyname: Job.data.companyName,
+                        companytx: app.globalData.web_path + companyJob.data.portraitPath,
+                        phonenum: companyJob.data.phone,
+                        juridicalPerson: companyJob.data.juridicalPerson,
+                        ckid: arr[i].id
+                    }
+                    if (arr[i].flowRecruit == 2) {
+                        yq.push(jobyq)
+                    } else if (arr[i].flowRecruit == 3) {
+                        tg.push(jobyq)
+                    } else if (arr[i].flowRecruit == -1) {
+                        bhs.push(jobyq)
+                    }
+
+                }
+                that.setData({
+                    msyq: yq,
+                    mstg: tg,
+                    bhs: bhs,
+                    comnum: yq.length
+                })
+            }
+        })
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    }
+})

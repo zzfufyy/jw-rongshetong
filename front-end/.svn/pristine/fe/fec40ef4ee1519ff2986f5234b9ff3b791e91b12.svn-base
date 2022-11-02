@@ -1,0 +1,39 @@
+<view class="container">
+	<view class="toptit">
+	您有{{comnum}}份面试邀请，请尽快联系！
+	</view>
+	<view class="line1"></view>
+
+	<block wx:for="{{joblist}}" wx:key="key">
+		<view class="jobbox clearfloat">
+			<view class=" ">
+				<view class="clearfloat">
+					<view class="ft ">
+						<view class="jobname">{{item.jobname}}</view>
+					</view>
+					<view class="fr ">
+						<view class="far">{{item.jl}}公里</view>
+					</view>
+				</view>
+				<view class="clearfloat">
+					<view class="jobmoney ft ">{{item.jobmoney}}</view>
+					<view class="fr btnboxjl clearfloat ">
+						<view class="phonecall" catchtap="callphone" data-phonenum="{{item.phonenum}}" data-item="{{item}}">电话沟通</view>
+					</view>
+				</view>
+				<view class="companyname1 clearfloat">
+					<image src="{{item.companytx}}" class="companytx ft"></image>
+					<view class="ft"> 
+						<view>{{item.juridicalPerson}}</view>
+						<view>{{item.companyname}}</view>
+					</view>
+				</view>
+				<view class="companyname1"></view>
+			</view>
+		</view>
+		<view class="line1"></view>
+	</block>
+	<!-- <view wx:if="{{noMoreData == true}}">
+			没有更多数据
+		</view> -->
+</view>

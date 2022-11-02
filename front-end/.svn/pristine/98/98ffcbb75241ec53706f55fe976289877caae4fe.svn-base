@@ -1,0 +1,15 @@
+const $ = require('../utils/request_util')
+
+function insertByEntity(entity) {
+    return $.request({
+        url: '/form-information/add',
+        data: entity,
+        method: $.RequestMethod.POST,
+        header: $.jsonHeader,
+    })
+}
+
+
+module.exports = {
+    insertByEntity: insertByEntity,
+}

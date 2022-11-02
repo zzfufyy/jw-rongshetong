@@ -1,0 +1,18 @@
+/* pages/xzsq/xzsq.wxss */
+.wggltxt{margin-left: 20px;}
+.csstreetbox .heightboxgz{
+	margin-left: 20px;
+}
+
+.csstreetbox, .communitybox{
+	display: none;
+}
+.active{
+	display: block;
+}
+.rote{
+	transform: rotate(90deg);
+}
+.communitybox .heightboxgz{
+	margin-left: 40px;
+}

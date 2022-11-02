@@ -1,0 +1,202 @@
+// pages/comxx/comxx.js
+const Loading = require('../../utils/loading_util');
+const { Completer } = require('../../utils/function_util');
+const string_util = require('../../utils/string_util');
+
+// 加载服务
+const buildingResidentService = require('../../common/buildingResidentService');
+
+const app = getApp();
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        residentUuid: '',
+
+        companyName: '',
+        businessRegisterId: '',
+        licensePermissionId: '',
+        juridicalPerson: '',
+        juridicalPhone: '',
+        companyRemark: '',
+
+        showCanvas: false,
+        img: '',
+    },
+    state: {
+        residentUuidCompleter: new Completer(),
+    },
+
+    dzqm() {
+        wx.navigateTo({
+            url: '/pages/dzqmpage/dzqmpage?url=comxx',
+        })
+        // this.setData({
+        // 	showCanvas:!this.data.showCanvas
+        // })
+    },
+    bindinputCompanyName(e) {
+        console.log(e.detail.value);
+        this.setData({
+            companyName: e.detail.value,
+        })
+    },
+    bindinputBusinessRegisterId(e) {
+        console.log(e.detail.value);
+        this.setData({
+            businessRegisterId: e.detail.value,
+        })
+    },
+    bindinputLicensePermissionId(e) {
+        console.log(e.detail.value);
+        this.setData({
+            licensePermissionId: e.detail.value,
+        })
+    },
+    bindinputJuridicalPerson(e) {
+        console.log(e.detail.value);
+        this.setData({
+            juridicalPerson: e.detail.value,
+        })
+    },
+    bindinputJuridicalPhone(e) {
+        console.log(e.detail.value);
+        this.setData({
+            juridicalPhone: e.detail.value,
+        })
+    },
+    bindinputCompanyRemark(e) {
+        console.log(e.detail.value);
+        this.setData({
+            companyRemark: e.detail.value,
+        })
+    },
+    //确认提交
+    async bindtapSubmit() {
+        if (string_util.isEmpty(this.data.companyName)) {
+            wx.showToast({
+                icon: 'error',
+                title: '请填写企业名称',
+            })
+            return;
+        }
+        // 信息保存
+        let updateData = {
+            id: this.data.residentUuid,
+            companyName: this.data.companyName,
+            businessRegisterId: this.data.businessRegisterId,
+            licensePermissionId: this.data.licensePermissionId,
+            juridicalPerson: this.data.juridicalPerson,
+            juridicalPhone: this.data.juridicalPhone,
+            companyRemark: this.data.companyRemark,
+        }
+        try {
+            Loading.begin();
+            await buildingResidentService.updateByEntity(updateData);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+
+        wx.showToast({
+            icon: 'success',
+            title: '提交成功',
+            duration: 1000,
+        })
+        
+        setTimeout(()=>{
+            wx.redirectTo({
+                url: '/pages/comjuzhu/comjuzhu?residentUuid=' + this.data.residentUuid,
+            })
+        }, 1000)
+           
+    },
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: function (options) {
+        this.state.residentUuidCompleter = new Completer();
+        let residentUuid = options.residentUuid;
+        // 测试id
+        residentUuid = '801fb106-6792-4770-8f34-7f8950ca61cd';
+        this.state.residentUuidCompleter.resolve(residentUuid);
+    },
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: async function () {
+        try {
+            Loading.begin()
+            await this.loadContent();
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end()
+        }
+    },
+    async loadContent() {
+        let residentUuid = await this.state.residentUuidCompleter.promise;
+        console.log(residentUuid);
+        this.setData({
+            residentUuid: residentUuid,
+        })
+        let residentData = await buildingResidentService.loadEntityWithAssociatedById(residentUuid);
+        residentData = residentData.data;
+        this.setData({
+            companyName: residentData.companyName,
+            businessRegisterId: residentData.businessRegisterId,
+            licensePermissionId: residentData.licensePermissionId,
+            juridicalPerson: residentData.juridicalPerson,
+            juridicalPhone: residentData.juridicalPhone,
+            companyRemark: residentData.companyRemark,
+        })
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+
+
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    }
+})

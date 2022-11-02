@@ -1,0 +1,59 @@
+<view class="p60"></view>
+		<view class="toptit">茶陵县城乡居民建房安全隐患排查整治信息采集表</view>
+		<view class="line10"></view>
+		<view class="first mt14">第三部分：管理情况</view>
+		<view class="first mt14">是否取得行政登记、审批备案手续【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="bindchangeisProcedure">
+        <label class="weui-cell weui-check__label" wx:for="{{isProcedure}}" wx:key="{{item.value}}">
+          <view class="weui-cell__hd">
+            <radio value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+		<view class="first mt14">行政登记、审批备案手续类型【多选题】</view>
+		<view class="mt14">
+			<checkbox-group  bindchange="bindchangeprocedureType">
+				<label class="weui-cell weui-check__label" wx:for="{{procedureType}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<checkbox value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+		<view class="first mt14">是否违法建设经营【单选题】</view>
+		<view class="mt14">
+			<radio-group  bindchange="bindchangeisIllegal">
+				<label class="weui-cell weui-check__label" wx:for="{{isIllegal}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<radio value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+
+		<view class="first mt14">违法建设经营情况【多选题】</view>
+		<view class="mt14">
+			<checkbox-group  bindchange="bindchangeillegalType">
+				<label class="weui-cell weui-check__label" wx:for="{{illegalType}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<checkbox value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+		
+
+	<view class="clearfloat">
+		<view class="tijsq ft prew" bindtap="prev" style="margin-left: 5%;" >上一步</view>
+		<view style="margin-right: 5%;" bindtap="next"  class="tijsq fr">下一步</view>
+
+	</view>
+
+
+
+
+
+		
+		

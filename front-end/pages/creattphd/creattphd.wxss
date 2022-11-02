@@ -1,0 +1,128 @@
+.creatbox_top {
+    height: 48px;
+    line-height: 48px;
+    box-shadow: 0px 2px 2px 1px rgba(153, 153, 153, 0.16);
+    padding: 0 20px;
+
+}
+
+.mycreat {
+    font-size: 15px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
+    margin-right: 80rpx;
+}
+
+.active {
+    color: #111111;
+}
+
+.active::after {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 2px;
+    background-color: #111111;
+    margin: 0 auto;
+    margin-top: -2px;
+}
+
+.newcreat {
+    font-size: 15px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #3484FD;
+
+}
+
+.conbox {
+    border-radius: 5px 5px 5px 5px;
+    border: 1px solid #EEEEEE;
+    margin: 20px 20px 0 20px;
+
+}
+
+.pd {
+    padding-left: 15px;
+}
+
+.title {
+    margin-top: 15px;
+    font-size: 18px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: bold;
+    color: #333333;
+}
+
+.leg {
+    font-size: 13px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
+    margin-top: 13px;
+    margin-bottom: 17px;
+}
+
+.editimg {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-top: -3px;
+    margin-right: 4px;
+}
+
+.btnbox {
+    height: 49px;
+    display: flex;
+    align-items: center;
+}
+
+.bjwz {
+    font-size: 14px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #2D80FD;
+}
+
+.btn {
+    width: 25%;
+}
+
+.sxbox {
+    top: auto;
+    bottom: 0;
+}
+
+.fxhy {
+    font-size: 15px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #999999;
+    padding: 17px 20px;
+}
+
+.hyimg {
+    width: 50px;
+    height: 50px;
+}
+
+.fxbox {
+    padding-bottom: 20px;
+}
+
+.button {
+    width: 60px !important;
+    text-align: center !important;
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #333333;
+    padding: 0 !important;
+    background: #fff;
+    margin-left: 20px !important;
+}
+
+.wxhy {
+    display: inline-block;
+}

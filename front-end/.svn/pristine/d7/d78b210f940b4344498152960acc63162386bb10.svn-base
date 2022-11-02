@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "关于我们",
+    "usingComponents": {
+        "form-choice-select-builder": "/components/formBuilder/formChoiceSelectBuilder/formChoiceSelectBuilder"
+    }
+}

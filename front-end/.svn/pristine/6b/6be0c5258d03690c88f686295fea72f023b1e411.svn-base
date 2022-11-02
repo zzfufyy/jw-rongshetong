@@ -1,0 +1,141 @@
+// pages/messgecollect3/messgecollect3.js
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+		dzzh:[
+			{value: 'USA', name: '是'},
+      {value: 'CHN', name: '否', },
+		],
+		dzzhlx:[
+			{value: 'USA', name: '切坡建房'},
+			{value: 'CHN', name: '滑坡', },
+			{value: 'USA', name: '泥石流'},
+			{value: 'CHN', name: '地下采空区', },
+			{value: 'USA', name: '洪涝'},
+			{value: 'CHN', name: '山体崩塌', },
+			{value: 'USA', name: '地面沉降'},
+			{value: 'CHN', name: '其他', },
+		],
+		fwjg:[
+			{value: 'USA', name: '基本安全'},
+			{value: 'CHN', name: '存在安全隐患', },
+		],
+		fwjganyh:[
+			{value: 'USA', name: '墙体'},
+			{value: 'CHN', name: '梁柱', },
+			{value: 'USA', name: '地基'},
+			{value: 'CHN', name: '屋面', },
+			{value: 'USA', name: '楼板'},
+			{value: 'CHN', name: '其他', },
+		],
+		isaqjd:[
+			{value: 'USA', name: '是'},
+      {value: 'CHN', name: '否', },
+		],
+		jdjg:[
+			{value: 'USA', name: 'A级'},
+			{value: 'CHN', name: 'B级', },
+			{value: 'USA', name: 'C级'},
+			{value: 'CHN', name: 'D级', },
+		],
+		jdcd:[
+			{value: 'USA', name: '墙体'},
+			{value: 'CHN', name: '梁柱', },
+			{value: 'USA', name: '地基'},
+			{value: 'CHN', name: '屋面', },
+			{value: 'USA', name: '楼板'},
+			{value: 'CHN', name: '其他', },
+		],
+		aqyh:[
+			{value: 'USA', name: '是'},
+      {value: 'CHN', name: '否', },
+		],
+		xfaqyh:[
+			{value: 'USA', name: '防车道严重堵塞'},
+			{value: 'CHN', name: '疏散通道严重堵塞', },
+			{value: 'USA', name: '消防设施和器材缺失或破坏'},
+			{value: 'CHN', name: '道路狭窄消防车无法通行', },
+			{value: 'USA', name: '发生过电路短路'},
+			{value: 'CHN', name: '电路敷设不规范', },
+			{value: 'CHN', name: '易燃材料', },
+			{value: 'CHN', name: '疏散楼梯', },
+			{value: 'CHN', name: '消火栓', },
+			{value: 'CHN', name: '喷淋', },
+			{value: 'CHN', name: '灭火器', },
+			{value: 'CHN', name: '应急照明', },
+			{value: 'CHN', name: '烟感', },
+			{value: 'CHN', name: '其他', },
+		],
+	},
+	prew(){
+		wx.navigateBack({
+			delta: 1,
+			success: (res) => {},
+			fail: (res) => {},
+			complete: (res) => {},
+		})
+	},
+	next(){
+		wx.navigateTo({
+			url: '/pages/messgecollect4/messgecollect4',
+		})
+	},
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: function (options) {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	}
+})

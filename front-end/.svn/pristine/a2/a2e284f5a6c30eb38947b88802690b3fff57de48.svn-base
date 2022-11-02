@@ -1,0 +1,14 @@
+<view class="container">
+	<block wx:for="{{sqlist}}">
+		<navigator hover-class="none" url="{{item.sqsrc}}" class="heightboxgz clearfloat">
+			<view class="ft">
+				<!-- <image class="lticonimg" src="/img/wgimg.png"></image> -->
+				<text class="wggltxt">{{item.sqname}}</text>
+			</view>
+			<view class="fr">
+				<image class="rtjtimg" src="/img/jt.png"></image>
+			</view>
+		</navigator>
+		<view class="line1"></view>
+	</block>
+</view>

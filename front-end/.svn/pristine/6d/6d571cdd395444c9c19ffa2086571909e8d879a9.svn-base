@@ -1,0 +1,129 @@
+<view class="container">
+	<view class="page-section-spacing">
+		<scroll-view class="scroll-view_H" scroll-x="true" style="width: 100%" >
+			<view bindtap="zczp" class='vv scroll-view-item_H demo-text-1' wx:for='{{vedio_data}}' style="background: {{item.bac}};" wx:key='key'>
+				<view class="xdname">{{item.xdname}}</view>
+				<view class="zczph">专场招聘会</view>
+				<view class="jrzc">进入专场 →</view>
+				<image bindtap="preimg" class="videoVideo2" src="{{item.img}}" data-src="{{item.img}}" mode="scaleToFill">
+				</image>
+				<video src="{{item.url}}" id="{{index}}" class='video' wx:if="{{_index == index}}" >
+				</video>
+			</view>
+		</scroll-view>
+	</view>
+	<view class="middlebox">
+		<view class='top_nav'>
+			<view class="nav-name {{item.typeId == currentId ? 'nav-hover':''}}" wx:for="{{section}}" wx:key="id" id='{{item.typeId}}' catchtap='handleTap'>
+				{{item.name}}({{item.num}})
+				<view class="linbc"></view>
+			</view>
+		</view>
+		<swiper current="{{currentTab}}" data-current="{{currentId}}"  style="height:{{winHeight - 55}}px;" bindchange="switchTab">
+			<!-- 在招职位 -->
+			<swiper-item style="height:100%;overflow-y:scroll;" >
+				<view class="scbox">
+					<view class="clearfloat sssx">
+						<view class="ft lt">
+							<icon class="INsearchicon" type="search" size="22" color="#999999" />
+							<input class="weui-input" placeholder-class="opl" placeholder="搜索职位、企业" confirm-type="search" />
+						</view>
+						<view class=" ft czan" bindtap="czan">重置</view>
+					</view>
+				</view>
+				<view class="zxfj">
+					<view class="zx {{canhgeid ==item.id?'actfj':'' }}" wx:for="{{zxfj}}" bindtap="chagethis" data-id="{{item.id}}" wx:key="key">{{item.zx}}</view>
+					<view class=" fr zx" bindtap="sx" style="margin-right:20px ;">筛选 ></view>
+					
+				</view>
+				<view class="jobbigbox">
+					<navigator hover-class="none"  wx:for="{{joblistyfb}}"
+					wx:key="index"  bindtap="bindtapChooseJob" data-index="{{index}}">
+						<view class="jobbox1 clearfloat" >
+							<view class="ft ltbox">
+								<view class="jobname">{{item.jobname}}</view>
+								<view class="jobmoney">{{item.jobmoney}}</view>
+								<view class="companyname1">
+									<image src="{{item.companytx}}" class="companytx"></image>
+									{{item.companyname}}
+								</view>
+							</view>
+							<view class="fr lrbox">
+								<view class="far">{{item.jl}}公里</view>
+								<view class="phonecall" catchtap="callphone" data-phonenum="{{item.phonenum}}">电话沟通</view>
+							</view>
+						</view>
+						<view class="line1"></view>
+					</navigator>
+				</view>
+			</swiper-item>
+			<!-- 优质企业 -->
+			<swiper-item style="height:100%;overflow-y:scroll;" >
+				<view class="scbox">
+					<view class="clearfloat sssx">
+						<view class="ft lt">
+							<icon class="INsearchicon" type="search" size="22" color="#999999" />
+							<input class="weui-input" placeholder-class="opl" placeholder="搜索职位、公司"  confirm-type="searchqy" />
+						</view>
+						<view class=" ft czan" bindtap="czanqy">重置</view>
+					</view>
+
+				</view>
+				<view class="zxfj">
+					<view class="zx {{yzqygeid ==item.id?'actfj':'' }}" wx:for="{{yzqytab}}" bindtap="chagethis1" data-id="{{item.id}}" wx:key="key">{{item.zx}}</view>
+					<!-- <view class=" fr zx" bindtap="sx" style="margin-right:20px ;">筛选 ></view> -->
+					
+				</view>
+				<view class="jobbigbox">
+					<navigator hover-class="none"  wx:for="{{joblistyxj}}"
+					wx:key="index"  bindtap="bindtapChoosecom" data-index="{{index}}">
+						<view class="jobbox2 clearfloat" >
+							<view class="ft ltbox">
+								<view class="jobname">{{item.comname}}</view>
+								<!-- <view class="jobmoney">{{item.jobmoney}}</view> -->
+								<view class="companyname2">
+									<image src="{{item.companytx}}" class="companytx"></image>
+									{{item.companylxr}}
+								</view>
+							</view>
+							<view class="fr lrbox">
+								<view class="far">{{item.jl}}公里</view>
+								<view class="phonecall1" catchtap="callphone" data-phonenum="{{item.phonenum}}">电话沟通</view>
+							</view>
+						</view>
+						<view class="line1"></view>
+					</navigator>
+				</view>
+			</swiper-item>
+
+		</swiper>
+	</view>
+</view>
+<view class="zzc" bindtap="sx" hidden="{{hidesx}}"></view>
+<scroll-view scroll-y  class="sxbox" hidden="{{hidesx}}">
+	<view class="topjlsg">
+		<view class="yxyq clearfloat">
+			<view class="yx ft">月薪要求</view>
+			<view class=" fr sxac" bindtap="sx">收起 <view class="jtbox xz"></view></view>
+		</view>
+		<view class="yxbox">
+			<view class="yxforbox {{item.checked?'active':'xb'}}"  bindtap="yxxz" data-id="{{item.id}}" 
+			wx:for="{{yxyq}}" wx:key="key">{{item.yxmoney}}</view>
+		</view>
+	</view>
+	<view class="topjlsg">
+		<view class="yxyq clearfloat">
+			<view class="yx ft">距离</view>
+			<!-- <view class=" fr sxac">收起 <view class="jtbox xz"></view></view> -->
+		</view>
+		<view class="yxbox">
+			<view class="yxforbox {{item.id==oid?'active':'xb'}}"  bindtap="nlfw" data-id="{{item.id}}" 
+			wx:for="{{nyxz}}" wx:key="key">{{item.nl}}</view>
+		</view>
+	</view>
+	<view class="btmbtnbox">
+		<view class="clear" bindtap="clear">清空</view>
+		<view class="qd" bindtap="qd">确定</view>
+	</view>
+</scroll-view>
+

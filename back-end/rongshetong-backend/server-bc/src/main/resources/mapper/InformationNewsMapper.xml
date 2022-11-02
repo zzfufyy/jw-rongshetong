@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.InformationNewsMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.InformationNews">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="article_title" jdbcType="VARCHAR" property="articleTitle" />
+    <result column="article_type" jdbcType="SMALLINT" property="articleType" />
+    <result column="article_keyword" jdbcType="VARCHAR" property="articleKeyword" />
+    <result column="article_introduction" jdbcType="VARCHAR" property="articleIntroduction" />
+    <result column="article_author" jdbcType="VARCHAR" property="articleAuthor" />
+    <result column="article_release_time" jdbcType="TIMESTAMP" property="articleReleaseTime" />
+    <result column="attachment_path" jdbcType="VARCHAR" property="attachmentPath" />
+    <result column="article_portrait_path" jdbcType="VARCHAR" property="articlePortraitPath" />
+    <result column="page_path_apply" jdbcType="VARCHAR" property="pagePathApply" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+    <result column="community_uuid" jdbcType="VARCHAR" property="communityUuid" />
+    <result column="count_view" jdbcType="INTEGER" property="countView" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+    <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+    <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.shopping.wx.model.InformationNews">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="article_content" jdbcType="LONGVARCHAR" property="articleContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, article_title, article_type, article_keyword, article_introduction, article_author, 
+    article_release_time, attachment_path, article_portrait_path, page_path_apply, priority, 
+    user_id, staff_name, community_uuid, count_view, status, create_time, ext1, ext2, 
+    ext3
+  </sql>
+  <sql id="Blob_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    article_content
+  </sql>
+</mapper>

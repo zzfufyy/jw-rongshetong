@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.JrzdfwbmdMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Jrzdfwbmd">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="qyid" jdbcType="VARCHAR" property="qyid" />
+    <result column="qyname" jdbcType="VARCHAR" property="qyname" />
+    <result column="qyfl" jdbcType="VARCHAR" property="qyfl" />
+    <result column="yyzz" jdbcType="VARCHAR" property="yyzz" />
+    <result column="nszm" jdbcType="VARCHAR" property="nszm" />
+    <result column="sgcrs" jdbcType="VARCHAR" property="sgcrs" />
+    <result column="wblxyjl" jdbcType="VARCHAR" property="wblxyjl" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="yl1" jdbcType="VARCHAR" property="yl1" />
+    <result column="yl2" jdbcType="VARCHAR" property="yl2" />
+    <result column="yl3" jdbcType="VARCHAR" property="yl3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, qyid, qyname, qyfl, yyzz, nszm, sgcrs, wblxyjl, status, yl1, yl2, yl3
+  </sql>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.UserRecruiterMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.UserRecruiter">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="gender" jdbcType="TINYINT" property="gender" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="job_position" jdbcType="VARCHAR" property="jobPosition" />
+    <result column="portrait_path" jdbcType="VARCHAR" property="portraitPath" />
+    <result column="count_view" jdbcType="INTEGER" property="countView" />
+    <result column="company_uuid" jdbcType="VARCHAR" property="companyUuid" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+    <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+    <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, real_name, telephone, gender, email, job_position, portrait_path, count_view, 
+    company_uuid, status, create_time, ext1, ext2, ext3
+  </sql>
+</mapper>

@@ -1,0 +1,25 @@
+<view class="container">
+	
+	<view class="creatbox_top clearfloat">
+		<view class="ft mycreat">投票活动</view>
+	</view>
+	<view class="tpbox" bindtap="bindtp" wx:for="{{tplist}}" wx:key="key">
+		<view wx:if="{{item.zt == 0}}" class="tpimgbox">
+			<image class="tpimg" src="/img/tpz.png"></image>
+			<text class="tpz">投票中</text>
+		</view>
+		<view wx:if="{{item.zt == 1}}" class="tpimgbox">
+			<image class="tpimg" src="/img/tpjs.png"></image>
+			<text class="tpz yjs">已结束</text>
+		</view>
+		<view class="tit pd15">{{item.tit}}</view>
+		<view class="ytp pd15">
+			<text class="ytpbox">{{item.ytprs}}人已投票</text>
+			<text class="jzrq">截止日期：{{item.jzrq}}</text>
+		</view>
+		<block wx:if="{{item.zt == 0}}">
+			<view class="line1"></view>
+			<view class="wytp pd15">我要投票</view>
+		</block>
+	</view>
+</view>

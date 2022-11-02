@@ -1,0 +1,78 @@
+<view class="container">
+	<view class="topbox">
+		<view  class="clearfloat personbox">
+			<view class="ft ltimg">
+				<image src="{{tximg}}" class="tximg"></image>
+			</view>
+			<view class="ft nameinfo">
+				<view class="name">{{name}}</view>
+				<view class="sex">
+					{{sex}} {{year}} {{gznl}}
+				</view>
+			</view>
+			<view class="fr frimg">
+				<!-- <image class="imgjt" src="/img/jt.png"></image> -->
+			</view>
+		</view>
+		<view class="clearfloat ttbox">
+			<view class="ft leftname">意向岗位名称</view>
+			<!-- <view class="fr rtip">
+				{{yxjobname}}
+			</view> -->
+		</view>
+		<view class="clearfloat ttbox">
+			<view class="ft leftname" style="color: #F8424C;width:100%">	{{yxjobname}}</view>
+		</view>
+		<view class="clearfloat ttbox">
+			<view class="ft leftname">期望工资</view>
+			<view class="fr rtip">
+				{{ygz}}
+			</view>
+		</view>
+		<view class="clearfloat ttbox">
+			<view class="ft leftname" style="">期望工作地址</view>
+		</view>
+		<view class="clearfloat ttbox">
+			<view class="ft leftname" style="color: #999999;width:100%">{{qwdq}}</view>
+		</view>
+		<view class="clearfloat ttbox" style="height: auto;">
+			<view class=" leftname">个人介绍</view>
+			<view class="gwxq textarea">
+				{{grjs}}
+			</view>
+		</view>
+	</view>
+	<!-- <view class="topbox">
+		<view class="topjob">
+			<image class="local" src="/img/Icon ／ Location On ／ Rounded@2x.png"></image>推荐人才
+		</view>
+		<view class="joblist">
+			<view class="company" wx:for="{{compangjob}}" wx:key="key">
+				<view class="companyname">找 {{item.job}} 工作</view>
+				<view class="wid95 tagbox" >
+					<view class="companytag" >{{item.tagxb}}</view>
+					<view class="companytag" >{{item.tagnl}}岁</view>
+					<view class="companytag" >{{item.taggz}}/月</view>
+				</view>
+				<view class="companyname lcm">
+					<image src="{{item.persontx}}" class="companytx"></image>
+					{{item.personname}} {{item.time}}分钟前 {{item.sq}}·{{item.juli}}km
+				</view>
+			</view>
+			
+		</view>
+	</view>-->
+</view>
+<view class="botombox clearfloat">
+	<button class="imgbt ft buttonbox" style="margin-left: 9px;" open-type = "share">
+		<image src="/img/share.png" class="imgbg ft"></image>
+	</button>
+	<!-- <image class="imgbt ddh ft" src="/img/dhred.png"></image> -->
+	<view class="fr tijsq yams"  bindtap="yqms" >邀请面试</view>
+
+	<view class="fr tijsq ms" data-cellphne="{{cellphne}}" bindtap="callnum" >打电话</view>
+	<view class="fr tijsq ms"  bindtap="msxx" >视频面试</view>
+</view>
+
+
+

@@ -1,0 +1,677 @@
+// pages/wantjob/wantjob.js
+const { UserService } = require('../../service/user_service');
+const { Category } = require('../../service/job_category');
+const { Salary } = require('../../common/constant');
+const { GlobalKey } = require('../../service/global_service');
+
+const CONSTANT = require('../../common/constant');
+const Loading = require('../../utils/loading_util');
+const object_util = require('../../utils/object_util');
+const string_util = require('../../utils/string_util');
+const sort_util = require('../../utils/sort_util');
+
+// 加载服务
+const jobCategoryService = require('../../common/jobCategoryService');
+const candidateForCategoryService = require('../../common/candidateForCategoryService');
+const candidateForCommunityService = require('../../common/candidateForCommunityService');
+const communityInformationService = require('../../common/communityInformationService');
+const userCandidateService = require('../../common/userCandidateService');
+
+
+
+const app = getApp();
+const MAX_CHOOSE_CATEGORY_NUM = 3;
+const MAX_CHOOSE_COMMUNITY_NUM = 3;
+
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        qwzw: '请输入期望职位',
+        // 保存 初始wantjob 副本
+        wantjobCopy: [],
+        wantjob: [
+            { job: 'IT', id: 0, checked: false, display: 'none' },
+            { job: '文化传媒', id: 1 },
+            { job: '电子制造', id: 2 },
+            { job: '机械制造', id: 3 },
+            { job: '美容美发', id: 4 }
+        ],
+        csjobCopy: [],
+        csjob: [
+            // { job: 'IT', id: 0, checked: false, display: 'none' },
+        ],
+        hiddenPopupExpectCategory: true,
+        jobzwei: '',
+        // 保存点击的下方热门职位
+        // 期望职位列表
+        arrtag: [],
+
+        txthide: false,
+        arrhide: true,
+
+        // 期望薪资
+        salaryStringList: [],
+        salaryList: [],
+        index: '0',
+
+        sjLeftItems: [
+            { typename: '芙蓉区', typeid: 0 },
+            { typename: '天心区', typeid: 1 },
+            { typename: '岳麓区', typeid: 2 },
+            { typename: '开福区', typeid: 3 },
+            { typename: '雨花区', typeid: 4 },
+            { typename: '望城区', typeid: 5 },
+        ],
+
+
+        districtList: [
+            // { districtName: '芙蓉区', checked: false },
+        ],
+        streetList: [
+            // { streetName: '望岳街道', checked: false },
+        ],
+        communityList: [
+            // { communityName: '社区er', typeid: 1 },
+            // { communityName: '社区3', typeid: 2 },
+            // { communityName: '社区一', typeid: 3 },
+        ],
+        // 已选社区
+        hiddenPopupExpectCommunity: true,
+        hiddenCommunityDefaultText: false,
+        choosedCommunityList: [],
+
+        choosedDistrictName: '',
+        curNav: 1,
+        curNav1: 0,
+        curNav2: 0,
+        curNav3: 0,
+        id: 0,
+        currentId: '2',
+        oht: '',
+
+
+
+
+
+        lclist: [
+            { checked: true, communityName: "社区3", typeid: 2 },
+            { checked: true, communityName: "社区3", typeid: 2 },
+            { checked: true, communityName: "社区3", typeid: 2 },
+        ]
+
+    },
+
+    //输入职位
+    inputjob(e) {
+        console.log(e.detail.value);
+        var that = this;
+
+        let searchText = e.detail.value;
+        let wantjobCopyTemp = object_util.copyObject(this.data.wantjobCopy);
+        if (string_util.isEmpty(searchText)) {
+            this.setData({
+                wantjob: wantjobCopyTemp,
+            })
+        } else {
+            // 遍历查找是否包含字符串
+            let wantjobList = wantjobCopyTemp.map(v => {
+                if (v.job.indexOf(searchText) == -1) {
+                    v.display = "none";
+                }
+                return v;
+            });
+            this.setData({
+                wantjob: wantjobList,
+            })
+        }
+    },
+
+
+    // 弹窗 职位意向选择
+    bindtapPopupExpectCategory() {
+        // 每次进来先制作副本保存
+        this.setData({
+            hiddenPopupExpectCategory: false,
+            wantjobCopy: object_util.copyObject(this.data.wantjob),
+            csjobCopy: object_util.copyObject(this.data.csjob),
+        })
+    },
+    // 选择职位 到已选择
+    bindtapChooseCategory(e) {
+        let currentId = e.currentTarget.dataset.id;
+        let wantjobList = this.data.wantjob;
+        let csjobList = this.data.csjob;
+
+        if (csjobList.length >= MAX_CHOOSE_CATEGORY_NUM) {
+            wx.showModal({
+                title: '提示',
+                content: '最多选择三个职业',
+            })
+            return;
+        }
+        // 更新待选择职位列表
+        wantjobList = wantjobList.map(v => {
+            if (v.id == currentId) {
+                v.checked = true;
+                v.display = 'none';
+            }
+            return v;
+        });
+        // 更新已选择职位列表
+        let currentObj = object_util.copyObject(
+            wantjobList.find(v => {
+                return v.id == currentId;
+            })
+        );
+        currentObj.display = 'block';
+        csjobList.push(currentObj);
+        this.setData({
+            wantjob: wantjobList,
+            csjob: csjobList,
+        })
+        console.log(this.data);
+
+    },
+    // 移除已选择职位 到待选择职位列表
+    bindtapRemoveCategory(e) {
+        let currentId = e.currentTarget.dataset.id;
+        let wantjobList = this.data.wantjob;
+        let csjobList = this.data.csjob;
+        // 更新已选择职位列表
+        let currentIndex = csjobList.findIndex(v => {
+            return v.id == currentId;
+        });
+        csjobList.splice(currentIndex, 1);
+        // 更新待选择职位列表
+        wantjobList = wantjobList.map(v => {
+            if (v.id == currentId) {
+                v.checked = false;
+                v.display = 'block';
+            }
+            return v;
+        })
+        this.setData({
+            wantjob: wantjobList,
+            csjob: csjobList,
+        })
+    },
+    // 职位搜索框  回车按键
+    async bindconfirmSeachCategory(e) {
+        let searchText = e.detail.value;
+        let wantjobList = this.data.wantjob;
+
+        let wantjobCopyTemp = object_util.copyObject(this.data.wantjobCopy);
+        // 如果字符串为空不作处理
+        if (string_util.isEmpty(searchText)) {
+            this.setData({
+                wantjob: wantjobCopyTemp,
+            })
+            return;
+        }
+        // 查找是否存在
+        if (wantjobList.findIndex(r => {
+            return r.job.indexOf(searchText) != -1;
+        }) != -1) {
+            let wantjobList = wantjobCopyTemp.map(v => {
+                if (v.job.indexOf(searchText) == -1) {
+                    v.display = "none";
+                }
+                return v;
+            });
+            this.setData({
+                wantjob: wantjobList,
+            })
+        } else {
+            insertData = {
+                categoryName: searchText,
+            }
+            // 不存在就插入  
+            let categoryUuidData = await jobCategoryService.insertByEntity(insertData);
+            let categoryUuid = categoryUuidData.data;
+            let newWantJobData = {
+                id: categoryUuid,
+                job: searchText,
+                checked: false,
+                display: 'block',
+            }
+            wantjobList.push(newWantJobData);
+            wantjobCopyTemp.push(newWantJobData);
+            this.setData({
+                wantjob: wantjobList,
+                wantjobCopy: object_util.copyObject(wantjobCopyTemp),
+            })
+        }
+
+
+    },
+    // 取消弹窗 职位意向选择
+    bindtapCategoryCancel() {
+        // 副本还原
+        let currentWantjobCopy = this.data.wantjobCopy;
+        let currentCsjobCopy = this.data.csjobCopy;
+        this.setData({
+            hiddenPopupExpectCategory: true,
+            wantjob: currentWantjobCopy,
+            csjob: currentCsjobCopy,
+        })
+    },
+    // 保存 -- 职位意向选择 
+    bindtapCategorySave() {
+        let wantjobListCopy = this.data.wantjobCopy;
+        let wantjobList = this.data.wantjob;
+        let arrhide; let txthide;
+        if (wantjobList.findIndex(r => {
+            return r.checked == true;
+        }) == -1) {
+            txthide = false;
+            arrhide = true;
+        } else {
+            txthide = true;
+            arrhide = false;
+        }
+        wantjobList = wantjobList.map(v => {
+            v.display = v.checked == false ? 'block' : 'none';
+            return v;
+        })
+        this.setData({
+            wantjob: object_util.copyObject(wantjobList),
+            hiddenPopupExpectCategory: true,
+            txthide: txthide,
+            arrhide: arrhide
+        });
+    },
+
+
+    //薪资选择
+    bindPickerChange: function (e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.setData({
+            index: e.detail.value
+        })
+    },
+
+    // 期望求职区域--区选择
+    bindtapChooseDistrict: async function (e) {
+        // 获取item项的id，和数组的下标值
+        let currentDistrictName = e.target.dataset.name;
+        let currentDistrictList = this.data.districtList;
+        this.setData({
+            districtList: currentDistrictList.map(v => {
+                v.checked = (v.districtName == currentDistrictName) ? true : false
+                return v;
+            })
+        })
+        // 先清空
+        this.setData({
+            streetList: [],
+            communityList: [],
+        })
+        // 后加载对应的街道
+        await this._loadStreetList(currentDistrictName);
+
+    },
+
+    // 期望求职区域--街道选择
+    bindtapChooseStreet: async function (e) {
+        let currentStreetName = e.target.dataset.name;
+        let currentStreetList = this.data.streetList;
+        this.setData({
+            streetList: currentStreetList.map(v => {
+                v.checked = (currentStreetName == v.streetName) ? true : false
+                return v;
+            }),
+        });
+        await this._loadCommunityList(currentStreetName);
+
+    },
+
+    // 期望求职区域--社区选择
+    bindtapChooseCommunity(e) {
+        let currentCommunityUuid = e.target.dataset.id;
+        let currentCommunityList = this.data.communityList;
+        let currentChoosedCommunityList = object_util.copyObject(this.data.choosedCommunityList);
+
+        currentCommunity = currentCommunityList.find(v => {
+            return currentCommunityUuid === v.communityUuid;
+        });
+        if (currentCommunity.checked == false) {
+            if (currentChoosedCommunityList.length >= 3) {
+                wx.showModal({
+                    title: '选择期望社区不得超过3个',
+                })
+                return;
+            } else {
+                currentChoosedCommunityList.push({
+                    communityUuid: currentCommunity.communityUuid,
+                    communityName: currentCommunity.communityName,
+                }),
+                    this.setData({
+                        choosedCommunityList: currentChoosedCommunityList
+                    })
+            }
+        } else {
+            // 去除
+            this.setData({
+                choosedCommunityList: object_util.copyObject(
+                    currentChoosedCommunityList.filter(v => {
+                        return v.communityUuid != currentCommunity.communityUuid;
+                    })
+                ),
+            })
+        }
+        this.setData({
+            communityList: currentCommunityList.map(v => {
+                if (currentCommunityUuid == v.communityUuid) {
+                    v.checked = !v.checked;
+                }
+                return v;
+            }),
+        })
+    },
+
+    // 加载街道函数
+    async _loadStreetList(districtName) {
+        let streetList = await communityInformationService.listStreetNameByDistrictName(districtName);
+        streetList = streetList.data;
+        this.setData({
+            streetList: streetList.map(v => {
+                return {
+                    streetName: v,
+                    checked: false,
+                }
+            }),
+        })
+    },
+
+    // 加载社区函数
+    async _loadCommunityList(streetName) {
+        let communityList = await communityInformationService.listByStreetName(streetName);
+        let choosedCommunityList = this.data.choosedCommunityList;
+        communityList = communityList.data;
+        console.log(communityList);
+        communityList = communityList.map(v => {
+            if (choosedCommunityList.findIndex(r => {
+                return r.communityUuid === v.id;
+            }) == -1) {
+                v.checked = false;
+            } else {
+                v.checked = true;
+            }
+            return {
+                communityUuid: v.id,
+                communityName: v.communityName,
+                streetName: v.streetName,
+                districtName: v.districtName,
+                checked: v.checked,
+            };
+        });
+        console.log(communityList);
+        this.setData({
+            communityList: communityList
+        });
+    },
+
+    //点击去掉已选择社区
+    bindtapCancelChoosedCommunity(e) {
+        console.log(e);
+        let currentCommunityUuid = e.currentTarget.dataset.id;
+        let currentChoosedCommunity = this.data.choosedCommunityList;
+        this.setData({
+            choosedCommunityList: currentChoosedCommunity.filter(v => {
+                return !(v.communityUuid == currentCommunityUuid);
+            })
+        })
+    },
+    // 弹窗 - 求职区域呼出
+    bindtapPopupExpectCommunity() {
+        // 建立副本
+        this.setData({
+            choosedCommunityListCopy: object_util.copyObject(this.data.choosedCommunityList),
+            hiddenPopupExpectCommunity: false,
+        })
+    },
+    // 求职区域保存
+    async bindtapChoosedCommunitySave() {
+        let candidateOpenid = this.data.candidateOpenid;
+        let currentChoosedCommunityList = object_util.copyObject(this.data.choosedCommunityList);
+        currentChoosedCommunityList = currentChoosedCommunityList.map(v => {
+            v.candidateOpenid = candidateOpenid
+            return v;
+        });
+        try {
+            Loading.begin();
+            await candidateForCommunityService.insertByEntityList(candidateOpenid, currentChoosedCommunityList);
+        } catch (e) {
+            console.error(e)
+        } finally {
+            Loading.end();
+        }
+        // 遮罩层关闭
+        this.setData({
+            hiddenPopupExpectCommunity: true,
+        })
+    },
+    //点击遮罩层关闭弹窗
+    bindtapCommunityMask() {
+        this.setData({
+            choosedCommunityList: object_util.copyObject(this.data.choosedCommunityListCopy),
+            hiddenPopupExpectCommunity: true,
+        })
+    },
+
+
+    // 全部保存事件
+    bc: async function () {
+        // 求职用户openid
+        let candidateOpenid = this.data.candidateOpenid;
+        let csjobList = this.data.csjob;
+        let currentSalary = this.data.salaryList[this.data.index];
+        console.log(this.data);
+        try {
+            Loading.begin();
+            // 构建 更新用户数据
+            let updateCandidateData = {
+                id: candidateOpenid,
+                expectSalaryMin: currentSalary.min,
+                expectSalaryMax: currentSalary.max,
+            }
+            await userCandidateService.updateByEntity(updateCandidateData);
+            // 构建 插入 期望职位数据
+            let insertExpectCategoryList = [];
+            csjobList.forEach(v => {
+                insertExpectCategoryList.push({
+                    candidateOpenid: candidateOpenid,
+                    categoryUuid: v.id,
+                    categoryName: v.job,
+                })
+            });
+            await candidateForCategoryService.insertByEntityList(candidateOpenid, insertExpectCategoryList);
+
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+        wx.navigateBack({
+            delta: 0,
+        });
+    },
+    onUnload: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: function (options) {
+
+    },
+    onShow: async function () {
+        // 初始化加载开始
+        try {
+            Loading.begin();
+            await app.getOpenidReady();
+            let openid = wx.getStorageSync('openid');
+            this.setData({
+                candidateOpenid: openid,
+            });
+            await this.loadContent();
+        } catch (e) {
+            console.error(e)
+        } finally {
+            Loading.end();
+        }
+
+        var that = this
+        wx.getSystemInfo({
+            success: (res) => {
+                console.log(res)
+                let windowHeight = res.windowHeight;
+                let wht = windowHeight * 0.8 - 86
+                let oht = wht;
+                that.setData({
+                    oht: oht
+                })
+            },
+        });
+    },
+
+
+    // 加载用户
+    loadContent: async function () {
+        let openid = wx.getStorageSync('openid');
+
+        // 加载职位列表
+        let wantjobList = [];
+        // 13个热门职位
+        let loadCategoryPromise = jobCategoryService.loadList();
+        await loadCategoryPromise.then(r => {
+            wantjobList = r.data.map(v => {
+                return {
+                    job: v.categoryName,
+                    id: v.id,
+                    checked: false,
+                    display: 'block',
+                }
+            })
+        }).catch(r => {
+            console.error(r);
+        })
+        // 加载求职者用户信息
+        let recruiteeInfo = await UserService.loadRcruiteeInfo();
+
+        // 加载求职者 - 期望职位
+        let candidateForCategoryResult = await candidateForCategoryService.loadListByCandidateOpenid(openid);
+        console.debug("加载求职者openid：" + openid + " 的求职期望列表：");
+        let expectJobCategoryList = candidateForCategoryResult.data.map(r => {
+            return {
+                job: r.categoryName,
+                id: r.categoryUuid,
+                checked: true,
+                display: 'none',
+            }
+        })
+        console.debug(expectJobCategoryList)
+        //去重
+        wantjobList = wantjobList.filter(r => {
+
+            if (expectJobCategoryList.findIndex(v => {
+                return r.id == v.id
+            }) == -1) {
+                return true;
+            }
+        })
+        // 拼接数组
+        wantjobList = wantjobList.concat(expectJobCategoryList);
+        let noCheckedNum = 0;
+        wantjobList = wantjobList.filter(v => {
+            if (v.checked == false) {
+                noCheckedNum += 1;
+            }
+            return v.checked == true || noCheckedNum <= 10;
+        });
+        console.debug(wantjobList);
+
+
+        // 默认请选择文字是否显示
+        let arrhide; let txthide;
+        if (wantjobList.findIndex(r => {
+            return r.checked == true;
+        }) == -1) {
+            txthide = false;
+            arrhide = true;
+        } else {
+            txthide = true;
+            arrhide = false;
+        }
+        // 需要设置display为 block
+        let csjobList = object_util.copyObject(
+            wantjobList.filter(v => {
+                return v.checked == true;
+            })
+        )
+        csjobList = csjobList.map(v => {
+            v.display = 'block';
+            return v;
+        })
+        console.debug(csjobList);
+        this.setData({
+            txthide: txthide,
+            arrhide: arrhide,
+            wantjob: wantjobList,
+            csjob: csjobList,
+        })
+        console.debug(this.data.wantjob);
+
+        // 加载求职者 - 薪资期望  及 薪资可选列表
+        let salaryIndex = CONSTANT.salaryList.findIndex((r, i) => {
+            return (r.min == recruiteeInfo.expectSalaryMin && r.max == recruiteeInfo.expectSalaryMax)
+        });
+
+        this.setData({
+            salaryStringList: CONSTANT.salaryList.map(e => e.value),
+            salaryList: CONSTANT.salaryList,
+            index: salaryIndex,
+        });
+
+        // 加载 求职者  已选择的期望社区列表
+        let candidateForCommunityResult = await candidateForCommunityService.loadListByCandidateOpenid(openid);
+        let expectCommunityList = candidateForCommunityResult.data;
+        console.log(expectCommunityList);
+        this.setData({
+            choosedCommunityList: expectCommunityList.map(v => {
+                return {
+                    communityUuid: v.communityUuid,
+                    communityName: v.communityName,
+                };
+            })
+        })
+        if (this.data.choosedCommunityList.length > 0) {
+            this.setData({
+                hiddenCommunityDefaultText: true,
+            })
+        }
+        // 加载 市辖区列表
+        let districtNameList = await communityInformationService.listDistrictNameByCityName(CONSTANT.CURRENT_CITY);
+
+        districtNameList = districtNameList.data;
+        let districtList = districtNameList.map(v => {
+            return {
+                districtName: v,
+                checked: false,
+            }
+        })
+        districtList = sort_util.sortChangshaDistrict(districtList);
+        // 加载 市辖区列表
+        this.setData({
+            districtList: districtList,
+
+        })
+
+    },
+
+
+})

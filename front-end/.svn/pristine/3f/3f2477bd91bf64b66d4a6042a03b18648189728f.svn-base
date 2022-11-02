@@ -1,0 +1,17 @@
+@import "../common/formCommonStyle.wxss";
+
+.upload-img-line-box{
+    padding: 10px 0px;
+}
+
+.upload-img-item{
+    margin: 10px 5px
+}
+.upload-wait-view{
+    background: #F6F6F6;
+    text-align: center;
+    opacity: 0.8;
+    border-radius: 5px 5px 5px 5px;
+    font-size: 50px;
+}
+

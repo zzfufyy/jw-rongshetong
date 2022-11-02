@@ -1,0 +1,35 @@
+<view class="container">
+    <image class="page-banner-img" src="{{bannerImgSrc}}" />
+    <view class="title-box">
+        <view class="title-line"></view>
+        <text class="title-text">个人社保业务</text>
+    </view>
+    <view class="tag-box">
+        <view wx:for="{{tabList1}}" class="tag-item"  bindtap="bindtapTemp">
+            <image class="tag-img" src="{{item.imgSrc}}" mode="widthFix" lazy-load="false" binderror="" bindload=""/>
+            <text class="tag-text">{{item.tagName}}</text>
+        </view>
+    </view>
+    <view class="split-line-20"></view>
+    <view class="title-box">
+        <view class="title-line"></view>
+        <text class="title-text">单位社保业务</text>
+    </view>
+    <view class="tag-box">
+        <view wx:for="{{tabList2}}" class="tag-item" bindtap="bindtapTemp">
+            <image class="tag-img" src="{{item.imgSrc}}" mode="widthFix" lazy-load="false" binderror="" bindload=""/>
+            <text class="tag-text">{{item.tagName}}</text>
+        </view>
+    </view>
+    <view class="split-line-20"></view>
+    <view class="title-box">
+        <view class="title-line"></view>
+        <text class="title-text">失业工伤待遇</text>
+    </view>
+    <view class="tag-box">
+        <view wx:for="{{tabList3}}" class="tag-item" bindtap="bindtapTemp">
+            <image class="tag-img" src="{{item.imgSrc}}" mode="widthFix" lazy-load="false" binderror="" bindload=""/>
+            <text class="tag-text">{{item.tagName}}</text>
+        </view>
+    </view>
+</view>

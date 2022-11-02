@@ -1,0 +1,6 @@
+@import "../common/formCommonStyle.wxss";
+
+
+.option-line-box {
+    margin-bottom: 30rpx;
+}

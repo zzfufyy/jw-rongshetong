@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "创建投票",
+
+  "usingComponents": {
+    "form-single-select-builder": "/components/formBuilder/formSingleSelectBuilder/formSingleSelectBuilder"
+  }
+}

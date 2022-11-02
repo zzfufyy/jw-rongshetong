@@ -1,0 +1,18 @@
+@import "../common/formCommonStyle.wxss";
+
+.sign-line-box {
+    padding: 10px 0px;
+}
+
+.sign-size {
+    height: 90px;
+    width: 100%;
+}
+
+.sign-wait-view {
+    background: #F6F6F6;
+    opacity: 1;
+    line-height: 90px;
+    text-align: center;
+    color: #999999;
+}

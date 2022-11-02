@@ -1,0 +1,239 @@
+.toptit {
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    color: #F8424C;
+    padding: 15px 0 13px 20px;
+}
+
+
+.jobbox {
+    margin: 10px 10px 0 10px;
+    /* padding-bottom: 19px; */
+    background: #fff;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.ltbox {
+    width: 70%;
+}
+
+.jobname {
+    font-size: 18px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    margin-top: 23px;
+    /* margin-bottom: 19px; */
+    color: #333333;
+}
+
+.jobmoney {
+    font-size: 16px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    margin: 14px 0 8px 0;
+    color: #F8424C;
+}
+
+.companytx {
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+    background: #CBCBCB;
+    border-radius: 50%;
+}
+
+.companyname {
+    font-size: 14px;
+    font-family: SimHei-Regular, SimHei;
+    font-weight: 400;
+    color: #999999;
+}
+
+.far {
+    font-size: 14px;
+    margin-top: 23px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #999999;
+    text-align: right;
+}
+
+.phonecall {
+    height: 30px;
+    width: 70px;
+    margin-top: 16px;
+    background: #FFFFFF;
+    border-radius: 0px 0px 0px 0px;
+    font-size: 12px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #F8424C;
+    opacity: 1;
+    border: 1px solid #F8424C;
+    line-height: 30px;
+    text-align: center;
+}
+
+.jobname {
+    font-size: 16px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    margin-top: 15px;
+    color: #333333;
+}
+
+.far {
+    font-size: 14px;
+    margin-top: 15px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #999999;
+    text-align: right;
+}
+
+.jobmoney {
+    font-size: 16px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    margin: 14px 0 8px 0;
+    color: #F8424C;
+}
+
+.btnboxjl {
+    position: relative;
+}
+
+.lrbox {
+    width: 23%;
+}
+
+.phonecall {
+    height: 30px;
+    width: 70px;
+    margin-top: 8px;
+    background: #FFFFFF;
+    border-radius: 0px 0px 0px 0px;
+    font-size: 12px;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #F8424C;
+    opacity: 1;
+    border: 1px solid #F8424C;
+    line-height: 30px;
+    text-align: center;
+}
+
+.tdjl {
+    position: absolute;
+    left: -81px;
+    color: #5A9BFC;
+    border: 1px solid #5A9BFC;
+}
+
+.bddh {
+    position: absolute;
+}
+
+.companyname1 {
+    font-size: 14px;
+    font-family: SimHei-Regular, SimHei;
+    font-weight: 400;
+    color: #999999;
+}
+
+.companytx {
+    width: 34px;
+    height: 34px;
+    vertical-align: middle;
+    background: #CBCBCB;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.top_nav {
+    display: flex;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.nav-name {
+    display: inline-block;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    background: #fff;
+    width: 100%;
+    color: #333333;
+    padding: 18rpx 8rpx 10rpx 8rpx;
+    font-size: 14px;
+    opacity: 0.6;
+}
+
+.nav-hover {
+    font-size: 14px;
+    font-family: Source Han Sans CN;
+    background: #fff;
+    opacity: 1;
+    color: #333333;
+    font-weight: bold;
+}
+
+.nav-hover .linbc {
+    width: 35px;
+    height: 4px;
+    background: rgba(67, 118, 228, 1);
+    margin: 0 auto;
+    border-radius: 3px;
+}
+
+.mstz {
+    height: 40px;
+    line-height: 40px;
+    padding-left: 20px;
+    font-size: 12px;
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-weight: 400;
+    background-color: #F6E6E7;
+    color: #F8424C;
+}
+
+.btmbox {
+    padding: 9px 18px 15px 19px;
+    border-top: 1px solid #ECECEC;
+}
+
+.xiajia1 {
+    display: inline-block;
+    /* width: 66px; */
+    padding: 0px 4px;
+    color: #579AFD;
+    text-align: center;
+    line-height: 25px;
+    /* margin-left: 10px; */
+    height: 25px;
+    background: #FFFFFF;
+    border-radius: 3px 3px 3px 3px;
+    opacity: 1;
+    border: 1px solid #579AFD;
+    margin-right: 10px;
+    font-size: 14px
+}
+
+.xiajia {
+    display: inline-block;
+    width: 55px;
+    color: #999999;
+    text-align: center;
+    line-height: 25px;
+    /* margin-left: 10px; */
+    height: 25px;
+    background: #FFFFFF;
+    border-radius: 3px 3px 3px 3px;
+    opacity: 1;
+    border: 1px solid #999999;
+    font-size: 14px
+}
+
+.line1 {
+    margin-top: 20px;
+}

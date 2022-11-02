@@ -1,0 +1,22 @@
+//  全局变量
+
+const { Listenable } = require("../utils/function_util");
+
+// 全局用户身份
+const GLOBAL_USER_IDENTITY = 'GLOBAL_USER_IDENTITY'; // 'user' 'company'
+// 全局完成初始化
+const GLOBAL_COMPLETE_BOOTSTRAP = 'GLOBAL_COMPLETE_BOOTSTRAP'; // true false
+// 全局openid
+const GLOBAL_OPENID = 'openid';
+
+// 全局监听
+const LISTENABLE_SEND_RESUME = 'LISTENABLE_SEND_RESUME';
+
+module.exports = {
+    GLOBAL_USER_IDENTITY: GLOBAL_USER_IDENTITY,
+    GLOBAL_COMPLETE_BOOTSTRAP: GLOBAL_COMPLETE_BOOTSTRAP,
+    GLOBAL_OPENID: GLOBAL_OPENID,
+
+    // 全局监听器
+    LISTENABLE_SEND_RESUME: LISTENABLE_SEND_RESUME,
+}

@@ -1,0 +1,93 @@
+// 加载 工具类
+const Paging = require('../../utils/paging_util');
+const CONSTANT = require('../../common/constant');
+
+const string_util = require('../../utils/string_util');
+const img_util = require('../../utils/img_util');
+const date_util = require('../../utils/date_util');
+const format_util = require('../../utils/format_util');
+
+// 加载服务类
+
+const recruitJobService = require('../../common/recruitJobService');
+const { Salary } = require('../../common/constant');
+
+// 定义常量
+const app = getApp();
+
+
+const createPageMethods = () => ({
+    // 分页状态
+    state: {
+        pageConfig: new Paging.PageConfig(5),
+    },
+    // 没有更多页面了
+    _noMoreData() {
+        this.setData({
+            noMoreData: true,
+        });
+    },
+    // 清空内容
+    clearContent: async function () {
+        this.state.pageConfig.reset();
+        // 重置数据内容
+        this.setData({
+            jobList: []
+        })
+    },
+
+    // 加载内容
+    loadJobListContent: async function () {
+        
+        // 加載openid
+        await app.getOpenidReady();
+        let openid = wx.getStorageSync('openid');
+        let companyUuid = await this.stateCompleter.companyUuidCompleter.promise;;
+        
+
+        // 回调 没有数据的处理方式
+        this.state.pageConfig.setNoMoreDataCallback(this._noMoreData);
+
+        // 初始化分页配置
+        let pageConfig = this.state.pageConfig;
+
+        // 构建查询条件 condition
+        let condition = {
+            companyUuid: companyUuid,
+        }
+        let pagingParam = pageConfig.buildNextParam(condition);
+        if (!pagingParam) {
+            return;
+        }
+        // 获取分页内容
+        let pageInfo;
+        // 请求数据
+        try {
+            pageInfo = await recruitJobService.page(pagingParam)
+            pageInfo = pageInfo.data;
+            console.debug(pageInfo);
+        } catch (e) {
+            console.error(e);
+        } finally {
+        }
+        let dataList = pageConfig.handlePageInfo(pageInfo);
+        let current = this.data.jobList;
+        let newList = dataList.map(r => ({
+            jobUuid: r.id,
+            jobName: r.jobName,
+            salaryScope: new Salary(r.jobSalaryMin,r.jobSalaryMax).value,
+            recruitingNumber: r.recruitingNumber,
+            jobIntroduction: r.jobIntroduction,
+        }));
+
+        // 拼接数据
+        this.setData({
+            jobList: current.concat(newList),
+        });
+    },
+
+});
+
+module.exports = {
+    createPageMethods: createPageMethods,
+}

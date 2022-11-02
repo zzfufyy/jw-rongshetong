@@ -1,0 +1,27 @@
+<view class="container" style="height:{{winHeight}}px">
+    <view class="top-box">
+        <view class="line-container">
+            <label class="line-title">培训类别*</label>
+            <picker bindchange="bindchangeTrainingType" value="index" range="{{trainingTypeList}}">
+                <input class="line-content" placeholder-class="input-placeholder" placeholder="请输选择 >" value="{{trainingType}}" disabled="{{true}}" />
+            </picker>
+        </view>
+        <view class="line-container">
+            <label class="line-title">姓名*</label>
+            <input class="line-content" placeholder-class="input-placeholder" placeholder="请输入姓名" bindinput="bindinputUserName" />
+        </view>
+        <view class="line-container">
+            <label class="line-title">电话*</label>
+            <input class="line-content" placeholder-class="input-placeholder" placeholder="请输入电话" bindinput="bindinputUserPhone" />
+        </view>
+        <view class="mark-container">
+            <label class="mark-title">备注</label>
+            <textarea class="mark-textarea" placeholder="请输入" placeholder-class="input-placeholder" bindinput="bindinputUserMark"></textarea>
+        </view>
+    </view>
+    <view class="bottom-box">
+        <view class="submit-button" bindtap="bindtapSubmit">
+            <text class="submit-text">提交报名</text>
+        </view>
+    </view>
+</view>

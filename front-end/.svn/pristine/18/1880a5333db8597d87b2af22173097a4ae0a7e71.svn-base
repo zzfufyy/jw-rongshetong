@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "招聘专场",
+  "usingComponents": {
+    "authorize": "/components/authorize/authorize"
+  }
+}

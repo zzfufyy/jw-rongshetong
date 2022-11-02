@@ -1,0 +1,65 @@
+<view class="container">
+	<view  class="clearfloat personbox">
+		<view class="ft ltimg">
+			<image src="{{tximg}}" class="tximg"></image>
+		</view>
+		<view class="ft nameinfo">
+			<view class="name">{{name}}</view>
+		</view>
+	</view>
+	<view  class="clearfloat personbox ">
+		<view class="tybox clearfloat">
+			<view class="sqname">{{sqname}}</view>
+			<view class="sqname">{{localtion}}</view>
+		</view>
+		
+	</view>
+
+	<view class="clearfloat personbox {{yxjobname != ''?'':'hide'}}">
+		<view class="clearfloat tybox" >
+			<view class="ft qzyx">企业介绍</view>
+		</view>
+		<view class="clearfloat yxjobname" >
+			{{yxjobname}}
+		</view>
+	</view>
+
+
+	<view class="clearfloat personbox " style="display: {{zwpj.length>0?'block':'none'}};">
+		<view class="clearfloat tybox" >
+			<view class="ft qzyx">企业相册</view>
+		</view>
+		<view class="clearfloat yxjobname flexbox" >
+			<image wx:for="{{zwpj}}" data-src="{{item.imgqy}}" bindtap="preimg1" wx:key="key" style="width: {{imgwd}}px;height: {{bight}}px;"  class="qyfc" src="{{item.imgqy}}"></image>
+		</view>
+	</view>
+
+	
+	<view class="clearfloat personbox" style="border-bottom: 0;padding-bottom: 0;">
+		<view class="clearfloat tybox" >
+			<view class="ft qzyx">招聘岗位</view>
+		</view>
+
+
+	</view>
+	<view class="clearfloat personbox" style="border-bottom: 0;padding-bottom: 0;padding-top: 0;">
+		<block wx:for="{{qzjy}}" wx:key="key">
+			<view class="clearfloat yxjobname" bindtap="zwxq">
+				<view class="clearfloat" style="padding-left: 0;">
+					<view class="companyname ft">
+						<view class="cmname">{{item.companyname}}</view>
+						<view class="tptit">{{item.jobmoney}}/月</view>
+						<view class="tptit">招{{item.rsnum}}人 · {{item.jiny}} · {{item.xlyq}} · {{item.jobyear}}</view>
+					</view>
+					<view class=" fr"><image class="imgjt" src="/img/jt.png"></image></view>
+				</view>
+				<view class="namejob" wx:for="{{item.jobdsc}}" wx:key="key">
+					{{item.jobjl}}
+				</view>
+			</view>
+			<view class="line1" style="margin: 10px 0;"></view>
+
+		</block>
+	</view>
+
+</view>

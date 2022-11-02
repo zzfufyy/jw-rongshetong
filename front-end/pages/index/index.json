@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "芙蓉融社通",
+    "usingComponents": {
+        "authorize": "/components/authorize/authorize"
+    }
+}

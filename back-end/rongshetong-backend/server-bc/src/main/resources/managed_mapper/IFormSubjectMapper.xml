@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IFormSubjectMapper">
+
+    <insert id="insertByList" parameterType="java.util.List">
+        INSERT INTO form_subject(
+            id,
+            subject_order,
+            subject_title,
+            subject_img,
+            component_type,
+            subject_type,
+            `row_count`,
+            upload_img_count,
+            is_require,
+            form_uuid,
+            status,
+            create_time
+        ) VALUES
+        <foreach collection="listFormSubject" item="fs" index="index" separator=",">
+            (
+            #{fs.id},
+            #{fs.subjectOrder},
+            #{fs.subjectTitle},
+            #{fs.subjectImg},
+            #{fs.componentType},
+            #{fs.subjectType},
+            #{fs.rowCount},
+            #{fs.uploadImgCount},
+            #{fs.isRequire},
+            #{fs.formUuid},
+            0,
+            now()
+            )
+        </foreach>
+    </insert>
+</mapper>

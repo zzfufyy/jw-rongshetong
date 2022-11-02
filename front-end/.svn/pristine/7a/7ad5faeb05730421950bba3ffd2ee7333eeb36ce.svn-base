@@ -1,0 +1,24 @@
+const $ = require('../utils/request_util')
+
+const insertByEntity = function (communityCell) {
+    return $.request({
+        url: '/community-cell/add',
+        data: communityCell,
+        method: $.RequestMethod.POST,
+        header: $.jsonHeader,
+    });
+};
+
+const listByCommunityUuid = function (communityUuid) {
+    return $.request({
+        url: '/community-cell/listByCommunityUuid?communityUuid=' + communityUuid,
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader,
+    });
+};
+
+module.exports = {
+    insertByEntity: insertByEntity,
+    listByCommunityUuid: listByCommunityUuid,
+}

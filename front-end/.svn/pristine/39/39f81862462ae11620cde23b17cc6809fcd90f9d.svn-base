@@ -1,0 +1,516 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "企业注册",
+          "pathName": "pages/qyzc/qyzc",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业验证",
+          "pathName": "pages/waiteyz/waiteyz",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "发布职位",
+          "pathName": "pages/fbjob/fbjob",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "资讯列表",
+          "pathName": "pages/news/news",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "资讯详情",
+          "pathName": "pages/zxxq/zxxq",
+          "query": "newsUuid=1526849363968954370",
+          "scene": null
+        },
+        {
+          "name": "个人中心-求职者",
+          "pathName": "pages/mine/mine",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "工作意向",
+          "pathName": "pages/wantjob/wantjob",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "个人简历",
+          "pathName": "pages/personjl/personjl",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "个人简历修改",
+          "pathName": "pages/jlxg/jlxg",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "工作经历添加",
+          "pathName": "pages/gzjl/gzjl",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "自我评价",
+          "pathName": "pages/selfpj/selfpj",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "面试岗位",
+          "pathName": "pages/msjob/msjob",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "已投递岗位",
+          "pathName": "pages/ytdjob/ytdjob",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "专业技能",
+          "pathName": "pages/zyjn/zyjn",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "被游览量",
+          "pathName": "pages/byll/byll",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "管理职位--企业版",
+          "pathName": "pages/manegejob/manegejob",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "设置",
+          "pathName": "pages/set/set",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "编辑职位--企业版",
+          "pathName": "pages/editjob/editjob",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "管理简历--企业版",
+          "pathName": "pages/manegejl/manegejl",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "聊一聊--企业版",
+          "pathName": "pages/talkjobcom/talkjobcom",
+          "query": "userident=user",
+          "scene": null
+        },
+        {
+          "name": "查看简历--企业版",
+          "pathName": "pages/loojl/lookjl",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "职位详情",
+          "pathName": "pages/zwxq/zwxq",
+          "query": "recruitJobUuid=73725e15-c088-11ec-a9e3-e86a648eddb5",
+          "scene": null
+        },
+        {
+          "name": "认证中心",
+          "pathName": "pages/rzcenter/rzcenter",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业基本信息",
+          "pathName": "pages/comjbxx/comjbxx",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "公司地址",
+          "pathName": "pages/comadrres/comadrres",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业介绍",
+          "pathName": "pages/comjs/comjs",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业相册",
+          "pathName": "pages/comxc/comxc",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "营业执照",
+          "pathName": "pages/yyzz/yyzz",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "关于我们",
+          "pathName": "pages/aboutus/aboutus",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "消息",
+          "pathName": "pages/massege/massege",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "搜索职位",
+          "pathName": "pages/searchpage/searchpage",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业搜索页面",
+          "pathName": "pages/qysearch/qysearch",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "社区服务",
+          "pathName": "pages/sqfw/sqfw",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "网格录入",
+          "pathName": "pages/wglr/wglr",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "网格录入详情",
+          "pathName": "pages/wglrxq/wglrxq",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "居住人信息",
+          "pathName": "pages/djmesge/djmesge",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "信息提交成功",
+          "pathName": "pages/mesegsubmit/mesegsubmit",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "东湖社区摸底表--1",
+          "pathName": "pages/sqmdb/sqmdb",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "普通居住",
+          "pathName": "pages/ptjuzhu/ptjuzhu",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "非普通居住",
+          "pathName": "pages/comjuzhu/comjuzhu",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业从业信息",
+          "pathName": "pages/comxx/comxx",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "修改居住人信息",
+          "pathName": "pages/xiugaijz/xiugaijz",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "社区管理",
+          "pathName": "pages/sqgl/sqgl",
+          "query": "communityUuid=e836d1f9-a8ea-11ec-b3b2-5076afbf1539",
+          "scene": null
+        },
+        {
+          "name": "社区基本信息修改",
+          "pathName": "pages/wgmanage/wgmanage",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "网格管理添加小区",
+          "pathName": "pages/sqmanege/sqmanege",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "添加小区",
+          "pathName": "pages/addxq/addxq",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "添加小区成功",
+          "pathName": "pages/xqtjcg/xqtjcg",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "网格管理--小区",
+          "pathName": "pages/xqwgmanege/xqwgmanege",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "普通居住信息查看",
+          "pathName": "pages/checkxx/checkxx",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "三合一居住信息查看",
+          "pathName": "pages/isshyjz/isshyjz",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "录入信息删除",
+          "pathName": "pages/sqsccg/sqsccg",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "发布新闻",
+          "pathName": "pages/fbnews/fbnews",
+          "query": "communityUuid=e81eef01-a8ea-11ec-be0a-5076afbf1539",
+          "scene": null
+        },
+        {
+          "name": "视频聊天",
+          "pathName": "pages/splt/splt",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "发布新闻成功",
+          "pathName": "pages/wztjcg/wztjcg",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业录入",
+          "pathName": "pages/qylr/qylr",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业录入企业基本信息",
+          "pathName": "pages/sqcomjbxx/sqcomjbxx",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "网格录入企业介绍",
+          "pathName": "pages/comjslr/comjslr",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业录入企业相册",
+          "pathName": "pages/comxcqylr/comxcqylr",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "选择社区",
+          "pathName": "pages/xzsq/xzsq",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "求职者录入",
+          "pathName": "pages/qzelr/qzelr",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "求职者基本信息",
+          "pathName": "pages/qzzxxlr/qzzxxlr",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业审核",
+          "pathName": "pages/qysh/qysh",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "社区服务新闻列表",
+          "pathName": "pages/newsms/newsms",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业录入成功",
+          "pathName": "pages/qylrcg/qylrcg",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "求职者录入成功",
+          "pathName": "pages/qzzlrcg/qzzlrcg",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "求职",
+          "pathName": "pages/qzjy/qzjy",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业信息展示",
+          "pathName": "pages/commessxq/commessxq",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "招聘专场",
+          "pathName": "pages/zpzhuanc/zpzhuanc",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业招聘",
+          "pathName": "pages/comzp/comzp",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业录入发布招聘",
+          "pathName": "pages/fbjobwork/fbjobwork",
+          "query": "companyUuid=b02a787a-cdb0-46af-b829-3425ddff0ebe",
+          "scene": null
+        },
+        {
+          "name": "求职者期望职位",
+          "pathName": "pages/qwjob/qwjob",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "面试邀请",
+          "pathName": "pages/msinvite/msinvite",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "茶陵摸底表1",
+          "pathName": "pages/messgecollect/messgecollect",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "茶陵摸底表2",
+          "pathName": "pages/messgecollect1/messgecollect1",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "茶陵摸底表3",
+          "pathName": "pages/messgecollect2/messgecollect2",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "茶陵摸底表4",
+          "pathName": "pages/messgecollect3/messgecollect3",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "茶陵摸底表5",
+          "pathName": "pages/messgecollect4/messgecollect4",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "信息采集完成",
+          "pathName": "pages/modicompit/modicompit",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "在招职位",
+          "pathName": "pages/zzzw/zzzw",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "招聘会列表页",
+          "pathName": "pages/zphlist/zphlist",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "社区服务更多",
+          "pathName": "pages/test/test",
+          "query": "newsUuid=1526849363968954370",
+          "scene": null
+        },
+        {
+          "name": "诉源治理",
+          "pathName": "pages/syzl/syzl",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "小程序码生成",
+          "pathName": "pages/splt/splt",
+          "query": "ext1=632",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

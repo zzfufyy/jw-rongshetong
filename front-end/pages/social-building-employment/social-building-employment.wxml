@@ -1,0 +1,19 @@
+<view class="container">
+    <view class="top-box">
+        <text class="top-box-text" bindtap="bindtapChooseStreet">{{choosedStreetList.length == 0?"选择区域": choosedStreetList[0].streetName}} ></text>
+    </view>
+    <view class="split-line-2"></view>
+</view>
+<scroll-view scroll-y="true" style="height:{{winHeight}}px;width:100%;" bindscrolltolower="bindscrolltolowerBuildingList">
+    <view class="item-box" wx:for="{{buildingList}}" wx:key="index" data-id="{{item.buildingUuid}}" data-name="{{item.buildingName}}" bindtap="bindtapGoLinkBuilding"> 
+        <image class="item-img" src="{{item.portraitPath}}"></image>
+        <view class="item-text-box">    
+            <text class="item-text-up">{{item.buildingName}}</text>
+            <text class="item-text-down">{{item.districtName}} | {{item.address}}</text>
+        </view>
+    </view>
+</scroll-view>
+
+<!-- 选择街道组件  -->
+<choose-street id='choose-street' max_choosed_number="1" choosedStreetList="{{choosedStreetList}}" bind:submit="submitChooseStreet">
+</choose-street>

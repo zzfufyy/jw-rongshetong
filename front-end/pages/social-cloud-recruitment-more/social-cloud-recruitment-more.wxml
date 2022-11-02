@@ -1,0 +1,16 @@
+<view class="container">
+    <picker class="top-box bg-FFFFFF" bindchange="bindchangeChooseStreet" range="{{streetNameList}}">
+        <text class="top-box-text">{{streetName}} ></text>
+    </picker>
+    <view class="split-line-20"></view>
+    <view class="company-box bg-FFFFFF" wx:for="{{companyList}}">
+        <video class="company-video" src="{{item.videoSrc}}" />
+        <view class="company-text-box">
+            <text class="company-name">{{item.companyName}}</text>
+            <view class="company-more-box" data-id="{{item.companyUuid}}" bindtap="bindtapGoLinkCompanyInfo">
+                <text class="more-text">更多</text>
+                <image class="more-icon" src="../../img/social-cloud-recruitment/keyboard_right.svg" />
+            </view>
+        </view>
+    </view>
+</view>

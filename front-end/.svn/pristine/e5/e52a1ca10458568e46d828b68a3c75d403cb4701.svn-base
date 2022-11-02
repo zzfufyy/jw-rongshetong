@@ -1,0 +1,619 @@
+// pages/sqfw/sqfw.js
+let $ = require('../../utils/request_util');
+// const Loading = require('../../utils/loading_util');
+const date_util = require('../../utils/date_util');
+const img_util = require('../../utils/img_util');
+
+// // 求职者模块
+// const recruitee = require('./recruitee');
+// // 招聘者模块
+// const recruiter = require('./recruiter');
+// 启动引导模块（引导用户授权、选择角色、注册角色等）
+// const bootstrap = require('./bootstrap');
+// 监听器模块
+const listener = require('./listener');
+// 内容加载模块
+const CONSTANT = require('../../common/constant');
+const GLOBAL_CONSTANT = require('../../common/globalConstant');
+// const content = require('./content');
+const Loading = require('../../utils/loading_util');
+const string_util = require('../../utils/string_util');
+
+
+// 加载服务
+const informationNewsService = require('../../common/informationNewsService');
+const communityInformationService = require('../../common/communityInformationService');
+const userCandidateService = require('../../common/userCandidateService');
+const userRecruiterService = require('../../common/userRecruiterService');
+const userCommunityService = require("../../common/userCommunityService");
+const userStateService = require("../../common/userStateService");
+
+// const listener = require('./listener');
+// const string_util = require('../../utils/string_util');
+
+
+
+const { Completer } = require('../../utils/function_util');
+
+const app = getApp();
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        openid: '',
+        // ...recruitee.createRecruiteeInfo(),
+        // 社区用户授权级别  0:普通 1: 社区管理员 2: 网格录入员
+        authorizationLevel: 0,
+        // 用户授权
+        isUserAuthorized: false, // 用户是否授权
+        // 授权框隐藏
+        hideUserInfoAuth: true,
+        // 角色选择
+        juesehide: true,
+        streetName: '',
+        districtName: '',
+        cityName: '',
+        provinceName: '',
+        scene: "",
+        communityUuid: '',
+        communityName: '', //communityName: '东湖社区',
+        communityAddress: '', //communityAddress: '湖南省长沙市芙蓉区晚报西街13号',
+        communityPhone: '',
+        communityPortraitPath: '',
+        // recruiterOpenid: "",
+        // companyUuid: "",
+        // categoryUuid: "",
+        isInformationCollectPermission: false,
+        ewmimg: '',
+        zhjy: [
+            { id: 'sygl', name: '诉源治理', url: '/pages/syzl/syzl', bac: '#EEF7FE', iconimg: '/img/syzl.png', },
+            { id: 'zphui', name: '招聘会', url: '/pages/zphlist_copy/zphlist_copy', bac: '#EEF7FE', iconimg: '/img/zphuiicon.png', },
+            { id: 'tagCandidateRecruit', name: '求职就业', url: '/pages/comzp/comzp', bac: '#FEFAEE', iconimg: '/img/qzjy.png', },
+            { id: 'tagCompanyRecruit', name: '企业招聘', url: '/pages/qzjy/qzjy', bac: '#EEF7FE', iconimg: '/img/qyzp.png', },
+
+            { id: 'tagCellInput', name: '网格录入', url: '/pages/wglr/wglr', bac: '#F3EEFC', iconimg: '/img/wglr.png', },
+            { id: 'tagCommunityManagement', name: '社区管理', url: '/pages/sqgl/sqgl', bac: '#EEFBFE', iconimg: '/img/sqgl.png', },
+            { id: 'tagRongEDai', name: '蓉e贷', url: '', bac: '#F5FFE8', iconimg: '/img/ryd.png', target: 'miniProgram', appId: 'wx96d6e30c9f677d52' },
+
+            // { id: 'tagNewsAnnouncement', name: '更多功能', url: '/pages/test/test', bac: '#EAFBF8', iconimg: '/img/moregn.png', },
+            { id: 'tagNewsAnnouncement', name: '新闻公告', url: '/pages/newsms/newsms', bac: '#FFF6F6', iconimg: '/img/xwgg.png', },
+
+            // { id: 'tagInformationCollect', name: '自建房信息采集', url: '/pages/messgecollect/messgecollect', bac: '#EEF7FE', iconimg: '/img/xxcj.png', tp: '-13px' },
+
+
+        ],
+        zhjy1: [
+            // { id: 'sygl', name: '诉源治理', url: '/pages/syzl/syzl', bac: '#EEF7FE', iconimg: '/img/syzl.png', },
+            { id: 'zphui', name: '招聘会', url: '/pages/zphlist_copy/zphlist_copy', bac: '#EEF7FE', iconimg: '/img/zphuiicon.png', },
+            { id: 'tagCandidateRecruit', name: '求职就业', url: '/pages/comzp/comzp', bac: '#FEFAEE', iconimg: '/img/qzjy.png', },
+            { id: 'tagCompanyRecruit', name: '企业招聘', url: '/pages/qzjy/qzjy', bac: '#EEF7FE', iconimg: '/img/qyzp.png', },
+
+            { id: 'tagCellInput', name: '网格录入', url: '/pages/wglr/wglr', bac: '#F3EEFC', iconimg: '/img/wglr.png', },
+            { id: 'tagCommunityManagement', name: '社区管理', url: '/pages/sqgl/sqgl', bac: '#EEFBFE', iconimg: '/img/sqgl.png', },
+            { id: 'tagRongEDai', name: '蓉e贷', url: '', bac: '#F5FFE8', iconimg: '/img/ryd.png', target: 'miniProgram', appId: 'wx96d6e30c9f677d52' },
+
+            // { id: 'tagNewsAnnouncement', name: '更多', url: '/pages/test/test', bac: '#FFF6F6', iconimg: '/img/xwgg.png', },
+            { id: 'tagNewsAnnouncement', name: '新闻公告', url: '/pages/newsms/newsms', bac: '#FFF6F6', iconimg: '/img/xwgg.png', },
+
+            // { id: 'tagInformationCollect', name: '自建房信息采集', url: '/pages/messgecollect/messgecollect', bac: '#EEF7FE', iconimg: '/img/xxcj.png', tp: '-13px' },
+
+
+        ],
+        newsList: [
+            // {
+            // 	articleTitle: '春风送温暖 就业送真情',
+            // 	articleIntroduction: '【湖南省】关于印发《湖南省“十四五”金融业发展规划》的通知湖南省地方金融监督管理局关于印发《湖南省“十四五”金融业发展规划》的通知',
+            // 	articleAuthor: '岳麓区就业服务中心',
+            // 	articleReleaseTime: '3月02日',
+            // 	articlePortraitPath: 'http://frqryb.oss-accelerate.aliyuncs.com/headphoto/16297916583243346b1330ea-9a71-4ea4-85d0-02c7556c3b40.jpeg'
+            // },
+        ],
+    },
+
+    state: {
+        communityUuidCompleter: new Completer(),
+    },
+    bindtapTagNewsAnnouncement() {
+        wx.navigateTo({
+            url: '/pages/newsms/newsms?communityUuid=' + this.data.communityUuid,
+        })
+    },
+    binderrorCommunityPortraitPath(e) {
+        console.log(e);
+        this.setData({
+            communityPortraitPath: CONSTANT.STATIC_IMG_URL.portrait_community,
+        })
+    },
+    binderrorArticlePortraitPath(e) {
+        console.log(e);
+        let img = 'newsList[' + e.currentTarget.dataset.index + '].articlePortraitPath';
+        this.setData({
+            [img]: CONSTANT.STATIC_IMG_URL.portrait_news,
+        })
+    },
+
+
+    /* 引导用户授权 hidden位：hideUserInfoAuth */
+    _doAuthorize: async function (scene) {
+        let authCompl = new Completer();
+        this.state.authCompl = authCompl;
+
+        var that = this;
+
+        // 获取状态码
+        let loginRes = await wx.login({
+            timeout: 10000,// 10秒login
+        });
+
+        let authData = await $.request({
+            url: '/wx/user/' + app.globalData.appId + '/login',
+            data: {
+                code: loginRes.code,
+                loginType: 'openid'
+            },
+            header: app.globalData.header,
+        })
+        if (JSON.stringify(authData.data.userWx) == undefined) {
+            // 用户未授权
+            that.setData({
+                hideUserInfoAuth: false,
+                scene: scene,
+                animated: true
+            });
+            wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY, 'vistor');
+            // 显示 授权页面 authCompl在授权页面完成
+        } else {
+            // 用户已授权
+            that.setData({
+                hideUserInfoAuth: true,
+                scene: scene,
+                animated: false,
+            });
+            let userState = await userStateService.loadEntityById(wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_OPENID));
+            userState = userState.data;
+            if (typeof (userState) != 'undefined') {
+                wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY, GLOBAL_CONSTANT.userStateNameList[userState.userRole]);
+            }
+            // 自动登录，无需授权，因此直接完成
+            authCompl.resolve();
+        }
+
+        // that.flagBootstrapCompleter.resolve();
+        return authCompl.promise;
+    },
+
+    /* 保存用户信息到后台 */
+    _saveUserInfo: async function (userInfo, iv, signature, encryptedData, rawData, scene) {
+        const that = this;
+        let loginRes = await wx.login({
+            timeout: 5000, // 5s超时
+        })
+        if (loginRes.code) {
+            let wxloginRes = await $.request({
+                url: '/wx/user/' + app.globalData.appId + '/login',
+                data: {
+                    code: loginRes.code,
+                    loginType: 'openid'
+                },
+                header: app.globalData.header,
+            });
+            console.log(wxloginRes);
+
+            wx.setStorageSync('sessionKey', wxloginRes.data.sessionKey);
+            var name = wx.getStorageSync('user').nickname;
+            if (name) {
+                that.setData({
+                    nickName: name
+                })
+            }
+            //判断是否存在token,不存在则说明该用户没有注册,需要弹出用户登录页面,有则不需要进行页面跳转
+            if (!wxloginRes.data.Token && userInfo) {
+                //保存用户信息 到bc_user
+                var openid = wx.getStorageSync('openid');
+                console.log(openid);
+                let wxInfo = await $.request({
+                    url: '/wx/user/' + app.globalData.appId + '/info',
+                    data: {
+                        sessionKey: wxloginRes.data.sessionKey,
+                        iv: iv,
+                        signature: signature,
+                        encryptedData: encryptedData,
+                        rawData: rawData,
+                        openid: openid
+                    },
+                    header: app.globalData.header,
+                });
+                wx.setStorageSync('user', wxInfo.data);
+                wx.hideLoading();
+
+                // 求职者用户初始化
+                let insertCandidateData = {
+                    id: openid,
+                    realName: userInfo.nickName,
+                    gender: userInfo.gender,
+                    portraitPath: userInfo.avatarUrl,
+                    communityUuid: that.data.communityUuid
+                }
+                await userCandidateService.insertByEntity(insertCandidateData);
+                // 招聘人用户初始化
+                let insertRecruiterData = {
+                    id: openid,
+                    realName: userInfo.nickName,
+                    portraitPath: userInfo.avatarUrl,
+                }
+                await userRecruiterService.insertByEntity(insertRecruiterData);
+                // 社区用户初始化
+                let insertUserCommunityData = {
+                    id: openid,
+                    realName: userInfo.nickName,
+                    portraitPath: userInfo.avatarUrl,
+                }
+                await userCommunityService.insertByEntity(insertUserCommunityData);
+                let insertUserStateData = {
+                    id: openid,
+                }
+                await userStateService.insertByEntity(insertUserStateData);
+
+            } else {
+                //放在请求头里
+                app.globalData.header.Token = res.data.data.Token
+                wx.hideLoading();
+            }
+
+        } else {
+            console.error("接口调用失败!");
+        }
+
+        // that.userShzt(); // 用户审核状态
+    },
+
+    //获取微信用户信息
+    bindtapGetUserProfile(e) {
+        const scene = this.data.scene;
+        var that = this;
+
+        console.log(app.globalData.web_path)
+        console.log(app.globalData.appId)
+        console.log(e)
+        wx.getUserProfile({
+            desc: "获取你的昵称、头像、地区及性别", // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+            success: async (res) => {
+                console.log(res);
+                this.setData({
+                    userInfo: res.userInfo,
+                })
+                // 如果用户同意
+                this.setData({
+                    isUserAuthorized: true,
+                    hideUserInfoAuth: true,
+                });
+                try {
+                    Loading.begin();
+                    await that._saveUserInfo(res.userInfo, res.iv, res.signature, res.encryptedData, res.rawData, scene);
+                } catch (e) {
+                    console.error(e)
+                } finally {
+                    Loading.end();
+                }
+                this.state.authCompl.resolve();
+            }, fail: (res) => {
+                this.setData({
+                    isUserAuthorized: false,
+                    hideUserInfoAuth: true,
+                });
+                console.log(res);
+                console.error("用户没有给予授权，需要授权后赋以操作功能");
+                this.state.authCompl.resolve();
+            },
+        });
+    },
+    bindtapGoLink(e) {
+        let id = e.currentTarget.dataset.id;
+        let linkUrl = this.data.zhjy.find(v => {
+            return id == v.id;
+        }).url;
+        switch (id) {
+            case 'tagCompanyRecruit':
+                // 传入 授权级别
+                linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                break;
+            case 'tagCandidateRecruit':
+                // 传入 授权级别
+                linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                break;
+            // 网格录入
+            case 'tagCellInput':
+                wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_FLAG_ENTRY_GRID_OR_COMMUNITY, 'grid');
+                if (this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_ADMIN
+                    || this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_RECORDER) {
+                    linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                } else {
+                    wx.showModal({
+                        title: '您没有网格录入的权限',
+                    })
+                    return;
+                }
+                break;
+            // 社区管理
+            case 'tagCommunityManagement':
+                wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_FLAG_ENTRY_GRID_OR_COMMUNITY, 'community');
+                if (this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_ADMIN) {
+                    linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                } else {
+                    wx.showModal({
+                        title: '您没有社区管理的权限',
+                    })
+                    return;
+                }
+                break;
+            // 新闻公告
+            case 'tagNewsAnnouncement':
+                linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                break;
+            // 信息采集
+            case 'tagInformationCollect':
+                linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                break;
+            default:
+                break;
+        }
+        console.log(id)
+        // // 信息采集  权限判断
+        // if (id == 'tagInformationCollect' && CONSTANT.INFO_COLLECT_PERMISSION_LIST.indexOf(this.data.districtName) == -1) {
+        //     wx.showToast({
+        //         icon: 'error',
+        //         title: '您暂无权限',
+        //     })
+        //     return;
+        // }
+        wx.navigateTo({
+            url: linkUrl,
+        })
+    },
+    // 打电话
+    cellphone: function () {
+        let phone = this.data.communityPhone;
+        wx.makePhoneCall({
+            phoneNumber: phone,
+        });
+    },
+    //咨询详情
+    fczcbtnclick(e) {
+        console.log(e);
+        let newsUuid = e.currentTarget.id;
+        wx.navigateTo({
+            url: '/pages/zxxq/zxxq?newsUuid=' + newsUuid,
+        })
+    },
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+        app.globalMonitors.communityInfoChangeMonitor.removeListener(this.communityInfoChangeListener);
+
+    },
+
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: async function (options) {
+        let that = this;
+        let communityUuid = "";
+        const scene = decodeURIComponent(options.scene)
+        console.log(scene)
+        let ext1 = scene;
+        if (typeof(ext1)!='undefined') {
+            console.log(scene)
+            await this.getcommuit(ext1, that)
+        } 
+        if(that.data.communityUuid=="") {
+            communityUuid = options.communityUuid;
+            that.setData({
+                communityUuid: communityUuid,
+            });
+        }
+
+        //获取社区banner图
+        wx.request({
+            url: app.globalData.web_path + '/banner_for_page/searchCommunityBanner',
+            data: {
+                communityUuid: that.data.communityUuid
+            },
+            header: app.globalData.header,
+            success: function (res) {
+                console.log(res)
+                let images = res.data.bannerForPageList;
+                let backgroundimg1 = [];
+                let backgroundimg = [];
+                let ewm = "";
+                for (let i = 0; i < images.length; i++) {
+                    const element = images[i];
+                    var image = { imgsrc: images[i].bannerImgPath, url: images[i].pagePath }
+                    backgroundimg1.push(image)
+                    backgroundimg.push(image)
+                }
+                // console.log(images)
+                if (images.length > 0) {
+                    ewm = images[0].bannerImgPath
+                }
+                console.log(ewm)
+                that.setData({
+                    ewmimg: ewm
+                    // backgroundimg1:backgroundimg1,
+                    // backgroundimg:backgroundimg
+                })
+            },
+            fail: function (res) {
+            }
+        })
+        // 添加社区基本信息是否修改监听器（）
+        app.globalMonitors.communityInfoChangeMonitor.addListener(this.communityInfoChangeListener);
+        this.state.communityUuidCompleter = new Completer();
+
+        let openid = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_OPENID);
+        this.setData({ openid: openid });
+        // 传入社区id  如果获取不到  从全局获取
+        // let communityUuid = options.communityUuid;
+        // 测试
+        // communityUuid = 'e81eef01-a8ea-11ec-be0a-5076afbf1539';
+        console.log(communityUuid)
+        console.log(that.data.communityUuid)
+        if (string_util.isEmpty(that.data.communityUuid)) {
+            communityUuid = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_COMMUNITYUUID);
+        }
+        console.log("onload事件" + communityUuid);
+        // 设置变量到 data
+
+        // 完成器传入
+        this.state.communityUuidCompleter.resolve(that.data.communityUuid);
+
+        try {
+            await this._doAuthorize();
+            Loading.begin();
+            await this.loadContent();
+            wx.setNavigationBarTitle({
+                title: that.data.communityName
+            })
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+    },
+
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: async function () {
+
+    },
+    getcommuit: async function (ext1, that) {
+        let completer = new Completer();
+         wx.request({
+            url: app.globalData.web_path + '/banner_for_page/searchCommunity',
+            data: {
+                ext1: ext1
+            },
+            header: app.globalData.header,
+            success: function (res) {
+                console.log(res)
+                if(res.data.communityInformationList.length>0){
+                    communityUuid = res.data.communityInformationList[0].id;
+                    that.setData({
+                        communityUuid: communityUuid,
+                    });
+                }
+                completer.resolve();
+            },
+            fail: function (res) {
+                completer.resolve();
+            }
+        })
+        return completer.promise;
+    },
+    // 加载页面内容
+    loadContent: async function () {
+        // 加载 社区用户 权限
+        await app.getOpenidReady();
+        let openid = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_OPENID);
+
+        let communityUuid = await this.state.communityUuidCompleter.promise;
+        console.log(communityUuid);
+        let userCommunityData = await userCommunityService.loadEntityById(openid);
+        userCommunityData = userCommunityData.data;
+        console.log(userCommunityData);
+
+        this.setData({
+            authorizationLevel: (communityUuid == userCommunityData.communityUuid) ? userCommunityData.authorizationLevel : 0,
+        })
+        // 社区信息加载
+        let communityData = await communityInformationService.loadEntityById(communityUuid);
+        communityData = communityData.data;
+        console.log(communityData)
+        this.setData({
+            communityUuid: communityData.id,
+            communityName: communityData.communityName,
+            streetName: communityData.streetName,
+            districtName: communityData.districtName,
+            cityName: communityData.cityName,
+            provinceName: communityData.provinceName,
+            communityAddress: communityData.address,
+            communityPhone: communityData.phone,
+            communityPortraitPath: img_util.handleCommunityPortraitPath(communityData.portraitPath),
+        });
+
+        // 新闻加载
+        let newsData = await informationNewsService.loadListByCommunityUuid(" ", 3);
+
+        let newsList = newsData.data.map(v => {
+            return {
+                id: v.id,
+                articleTitle: v.articleTitle,
+                articleIntroduction: v.articleIntroduction,
+                articleAuthor: v.articleAuthor,
+                articleReleaseTime: date_util.dateToCN(v.articleReleaseTime),
+                articlePortraitPath: img_util.handleArticlePortraitPath(v.articlePortraitPath),
+            }
+        });
+        let newsData1 = await informationNewsService.loadListByCommunityUuid(communityUuid, 3);
+        let newsList1 = newsData1.data.map(v => {
+            return {
+                id: v.id,
+                articleTitle: v.articleTitle,
+                articleIntroduction: v.articleIntroduction,
+                articleAuthor: v.articleAuthor,
+                articleReleaseTime: date_util.dateToCN(v.articleReleaseTime),
+                articlePortraitPath: img_util.handleArticlePortraitPath(v.articlePortraitPath),
+            }
+        });
+        for (let index = 0; index < newsList1.length; index++) {
+            newsList.push(newsList1[index])
+
+        }
+        console.log(newsList);
+        this.setData({
+            newsList: newsList,
+        });
+
+    },
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    },
+    ...listener.createListenerMethods(),
+})

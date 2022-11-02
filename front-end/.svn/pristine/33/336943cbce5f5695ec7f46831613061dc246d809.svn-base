@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "简历修改",
+  "usingComponents": {
+    "choose-community": "/components/chooseCommunity/chooseCommunity"
+  }
+}

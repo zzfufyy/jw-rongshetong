@@ -1,0 +1,69 @@
+<view class="container">
+    <view class="topbox clearfloat">
+        <view class="ft">
+            <!-- <image class="sqzy" src="/img/sqzy.png"></image> -->
+            <image class="sqzy" src="{{communityPortraitPath}}" binderror="binderrorCommunityPortraitPath"></image>
+        </view>
+        <view class="ft lrbox">
+            <view class="sqname">
+                <text class="namesq">{{communityName}} </text>
+                <image class="phoneimg" bindtap="bindtapCommunityCellphone" src="/img/phoneimg.png"></image>
+            </view>
+            <view class="local">
+                <image class="localimg" src="/img/localimg.png"></image>
+                <text class="localtt">{{communityAddress}} </text>
+            </view>
+        </view>
+    </view>
+    <view class="content">
+        <navigator wx:for="{{functionTagList}}" wx:key="key" hover-class="none" bindtap="bindtapGoLink" data-id="{{item.tagId}}" target="{{item.target}}" app-id="{{item.appId}}" class="vcont" style="background: {{item.backgroundColor}};">
+            <image class="qyzp" src="{{item.logoPathBig}}"></image>
+            <text class="qytext">{{item.tagName}}</text>
+        </navigator>
+        <navigator hover-class="none" bindtap="bindtapGoMoreFunction"  data-id="tagNewsAnnouncement" class="vcont" style="background: #EAFBF8;">
+            <image class="qyzp" src="/img/moregn.png"></image>
+            <text class="qytext">更多功能</text>
+        </navigator>
+    </view>
+
+    <block wx:if="{{ewmimg!=''}}">
+        <view class="line10"></view>
+        <navigator hover-class="none" url="/pages/syzl/syzl" class="imgbox">
+            <image src="{{ewmimg}}" show-menu-by-longpress="true" style="width: 100%;" mode="widthFix" class="ewmimg"></image>
+        </navigator>
+    </block>
+    <view class="line10" style="margin-top: -4px;"></view>
+
+    <view class="newsbox">
+        <view class="titbox clearfloat">
+            <view class="ft">
+                <image class="newimg" src="/img/newimg.png"></image>
+                <text class="newtit">新闻公告</text>
+            </view>
+            <view class="fr qbnews" bindtap="bindtapTagNewsAnnouncement">
+                全部 >
+            </view>
+        </view>
+        <block wx:for="{{newsList}}" wx:key="key">
+            <!-- url="/pages/zcxq/zcxq" -->
+            <navigator hover-class="none" id="{{item.id}}" bindtap="bindtapAllNews" class="mainbox clearfloat">
+                <view class="ft leftimgbox">
+                    <image class="ltimg" src="{{item.articlePortraitPath}}" data-index="{{index}}" binderror="binderrorArticlePortraitPath">
+                    </image>
+                </view>
+                <view class="fr rightbox">
+                    <view class="title">{{item.articleTitle}}</view>
+                    <view class="ptit">{{item.articleIntroduction}}</view>
+                    <view class="clearfloat">
+                        <view class="ptime ft">{{item.articleAuthor}}</view>
+                        <view class="ptime fr">{{item.articleReleaseTime}}</view>
+                    </view>
+                </view>
+            </navigator>
+            <view class="line1"></view>
+        </block>
+    </view>
+</view>
+
+<authorize id="authorize">
+</authorize>

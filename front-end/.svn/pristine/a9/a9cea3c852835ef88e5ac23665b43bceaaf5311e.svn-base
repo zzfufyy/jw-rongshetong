@@ -1,0 +1,123 @@
+
+const GLOBAL_CONSTANT = require('./globalConstant');
+const CONSTANT = require('./constant');
+
+const { Completer } = require('../utils/function_util');
+const string_util = require('../utils/string_util');
+
+const userStateService = require('./userStateService');
+
+const app = getApp();
+
+const getUserRole = async function () {
+    let userRole = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY);
+    if (string_util.isEmpty(userRole)) {
+        // 全局获取不到尝试从数据库获取
+        let userStateData = await userStateService.loadEntityById(openid);
+        userStateData = userStateData.data;
+        switch (userStateData.userRole) {
+            case 0: userRole = CONSTANT.UserRole.Vistor; break;
+            case 1: userRole = CONSTANT.UserRole.Recruitee; break;
+            case 2: userRole = CONSTANT.UserRole.Recruiter; break;
+            default: break;
+        }
+    }
+    if(!userRole){
+        throw new Error("error: 获取不到用户角色");
+    }
+    console.debug("当前用户角色是：" + userRole);
+    wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY, userRole);
+    return userRole;
+}
+
+// 尝试切换至求职者
+const trySwitchToCandidate = async function () {
+    let switchCompleter = new Completer();
+    await app.getOpenidReady();
+    let openid = app.getOpenid();
+    let userRole = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY);
+    try {
+        if (userRole == CONSTANT.UserRole.Recruitee) {
+            switchCompleter.resolve(true);
+        } else {
+            let wxModal = wx.showModal({
+                title: '提示',
+                content: '您当前身份不是求职者，需切换为求职者身份',
+            });
+            await wxModal.then(async res => {
+                if (res.confirm) {
+                    console.debug(`用户 确认切换至 求职者身份openid:${openid}`)
+                    // 保存本次用户登录信息
+                    let updateUserState = {
+                        id: openid,
+                        userRole: 1,
+                    }
+                    await userStateService.updateByEntity(updateUserState);
+                    // 保存登录角色信息
+                    wx.showToast({
+                        title: '身份切换成功',
+                        duration: 2000,
+                    })
+                    wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY, CONSTANT.UserRole.Recruitee);
+                    switchCompleter.resolve(true);
+                } else if (res.cancel) {
+                    console.debug('用户 取消切换至求职者身份')
+                    switchCompleter.resolve(false);
+                }
+            });
+        }
+    } catch (e) {
+        switchCompleter.resolve(false);
+        throw new Error("error: 切换身份至求职者 - 程序出错");
+    }
+    return switchCompleter.promise;
+};
+
+// 尝试切换至 招聘者
+const trySwitchToRecruiter = async function () {
+    let switchCompleter = new Completer();
+    await app.getOpenidReady();
+    let openid = app.getOpenid();
+    let userRole = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY);
+    try {
+        if (userRole == CONSTANT.UserRole.Recruiter) {
+            switchCompleter.resolve(true);
+        } else {
+            let wxModal = wx.showModal({
+                title: '提示',
+                content: '您当前身份不是招聘者，需切换为招聘者身份',
+            });
+            await wxModal.then(async res => {
+                if (res.confirm) {
+                    console.debug(`用户 确认切换至 招聘者身份openid:${openid}`)
+                    // 保存本次用户登录信息
+                    let updateUserState = {
+                        id: openid,
+                        userRole: 2,
+                    }
+                    await userStateService.updateByEntity(updateUserState);
+                    // 保存登录角色信息
+                    wx.showToast({
+                        title: '身份切换成功',
+                        duration: 2000,
+                    })
+                    wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY, CONSTANT.UserRole.Recruiter);
+                    switchCompleter.resolve(true);
+                } else if (res.cancel) {
+                    console.debug('用户 取消切换至招聘者身份')
+                    switchCompleter.resolve(false);
+                }
+            });
+        }
+    } catch (e) {
+        switchCompleter.resolve(false);
+        throw new Error("error: 切换身份至招聘者 - 程序出错");
+    }
+    return switchCompleter.promise;
+};
+
+module.exports = {
+    trySwitchToCandidate: trySwitchToCandidate,
+    trySwitchToRecruiter: trySwitchToRecruiter,
+    getUserRole: getUserRole,
+}

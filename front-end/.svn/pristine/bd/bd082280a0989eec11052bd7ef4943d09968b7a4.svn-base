@@ -1,0 +1,12 @@
+const string_util = require('./string_util');
+
+const app= getApp();
+
+const isUploadPathLegal = function(path){
+    return (string_util.isEmpty(path) || path.includes(app.globalData.web_path))? false: true;
+}
+
+
+module.exports = {
+    isUploadPathLegal: isUploadPathLegal,
+}

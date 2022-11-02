@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "竟网智慧就业",
+    "usingComponents": {
+        "authorize": "/components/authorize/authorize"
+    }
+}

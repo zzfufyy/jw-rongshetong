@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.UserCommunityMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.UserCommunity">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="cell_uuid" jdbcType="VARCHAR" property="cellUuid" />
+    <result column="community_uuid" jdbcType="VARCHAR" property="communityUuid" />
+    <result column="authorization_level" jdbcType="TINYINT" property="authorizationLevel" />
+    <result column="authorization_identification" jdbcType="TINYINT" property="authorizationIdentification" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+    <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+    <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, real_name, cell_uuid, community_uuid, authorization_level, authorization_identification, 
+    status, create_time, ext1, ext2, ext3
+  </sql>
+</mapper>

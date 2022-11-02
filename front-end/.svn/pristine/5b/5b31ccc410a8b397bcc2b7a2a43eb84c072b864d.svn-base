@@ -1,0 +1,312 @@
+.page-section-spacing {
+	margin-left: 10px;
+	padding: 10px 0;background: #F8F8F8;
+}
+.scroll-view_H {
+	white-space: nowrap;
+}
+.vv {
+	width: 700rpx;
+	height: 530rpx;
+	border-left: gainsboro 1px solid;
+	border-right: gainsboro 1px solid;
+	border-top: gainsboro 1px solid;
+	border-radius: 15rpx;
+	overflow: hidden;
+	position: relative;
+}
+.scroll-view-item_H {
+	display: inline-block;
+	width: 159px;
+	height: 108px;
+	margin-right: 10px;
+}
+.videoVideo2 {
+	width: 48px;
+	height: 48px;
+	position: absolute;
+	z-index: 0;right: 11px;bottom: 10px;
+}
+.cover{
+	position: relative;
+}
+.xdname{
+	font-size: 14px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #FFFFFF;margin: 15px 0 10px 17px;
+}
+.zczph{
+	font-size: 12px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #FFFFFF;margin: 0px 0 17px 17px;
+}
+.jrzc{
+	font-size: 12px;
+	font-family: Source Han Sans CN-Bold, Source Han Sans CN;
+	font-weight: bold;
+	color: #FFFFFF;margin: 0px 0 0px 17px;
+}
+.top_nav {
+	display: flex;
+}
+.nav-name {
+	display: inline-block;
+	text-align: center;
+	height: 40px;
+	line-height: 40px;
+	background: #fff;
+	width: 100%;
+	color: #333333;
+	padding: 18rpx 18rpx 10rpx 18rpx;
+	font-size: 14px;
+	opacity: 0.6;
+}
+.nav-hover {
+	font-size: 14px;
+	font-family: Source Han Sans CN;
+	background: #fff;
+	opacity: 1;
+	color: #333333;
+	font-weight: bold;
+}
+.nav-hover .linbc {
+	width: 35px;
+	height: 4px;
+	background: rgba(67, 118, 228, 1);
+	margin: 0 auto;
+	border-radius: 3px;
+}
+.sssx {
+	margin: 11px 0 0 0;
+}
+.lt {
+	width: 80%;
+	position: relative;
+	left: 15px;
+}
+.INsearchicon {
+	position: absolute;
+	left: 8px;
+	top: 5px;
+}
+.weui-input {
+	height: 30px;
+	line-height: 30px;
+	text-align: left;
+	padding-left: 30px;
+	letter-spacing: 0px;
+	background-color: #EFEFEF;
+	border-radius: 30px;
+	color: #333;
+	font-size: 14px;
+}
+.qudssbtn {
+	font-size: 14px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #F8424C;
+	position: absolute;
+	top: 4px;
+	z-index: 99;
+	right: 14px;
+}
+.czan {
+	color: #999999;
+	margin-left: 26px;
+	font-size: 14px;
+	margin-top: 5px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+}
+.jobbox1 {
+	margin: 0 16px 0 20px;
+	padding-bottom: 19px;
+}
+.jobbox2 {
+	margin: 0 16px 0 20px;
+	padding-bottom: 10px;
+}
+.ltbox {
+	width: 70%;
+}
+.jobname {
+	font-size: 18px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: 500;
+	margin-top: 23px;
+	color: #333333;
+}
+.jobmoney {
+	font-size: 16px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: 500;
+	margin: 14px 0 8px 0;
+	color: #F8424C;
+}
+.companyname1 {
+	font-size: 14px;
+	font-family: SimHei-Regular, SimHei;
+	font-weight: 400;
+	color: #999999;
+}
+.companyname2 {
+	font-size: 14px;
+	font-family: SimHei-Regular, SimHei;
+	font-weight: 400;
+	color: #999999;margin-top: 17px;
+}
+.companytx {
+	width: 22px;
+	height: 22px;
+	vertical-align: middle;
+	background: #CBCBCB;
+	border-radius: 50%;
+}
+.far {
+	font-size: 14px;
+	margin-top: 23px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: 500;
+	color: #999999;
+	text-align: right;
+}
+.phonecall {
+	height: 30px;
+	width: 70px;
+	margin-top: 32px;
+	background: #FFFFFF;
+	border-radius: 0px 0px 0px 0px;
+	font-size: 12px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: 500;
+	color: #F8424C;
+	opacity: 1;
+	border: 1px solid #F8424C;
+	line-height: 30px;
+	text-align: center;
+}
+.phonecall1 {
+	height: 30px;
+	width: 70px;
+	margin-top: 16px;
+	background: #FFFFFF;
+	border-radius: 0px 0px 0px 0px;
+	font-size: 12px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: 500;
+	color: #F8424C;
+	opacity: 1;
+	border: 1px solid #F8424C;
+	line-height: 30px;
+	text-align: center;
+}
+.jtbox {
+	width: 0;
+	height: 0;
+	border: 7px solid transparent;
+	position: absolute;
+	top: 6px;
+	margin-left: 4px;
+	margin-right: 10px;
+	border-top-color: #A9A9A9;
+	display: inline;
+	font-size: 14px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+}
+.sx {
+	position: relative;
+	/* color: #A9A9A9; */
+	margin-right: 10px;
+	margin-top: 4px;width: 50px;
+}
+.topjlsg {
+	margin: 17px 10px 19px 10px;
+}
+.yx {
+	font-size: 14px;
+	margin-left: 10px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #999999;
+}
+.sxac {
+	color: #F8424C;
+	margin-right: 23px;
+	font-size: 14px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+}
+.xz {
+	transform: rotate(180deg);
+	top: 16px;
+	border-top-color: #F8424C;
+}
+.yxbox {
+	margin: 6px 10px 19px 10px;
+	display: flex;
+	flex-wrap: wrap;
+}
+.yxforbox {
+	width: 30%;
+	margin-right: 3%;
+	margin-top: 10px;
+	font-size: 12px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #333333;
+	background: #F7F8FA;
+	padding: 9px 0;
+	text-align: center;
+}
+.active {
+	color: #F8424C;
+	background: #FFEBED;
+}
+.btmbtnbox {
+	display: flex;
+	justify-content: space-around;
+	padding-bottom: 37px;
+	margin-top: 30px;
+}
+.clear {
+	font-size: 18px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	width: 29%;
+	border-radius: 4px 4px 4px 4px;
+	color: #FFFFFF;
+	border: 1px solid #F8424C;
+	color: #F8424C;
+	height: 46px;
+	line-height: 46px;
+	text-align: center;
+}
+.qd {
+	background: #F8424C;
+	height: 46px;
+	line-height: 46px;
+	text-align: center;
+	border-radius: 4px 4px 4px 4px;
+	font-size: 18px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #FFFFFF;
+	width: 56%;
+}
+.zxfj{
+	border-bottom: 1px solid #F5F5F5;
+}
+.zx{
+	display: inline-block;font-size: 14px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: 500;
+	color: #999999;margin: 11px 40px 13px 30px;
+}
+.actfj{
+	font-size: 14px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: 500;
+	color: #333;
+}
+
+

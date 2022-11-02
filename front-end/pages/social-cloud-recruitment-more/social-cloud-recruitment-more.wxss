@@ -1,0 +1,88 @@
+page {
+    background-color: #F5F5F5;
+}
+.bg-FFFFFF{
+    background-color: #FFFFFF;
+}
+.top-box {
+
+    width: 100%;
+    height: 80rpx;
+    padding: 0rpx 30rpx;
+
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+}
+
+.top-box-text {
+    font-size: 28rpx;
+    color: #999999;
+}
+
+.split-line-20 {
+    width: 100%;
+    height: 20rpx;
+    background-color: #F5F5F5;
+}
+
+.company-box{
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    border-bottom: 2rpx solid #EEEEEE;
+}
+
+.company-video{
+    width: 690rpx;
+    height: 384.86rpx;
+
+    border-radius: 16rpx;
+    margin-top: 24rpx;
+}
+
+.company-text-box{
+    height: 90rpx;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.company-name{
+    margin-left: 30rpx;
+    color: #333333;
+    font-size: 32rpx;
+    font-weight: 600;
+}
+
+.company-more-box{
+    margin-right: 30rpx;
+    height: 100%;
+    display: flex;
+    flex-flow: row  nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.more-text{
+    color: #3182FD;
+    font-size: 24rpx;
+    margin-right: 6rpx;
+
+}
+
+.more-icon{
+    height: 24rpx;
+    width: 24rpx;
+    opacity: 0.8;
+}
+
+

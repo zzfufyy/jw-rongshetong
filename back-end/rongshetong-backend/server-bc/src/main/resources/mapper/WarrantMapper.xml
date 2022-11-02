@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.WarrantMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Warrant">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="warrantname" jdbcType="VARCHAR" property="warrantname" />
+    <result column="warrantfl" jdbcType="VARCHAR" property="warrantfl" />
+    <result column="warrantqx" jdbcType="VARCHAR" property="warrantqx" />
+    <result column="edu" jdbcType="VARCHAR" property="edu" />
+    <result column="warrantcontext" jdbcType="VARCHAR" property="warrantcontext" />
+    <result column="yl1" jdbcType="VARCHAR" property="yl1" />
+    <result column="yl2" jdbcType="VARCHAR" property="yl2" />
+    <result column="yl3" jdbcType="VARCHAR" property="yl3" />
+    <result column="sfsx" jdbcType="VARCHAR" property="sfsx" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, warrantname, warrantfl, warrantqx, edu, warrantcontext, yl1, yl2, yl3, sfsx
+  </sql>
+</mapper>

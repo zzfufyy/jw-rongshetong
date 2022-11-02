@@ -1,0 +1,12 @@
+<view class="container">
+    <view class="row-box .flex-row-start">
+        <view class="title-icon"></view>
+        <text class="title-text">基础题型</text>
+    </view>
+    <view class="row-box flex-row-between">
+            <view class="option-box flex-column" wx:for="{{optionList}}" bindtap="bindtapChooseType" data-index="{{index}}">
+                <image class="option-icon" src="{{item.iconSrc}}" />
+                <text class="option-text">{{item.iconTitle}}</text>
+            </view>
+    </view>
+</view>

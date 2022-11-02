@@ -1,0 +1,112 @@
+<view class="container">
+    <view class="clearfloat topbox">
+        <view class="jobname">{{jobName}}</view>
+        <view class="jobmony">{{salaryScope}}</view>
+        <!-- <view class="jobyq">{{location}}</view> -->
+        <view class="jobyq">
+            <text decode="true">{{jobyq.rs}}&ensp;|&ensp;浏览量:{{countView}}</text>
+        </view>
+    </view>
+    <!-- <view class="line1"></view> -->
+    <view class="clearfloat topbox">
+        <view class="ft">
+            <image class="ltimg" src="{{recruiterPortrait}}" binderror="binderrorPortraitImg"></image>
+            <view class="rttext">
+                <view class="nacs">
+                    <text class="namezzp" decode="true">{{recruiterName}}&ensp;</text>
+                    <text>·招聘人</text>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="topbox">
+        <view class="xqxq">
+            <view class="jobname" style="margin-bottom:15px">岗位需求</view>
+            {{jobIntroduction}}
+        </view>
+    </view>
+    <view class="interlayer-box" wx:if="{{jobBasicWorkfare}}">
+        <view class="xqxq">
+            <view class="jobname" style="margin-bottom:15px">基本福利</view>
+            {{jobBasicWorkfare}}
+        </view>
+    </view>
+    <view class="interlayer-box" wx:if="{{jobRequireMajor}}">
+        <view class="xqxq">
+            <view class="jobname" style="margin-bottom:15px">专业要求</view>
+            {{jobRequireMajor}}
+        </view>
+    </view>
+    <view class="interlayer-box" wx:if="{{jobRequireSkill}}">
+        <view class="xqxq">
+            <view class="jobname" style="margin-bottom:15px">技能要求</view>
+            {{jobRequireSkill}}
+        </view>
+    </view>
+    <!-- <view class="line1"></view> -->
+    <!-- <view class="line1"></view> -->
+    <view class="topbox comxx">
+        <view class="jobname">公司信息</view>
+        <view class="zzzw" bindtap="bindtapRecruitingJob" hidden="{{hideRecruitingJob}}">
+            {{countJob}}
+            <text class="zw">个在招职位</text>
+            <image src="/img/jt.png" class="rtjtimg"></image>
+        </view>
+        <view class="combox">
+            <view class="comtb clearfloat">
+                <view class="imgbox">
+                    <!-- <image class="ltimg" src="/img/tx.png" ></image> -->
+                    <image class="ltimg" src="{{portraitPath}}" binderror="binderrorCompanyPortrait"></image>
+                    <text class="comname">{{companyName}}</text>
+                </view>
+                <view class="conadrres clearfloat">
+                    <view class="ft addressloc">{{conadrres}}</view>
+                    <view class="fr local">{{distance}}</view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <!-- <button type="default" bindtap="openMap">打开地图</button>
+	<map 
+		id="mapId"
+		class="map"
+		latitude="{{latitude}}"
+		longitude="{{longitude}}"
+		bindtap="openMap"
+	></map> -->
+    <!-- <view class="line1"></view> -->
+    <view class="botombox clearfloat">
+        <button class="imgbt ft buttonbox" bindtap="isshow" style="margin-left: 9px;">
+            <image src="/img/fximg.png" class="imgbg ft"></image>
+        </button>
+        <!-- <image class="imgbt ddh ft" data-cellphne="{{cellphne}}" bindtap="callPhone" src="/img/dhred.png"></image> -->
+        <view class="fr tijsq tdjl" bindtap="tdjl">投递简历</view>
+        <view class="fr tijsq ddh" data-cellphne="{{cellphne}}" bindtap="callPhone">打电话</view>
+        <view class="fr tijsq ddh" data-cellphne="{{cellphne}}" bindtap="msxx">视频面试</view>
+        <!-- <view class="fr tijsq lyl" bindtap="talk">聊一聊</view> -->
+    </view>
+</view>
+<view class="zzc" bindtap="isshow" hidden="{{showshare}}"></view>
+<view class="sxbox1" hidden="{{showshare}}">
+    <view class="pyq" bindtap="formSubmit">
+        <image class="pyqimg" src="/img/pyq.png"></image>
+        <text class="pyqtxt">生成朋友圈图片</text>
+    </view>
+    <view class="line1"></view>
+    <button class="pyq pyqbtn" open-type="share">
+        <image class="pyqimg" src="/img/wxhy.png"></image>
+        <text class="pyqtxt">转发给好友或群聊</text>
+    </button>
+</view>
+<!-- 生成海报 -->
+<view class='imagePathBox' hidden="{{maskHidden == false}}">
+    <image class="closeimgbtn" bindtap="closeimg" src="/img/gbimg.png"></image>
+    <image src="{{imagePath}}" show-menu-by-longpress="true" class='shengcheng'></image>
+    <button class='baocun' bindtap='baocun'>保存相册，分享到朋友圈</button>
+</view>
+<view hidden="{{maskHidden == false}}" class="mask"></view>
+<view class="canvas-box">
+    <canvas style="width: 375px;height:734px;position:fixed;z-index: -1;opacity: 0;left: -700px;" canvas-id="mycanvas" />
+</view>
+<!-- 授权组件 -->
+<authorize id='authorize'></authorize>

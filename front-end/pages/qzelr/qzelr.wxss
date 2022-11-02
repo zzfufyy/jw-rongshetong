@@ -1,0 +1,210 @@
+.personbox {
+	margin: 0 10px;
+	padding-top: 20px;
+	border-bottom: 1px solid #F2F2F2;
+	padding-bottom: 20px;
+}
+.clearfloat .clearfloat {
+	padding-left: 20px;
+}
+.tybox {
+	margin-top: 0px;
+}
+.qzyx {
+	font-weight: bold;
+	font-size: 20px;
+	margin-bottom: 25px;
+}
+.tjia {
+	width: 55px;
+	height: 25px;
+	line-height: 25px;
+	text-align: center;
+	background: #FFFFFF;
+	border-radius: 3px 3px 3px 3px;
+	opacity: 1;
+	border: 1px solid #ECB29E;
+	font-size: 12px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: 500;
+	color: #FF4829;
+	margin-right: 20px;
+}
+
+
+.tximg{
+	border-radius: 50%;width: 70px;height: 70px;margin-left: 19px;margin-right: 12px;vertical-align: middle;
+}
+.name{
+	font-size: 22px;
+font-family: SimHei-Regular, SimHei;
+font-weight: 400;
+color: #333333;margin-top: 6px;margin-bottom: 10px;
+}
+.sex{
+	font-size: 16px;
+font-family: SimHei-Regular, SimHei;
+font-weight: 400;
+color: #999999;
+}
+.personbox{
+	margin: 0 10px;padding-top: 20px;border-bottom: 1px solid #F2F2F2;padding-bottom: 20px;
+}
+.imgjt{
+	width: 19px;
+	height: 18px;vertical-align: middle;
+	/* margin-top: -3px;     */
+	/* margin-right: 23px; */
+}
+.frimg{
+	height: 70px;
+    line-height: 70px;
+		text-align: right;
+		/* margin-right: 23px; */
+}
+
+.tybox{
+	margin-top: 0px;
+}
+.qzyx{
+	font-weight: bold;font-size: 20px;margin-bottom: 25px;
+}
+.sqname{
+	margin-right:10px;
+}
+.monbox{
+	margin-top: 8px;	color: #666666;font-size: 14px;
+}
+.yxjobname{
+	color: #666666;font-size: 16px;
+}
+.tjia{
+	width: 55px;
+	height: 25px;
+	line-height: 25px;text-align: center;
+	background: #FFFFFF;
+	border-radius: 3px 3px 3px 3px;
+	opacity: 1;
+	border: 1px solid #ECB29E;
+	font-size: 12px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: 500;
+	color: #FF4829;margin-right: 20px;
+}
+.clearfloat  .clearfloat {
+	padding-left: 20px;
+}
+page{
+	/* background-color: #F6F6F6; */
+}
+.container{background-color: #fff;padding-bottom: 30px;}
+.cmname{
+	font-size: 16px;
+font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+font-weight: 400;
+color: #333;margin-bottom: 8px;
+}
+.namejob{
+	font-size: 14px;margin-bottom: 4px;
+font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+font-weight: 400;line-height: 18px;
+color: #999999;
+}
+.yyzz{
+	width: 80px;
+	height: 60px;
+	margin-top: 25px;
+}
+.qyfc{
+	width: 30%;
+}
+.flexbox{
+	display: flex;
+	justify-content: space-between;
+}
+.imgtx{
+	width: 60px;
+	height: 60px;
+	border-radius: 5px 5px 5px 5px;
+	opacity: 1;
+	border: 1px solid #EEEEEE;margin-right: 20px;
+}
+.crbox{
+	margin: 26px 20px 20px 28px;
+}
+.comnamebox{
+	font-size: 22px;
+	font-family: Source Han Sans CN-Bold, Source Han Sans CN;
+	font-weight: bold;
+	color: #333333;
+	/* height: 52px; */
+	/* width:60% ; */
+}
+.txtbox{
+	margin:0px 20px 10px 28px; 
+}
+.line1{
+	margin: 0 10px;
+}
+.sqname{
+	font-size: 14px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #666666;
+	margin-top: 12px;
+}
+.sqwj{
+	font-size: 14px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #FF4829;border-bottom: 1px solid #FF4829;margin-left: 12px;
+}
+.qypllr{
+	font-size: 14px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #333333;padding: 13px 0 13px 20px;
+}
+.ptfj{
+	padding: 15px 0 11px 22px;
+	font-size: 14px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: 500;
+	color: #333333;
+}
+.fjnamebox{
+	padding-bottom: 12px;
+}
+.fjname{
+	width: 18px;height: 18px;margin-left: 22px;vertical-align: middle;
+}
+.scfile{
+	margin-left: 8px;
+}
+.scbtn{
+	font-size: 12px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	margin-left: 15px;
+	color: #999999;
+}
+.qdlr{
+	margin: 0 20px;padding-top: 10px;
+	border-top: 1px solid #F7F7F7;padding-bottom: 21px;
+}
+.qdlrbtn{
+	width: 76px;
+	height: 25px;
+	background: #2B80FE;
+	border-radius: 3px 3px 3px 3px;
+	opacity: 1;color: #fff;color: #FFFFFF;
+	font-size: 14px;line-height: 25px;text-align: center;
+}
+
+
+
+
+
+
+
+

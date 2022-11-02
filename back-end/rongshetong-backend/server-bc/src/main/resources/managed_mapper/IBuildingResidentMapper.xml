@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IBuildingResidentMapper">
+    <resultMap id="BaseResultMap" type="com.shopping.wx.model.BuildingResident">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="which_layer" jdbcType="INTEGER" property="whichLayer" />
+        <result column="which_layer_family" jdbcType="INTEGER" property="whichLayerFamily" />
+        <result column="resident_name" jdbcType="VARCHAR" property="residentName" />
+        <result column="resident_phone" jdbcType="VARCHAR" property="residentPhone" />
+        <result column="resident_address" jdbcType="VARCHAR" property="residentAddress" />
+        <result column="resident_number" jdbcType="TINYINT" property="residentNumber" />
+        <result column="employee_number" jdbcType="TINYINT" property="employeeNumber" />
+        <result column="house_space" jdbcType="INTEGER" property="houseSpace" />
+        <result column="house_chamber" jdbcType="TINYINT" property="houseChamber" />
+        <result column="house_hall" jdbcType="TINYINT" property="houseHall" />
+        <result column="electrocar_number" jdbcType="VARCHAR" property="electrocarNumber" />
+        <result column="flag_company" jdbcType="TINYINT" property="flagCompany" />
+        <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+        <result column="business_register_id" jdbcType="VARCHAR" property="businessRegisterId" />
+        <result column="license_permission_id" jdbcType="VARCHAR" property="licensePermissionId" />
+        <result column="juridical_person" jdbcType="VARCHAR" property="juridicalPerson" />
+        <result column="juridical_phone" jdbcType="VARCHAR" property="juridicalPhone" />
+        <result column="company_remark" jdbcType="VARCHAR" property="companyRemark" />
+        <result column="sign_img_path" jdbcType="VARCHAR" property="signImgPath" />
+        <result column="surveyor_name" jdbcType="VARCHAR" property="surveyorName" />
+        <result column="building_uuid" jdbcType="VARCHAR" property="buildingUuid" />
+        <result column="cell_uuid" jdbcType="VARCHAR" property="cellUuid" />
+        <result column="community_uuid" jdbcType="VARCHAR" property="communityUuid" />
+        <result column="flag_register" jdbcType="TINYINT" property="flagRegister" />
+        <result column="register_time" jdbcType="TIMESTAMP" property="registerTime" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+        <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+        <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+    </resultMap>
+    <delete id="deleteByBuildingAndLayerList">
+        DELETE FROM  building_resident
+        WHERE building_uuid in (
+          <foreach collection="buildingUuidList" item="bu" index="index" separator=",">
+              #{bu}
+          </foreach>
+        ) AND which_layer in(
+          <foreach collection="layerList" item="l" index="index" separator=",">
+              #{l}
+          </foreach>
+        )
+    </delete>
+
+    <delete id="deleteByBuildingAndLayerFamilyList">
+        DELETE FROM  building_resident
+        WHERE building_uuid in (
+        <foreach collection="buildingUuidList" item="bu" index="index" separator=",">
+            #{bu}
+        </foreach>
+        ) AND which_layer_family in(
+        <foreach collection="layerFamilyList" item="lf" index="index" separator=",">
+            #{lf}
+        </foreach>
+        )
+    </delete>
+    
+    
+    <insert id="insertByList" parameterType="java.util.List">
+        INSERT INTO building_resident(
+        id,
+        which_layer,
+        which_layer_family,
+        building_uuid,
+        cell_uuid,
+        community_uuid,
+        status,
+        create_time
+        ) VALUES
+        <foreach collection="listBuildingResident" item="br" index="index" separator=",">
+            (
+            #{br.id},
+            #{br.whichLayer},
+            #{br.whichLayerFamily},
+            #{br.buildingUuid},
+            #{br.cellUuid},
+            #{br.communityUuid},
+            0,
+            now()
+            )
+        </foreach>
+    </insert>
+
+    <resultMap id="BuildingResidentDTOMap" type="com.shopping.wx.pojo.dto.building_resident.BuildingResidentDTO"
+               extends="BaseResultMap">
+        <result column="building_name" jdbcType="VARCHAR" property="buildingName"/>
+        <result column="cell_name" jdbcType="VARCHAR" property="cellName"/>
+        <result column="community_name" jdbcType="VARCHAR" property="communityName"/>
+    </resultMap>
+    <select id="infoWithAssociated" resultMap="BuildingResidentDTOMap">
+            SELECT
+                br.*,
+                ccb.building_name as building_name,
+                cc.cell_name as cell_name,
+                ci.community_name as community_name
+            FROM building_resident br
+            LEFT JOIN community_cell_building ccb
+            ON br.building_uuid = ccb.id
+            LEFT JOIN community_cell cc
+            ON br.cell_uuid = cc.id
+            LEFT JOIN community_information ci
+            ON br.community_uuid = ci.id
+            WHERE br.id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,13 @@
+
+
+function formatRoomNum(whichLayer, whichLayerFamily) {
+    let tempWhichLayer = whichLayer + "";
+    tempWhichLayer = (tempWhichLayer.length == 1) ? "0" + tempWhichLayer : tempWhichLayer;
+    let tempWhichLayerFamily = whichLayerFamily + "";
+    tempWhichLayerFamily = (tempWhichLayerFamily.length == 1) ? "0" + tempWhichLayerFamily : tempWhichLayerFamily;
+    return tempWhichLayer + tempWhichLayerFamily;
+}
+
+module.exports = {
+    formatRoomNum: formatRoomNum,
+}

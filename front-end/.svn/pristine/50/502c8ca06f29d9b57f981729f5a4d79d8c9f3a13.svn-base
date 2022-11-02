@@ -1,0 +1,26 @@
+const $ = require('../utils/request_util')
+
+
+const loadList = function () {
+    return $.request({
+        url: '/community-info/list',
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader
+    })
+}
+
+const loadListByCommunityUuid = function (communityUuid) {
+    return $.request({
+        url: '/community-info/listByCommunityUuid?communityUuid=' + communityUuid,
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader
+    })
+}
+
+
+module.exports = {
+    loadList: loadList,
+    loadListByCommunityUuid:loadListByCommunityUuid,
+}

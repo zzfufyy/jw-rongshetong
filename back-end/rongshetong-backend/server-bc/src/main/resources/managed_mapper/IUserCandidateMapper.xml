@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IUserCandidateMapper">
+    <resultMap id="BaseResultMap" type="com.shopping.wx.model.UserCandidate">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="real_name" jdbcType="VARCHAR" property="realName" />
+        <result column="identity_card" jdbcType="VARCHAR" property="identityCard" />
+        <result column="gender" jdbcType="TINYINT" property="gender" />
+        <result column="birthday" jdbcType="DATE" property="birthday" />
+        <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+        <result column="working_age" jdbcType="TINYINT" property="workingAge" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="lon" jdbcType="DOUBLE" property="lon" />
+        <result column="lat" jdbcType="DOUBLE" property="lat" />
+        <result column="marraige_state" jdbcType="TINYINT" property="marraigeState" />
+        <result column="political_state" jdbcType="TINYINT" property="politicalState" />
+        <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+        <result column="personnel_state" jdbcType="TINYINT" property="personnelState" />
+        <result column="portrait_path" jdbcType="VARCHAR" property="portraitPath" />
+        <result column="expect_salary_min" jdbcType="INTEGER" property="expectSalaryMin" />
+        <result column="expect_salary_max" jdbcType="INTEGER" property="expectSalaryMax" />
+        <result column="expect_category_id" jdbcType="VARCHAR" property="expectCategoryId" />
+        <result column="expect_community_id" jdbcType="VARCHAR" property="expectCommunityId" />
+        <result column="edu_school_name" jdbcType="VARCHAR" property="eduSchoolName" />
+        <result column="edu_background_name" jdbcType="VARCHAR" property="eduBackgroundName" />
+        <result column="edu_major" jdbcType="VARCHAR" property="eduMajor" />
+        <result column="edu_begin_time" jdbcType="TIMESTAMP" property="eduBeginTime" />
+        <result column="edu_end_time" jdbcType="TIMESTAMP" property="eduEndTime" />
+        <result column="flag_identification" jdbcType="TINYINT" property="flagIdentification" />
+        <result column="count_view" jdbcType="INTEGER" property="countView" />
+        <result column="community_uuid" jdbcType="VARCHAR" property="communityUuid" />
+        <result column="priority" jdbcType="INTEGER" property="priority" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+        <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+        <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+    </resultMap>
+    <resultMap id="UserCandidatePlusResultMap" extends="BaseResultMap" type="com.shopping.wx.pojo.dto.user_candidate.UserCandidatePlus">
+        <result column="community_name" jdbcType="VARCHAR" property="communityName" />
+    </resultMap>
+    <!--id 即是主键 openid-->
+    <update id="increaseViewCount">
+        update user_candidate
+        set count_view=count_view + 1
+        where id = #{openid}
+    </update>
+
+    <resultMap id="UserCandidateDTO" type="com.shopping.wx.pojo.dto.user_candidate.UserCandidateDTO">
+        <result column="candidate_openid" jdbcType="VARCHAR" property="candidateOpenid"/>
+        <result column="real_name" jdbcType="VARCHAR" property="realName"/>
+        <result column="candidate_portrait_path" jdbcType="VARCHAR" property="candidatePortraitPath"/>
+        <result column="gender" jdbcType="INTEGER" property="gender"/>
+        <result column="birthday" jdbcType="TIMESTAMP" property="birthday"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="expect_salary_max" jdbcType="INTEGER" property="expectSalaryMax"/>
+        <result column="expect_salary_min" jdbcType="INTEGER" property="expectSalaryMin"/>
+        <result column="expect_category_id" jdbcType="VARCHAR" property="expectCategoryId"/>
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName"/>
+        <result column="expect_community_id" jdbcType="VARCHAR" property="expectCommunityId"/>
+        <result column="community_name" jdbcType="VARCHAR" property="communityName"/>
+        <result column="distance" jdbcType="DOUBLE" property="distance"/>
+        <result column="edu_school_name" jdbcType="VARCHAR" property="eduSchoolName" />
+        <result column="edu_background_name" jdbcType="VARCHAR" property="eduBackgroundName" />
+        <result column="edu_major" jdbcType="VARCHAR" property="eduMajor" />
+        <result column="edu_begin_time" jdbcType="TIMESTAMP" property="eduBeginTime" />
+        <result column="edu_end_time" jdbcType="TIMESTAMP" property="eduEndTime" />
+    </resultMap>
+    <select id="pagedByDistance" resultMap="UserCandidateDTO">
+        SELECT
+        candidate_openid AS candidate_openid,
+        real_name AS real_name,
+        candidate_portrait_path AS candidate_portrait_path,
+        gender AS gender,
+        birthday AS birthday,
+        phone AS phone,
+        create_time as create_time,
+        expect_salary_max AS expect_salary_max,
+        expect_salary_min AS expect_salary_min,
+        distance as distance,
+        edu_school_name as edu_school_name,
+        edu_background_name as edu_background_name,
+        edu_major as edu_major,
+        edu_begin_time as edu_begin_time,
+        edu_end_time as edu_end_time,
+        GROUP_CONCAT(distinct expect_category_id SEPARATOR ',') as expect_category_id,
+        GROUP_CONCAT(distinct category_name SEPARATOR ',') as category_name,
+        GROUP_CONCAT(distinct expect_community_id SEPARATOR ',') as expect_community_id,
+        GROUP_CONCAT(distinct community_name SEPARATOR ',') as community_name
+        FROM(
+            SELECT
+                candidate_openid,real_name,candidate_portrait_path,gender,birthday,tmp.phone as phone,tmp.create_time as create_time,
+                expect_salary_max,expect_salary_min,distance,expect_category_id,expect_community_id,
+                -- 教育信息
+                edu_school_name,edu_background_name,edu_major,edu_begin_time,edu_end_time,
+                -- 根据维表 回填名称
+                ci.community_name  as community_name,
+                jc.category_name as category_name
+            FROM (
+                SELECT
+                    uc.id as candidate_openid,
+                    uc.real_name as real_name,
+                    uc.portrait_path as candidate_portrait_path,
+                    uc.gender as gender,
+                    uc.birthday as birthday,
+                    uc.telephone as phone,
+                    uc.create_time as create_time,
+                    uc.expect_salary_max as expect_salary_max,
+                    uc.expect_salary_min as expect_salary_min,
+                    (
+                        CASE WHEN uc.`lon` = 0 THEN 10000 * 1000
+                        WHEN  #{location.longitude} = 0 THEN 10000 * 1000
+                        ELSE ST_DISTANCE_SPHERE(
+                            POINT(#{location.longitude}, #{location.latitude}),
+                            POINT(uc.`lon`, uc.`lat`)
+                        ) END
+                    )AS `distance`,
+                    uc.edu_school_name as edu_school_name,
+                    uc.edu_background_name as edu_background_name,
+                    uc.edu_major as edu_major,
+                    uc.edu_begin_time as edu_begin_time,
+                    uc.edu_end_Time as edu_end_time,
+                    cfca.category_uuid as expect_category_id,
+                    cfco.community_uuid as expect_community_id
+                FROM user_candidate uc
+                LEFT JOIN candidate_for_category cfca
+                ON uc.id = cfca.candidate_openid
+                LEFT JOIN candidate_for_community cfco
+                ON uc.id = cfco.candidate_openid
+                WHERE uc.`status` != -1
+               <if test="communityUuid != null and communityUuid != ''">
+                    AND uc.community_uuid = #{communityUuid}
+                </if>
+                -- 薪资条件拼接
+                <if test="salaryCompareState == 0">
+                    AND uc.expect_salary_min = 0
+                    AND uc.expect_salary_max = 0
+                </if>
+                <if test="salaryCompareState == 1">
+                    AND uc.expect_salary_min = 0
+                    AND uc.expect_salary_max > 0
+                    AND uc.expect_salary_max <![CDATA[ <=  ]]> #{jobSalaryMax}
+
+                </if>
+                <if test="salaryCompareState == 2">
+                    AND uc.expect_salary_min > 0
+                    AND uc.expect_salary_max = 0
+                    AND uc.expect_salary_min <![CDATA[ >=  ]]> #{jobSalaryMin}
+                </if>
+                <if test="salaryCompareState == 3">
+                    AND uc.expect_salary_min != 0
+                    AND uc.expect_salary_max != 0
+                    AND uc.expect_salary_min <![CDATA[ >=  ]]> #{jobSalaryMin}
+                    AND uc.expect_salary_max <![CDATA[ <=  ]]> #{jobSalaryMax}
+                </if>
+            ) tmp
+            LEFT JOIN community_information ci
+            ON tmp.expect_community_id = ci.id
+            LEFT JOIN job_category jc
+            ON tmp.expect_category_id = jc.id
+        ) a
+        WHERE category_name is not null
+        GROUP BY
+        candidate_openid,real_name,candidate_portrait_path,gender,birthday,phone,expect_salary_max,expect_salary_min,distance,
+        edu_school_name,edu_background_name,edu_major,edu_begin_time,edu_end_time
+        <if test="categoryName != null and categoryName != ''">
+            HAVING
+            category_name like concat('%',#{categoryName},'%')
+        </if>
+        <if test="orderType == 0">
+            ORDER BY `distance` asc
+        </if>
+        <if test="orderType == 1">
+            ORDER BY create_time desc
+        </if>
+
+    </select>
+
+    <select id ="infoPlus" resultMap="UserCandidatePlusResultMap">
+        SELECT  uc.*,ci.community_name as community_name  FROM user_candidate uc
+        LEFT JOIN community_information ci
+        ON uc.community_uuid = ci.id
+        WHERE uc.id = #{id}
+        limit 1
+    </select>
+</mapper>

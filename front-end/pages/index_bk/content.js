@@ -1,0 +1,82 @@
+// 如果小程序是采用组件化的方式开发的话，那可以将这一部分迁移到子组件的逻辑中
+
+const Paging = require('../../utils/paging_util');
+const CONSTANT = require('../../common/constant');
+
+const Loading = require('../../utils/loading_util');
+
+const userCandidateService = require('../../common/userCandidateService');
+const recruitCompanyService = require('../../common/recruitCompanyService');
+const { UserService } = require('../../service/user_service');
+
+let app = getApp();
+const createContentMethods = () => ({
+    // 分页状态
+    state: {
+        pageConfig: new Paging.PageConfig(5),
+        location: CONSTANT.defaultLocation,
+    },
+
+   
+    // 根据用户角色加载列表信息
+    loadContent: async function () {
+        // 加载位置参数
+        this.state.pageConfig.setNoMoreDataCallback(this._noMoreData);
+        let data = this.data;
+        console.log(this.data.ident);
+        if (this.data.ident === 'user') {
+            // 加载位置参数
+            let candidateInfo = await UserService.loadRcruiteeInfo();
+            this.setData({
+                // 加载电话号码
+                candidateTelephone: candidateInfo.telephone,
+                location: {
+                    longitude: candidateInfo.lon,
+                    latitude: candidateInfo.lat,
+                }
+            })
+            console.log('开始 加载 给求职者方 展示的数据')
+            await this._loadJobList();
+        }
+        // 当前用户是招聘者
+        else if (data.ident === 'company') {
+            let recruiterInfo = await UserService.loadRecruiterInfo();
+            let companyData = await recruitCompanyService.loadEntityById(recruiterInfo.companyUuid);
+            console.log(recruiterInfo.companyUuid);
+            this.setData({
+                companyUuid: companyData.data.id,
+                location: {
+                    longitude: companyData.data.lon,
+                    latitude: companyData.data.lat,
+                }
+            })
+            console.log('开始 加载 给招聘人方 展示的数据');
+            await this._loadCandidateList();
+        }
+    },
+
+    // 没有更多页面了
+    _noMoreData() {
+
+        this.setData({
+            noMoreData: true,
+        });
+    },
+
+    
+    // 重新加载 页面内容
+    async reloadContent() {
+        await this.state.pageConfig.reset();
+        // 重置 展现的 岗位列表
+        await this._resetJobInfoList();
+        // 重置 展现的 求职者列表
+        await this._resetCandidateList();
+        // 重新加载内容
+        await this.loadContent();
+    },
+});
+
+
+module.exports = {
+    createContentMethods: createContentMethods,
+}

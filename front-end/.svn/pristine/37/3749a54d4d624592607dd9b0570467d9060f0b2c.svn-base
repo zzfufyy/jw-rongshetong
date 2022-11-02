@@ -1,0 +1,33 @@
+const $ = require('../utils/request_util')
+
+function insertByList(list) {
+    return $.request({
+        url: '/form-subject/addList',
+        data: list,
+        method: $.RequestMethod.POST,
+        header: $.jsonHeader,
+    })
+}
+function loadEntityListByFormUuid(formUuid) {
+    return $.request({
+        url: '/form-subject/listByFormUuid?formUuid=' + formUuid,
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader,
+    })
+}
+
+function page(pagingParam) {
+    return $.request({
+        url: '/form-subject/page',
+        data: pagingParam,
+        method: $.RequestMethod.POST,
+        header: $.jsonHeader,
+    })
+}
+
+module.exports = {
+    insertByList: insertByList,
+    loadEntityListByFormUuid: loadEntityListByFormUuid,
+    page: page,
+}

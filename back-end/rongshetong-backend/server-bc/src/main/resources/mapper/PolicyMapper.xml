@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.PolicyMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Policy">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="policyname" jdbcType="VARCHAR" property="policyname" />
+    <result column="fbtime" jdbcType="VARCHAR" property="fbtime" />
+    <result column="policycontext" jdbcType="VARCHAR" property="policycontext" />
+    <result column="policyimg" jdbcType="VARCHAR" property="policyimg" />
+    <result column="yl1" jdbcType="VARCHAR" property="yl1" />
+    <result column="yl2" jdbcType="INTEGER" property="yl2" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, policyname, fbtime, policycontext, policyimg, yl1, yl2
+  </sql>
+</mapper>

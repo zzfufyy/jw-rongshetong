@@ -1,0 +1,13 @@
+@import "/clcss.wxss";
+
+
+.tijsq {
+	width: 40%;
+}
+.textbox{
+	font-size: 12px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #2D80FD;
+	margin: 0 14px;
+}

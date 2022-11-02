@@ -1,0 +1,19 @@
+<view class="container">
+	<view class="topbox">
+		<view class="">
+			<image class="byszc" src="/img/byszc.png"></image>
+		</view>
+		<view class="titbox">
+			<view class="tit">{{tit}}</view>
+		</view>
+		<view class="clearfloat sjbox">
+			<view class="ft ftks">
+				<view class="sj">开始时间:{{kssj}}</view>
+				<view class="sj">结束时间:{{jssj}}</view>
+			</view>
+			<view class="fr">
+				<view class="bmcj" bindtap="bmcj">{{bmcj}}</view>
+			</view>
+		</view>
+	</view>
+</view>

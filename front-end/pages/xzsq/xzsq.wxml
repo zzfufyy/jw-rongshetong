@@ -1,0 +1,54 @@
+<view class="container">
+    <!-- 市辖区选择 -->
+    <view hidden="{{localchoose}}" wx:for="{{districtList}}">
+        <view bindtap="bindtapChooseDistrict" data-name='{{item.districtName}}' data-nav="{{index}}" hover-class="none" class="heightboxgz clearfloat">
+            <view class="ft">
+                <text class="wggltxt">{{item.districtName}}</text>
+            </view>
+            <view class="fr">
+                <image class="rtjtimg {{showDistrictName==item.districtName?'rote':''}}" src="/img/jt.png"></image>
+            </view>
+        </view>
+        <view class="line1"></view>
+        <view class="csstreetbox  {{showDistrictName==item.districtName  ?'active':''}}">
+            <!-- 街道选择 -->
+            <view class="" wx:for="{{item.streetNameList}}">
+                <view hover-class="none" bindtap="streetchoosetap" data-name='{{item.streetName}}' class="heightboxgz clearfloat">
+                    <view class="ft">
+                        <text class="wggltxt">{{item.streetName}}</text>
+                    </view>
+                    <view class="fr">
+                        <image class="rtjtimg {{showStreetName==item.streetName  ?'rote':''}}" src="/img/jt.png"></image>
+                    </view>
+                </view>
+                <view class="line1"></view>
+                <view class="communitybox {{showStreetName==item.streetName  ?'active':''}}">
+                    <view wx:for="{{item.communityList}}">
+                        <navigator hover-class="none" catchtap="catchtapSkipToSqfw" class="heightboxgz clearfloat" data-id="{{item.communityUuid}}">
+                            <view class="ft">
+                                <text class="wggltxt">{{item.communityName}}</text>
+                            </view>
+                            <view class="fr">
+                                <!-- <image class="rtjtimg" src="/img/jt.png"></image> -->
+                            </view>
+                        </navigator>
+                        <view class="line1"></view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <!-- 小区选择 -->
+    <view hidden="{{communitychoose}}" wx:for="{{communityList}}">
+        <navigator hover-class="none" url="/pages/sqfw/sqfw?communityUuid={{item.communityUuid}}" class="heightboxgz clearfloat">
+            <view class="ft">
+                <text class="wggltxt">{{item.communityName}}</text>
+            </view>
+            <view class="fr">
+                <image class="rtjtimg" src="/img/jt.png"></image>
+            </view>
+        </navigator>
+        <view class="line1"></view>
+    </view>
+</view>

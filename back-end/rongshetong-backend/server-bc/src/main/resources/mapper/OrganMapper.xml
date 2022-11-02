@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.OrganMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Organ">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="bankid" jdbcType="VARCHAR" property="bankid" />
+    <result column="organname" jdbcType="VARCHAR" property="organname" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="lxdh" jdbcType="VARCHAR" property="lxdh" />
+    <result column="yl1" jdbcType="VARCHAR" property="yl1" />
+    <result column="yl2" jdbcType="VARCHAR" property="yl2" />
+    <result column="jd" jdbcType="VARCHAR" property="jd" />
+    <result column="wd" jdbcType="VARCHAR" property="wd" />
+    <result column="ttype" jdbcType="VARCHAR" property="ttype" />
+    <result column="flinkMan" jdbcType="VARCHAR" property="flinkman" />
+    <result column="fdesc" jdbcType="VARCHAR" property="fdesc" />
+    <result column="dkye" jdbcType="VARCHAR" property="dkye" />
+    <result column="cjhs" jdbcType="VARCHAR" property="cjhs" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, bankid, organname, type, address, lxdh, yl1, yl2, jd, wd, ttype, flinkMan, fdesc, 
+    dkye, cjhs
+  </sql>
+</mapper>

@@ -1,0 +1,45 @@
+<view class="subject-container">
+    <view class="subject-line-box flex-row">
+        <text>{{subjectOrder+1}}.</text>
+        <input class="input-box" placeholder="点击编辑【签名题】" value="{{subjectTitle}}"  bindinput="bindinputSujectTitle" disabled="{{hiddenEditable}}"/>
+    </view>
+
+    <view class="sign-line-box">
+        <view class="sign-size sign-wait-view" bindtap="bindtapDrawSign" hidden="{{hiddenDefaultSign}}">签名区域</view>
+        <image class="sign-size" src="{{uploadImg}}" hidden="{{!hiddenDefaultSign}}" bindtap="bindtapDrawSign"></image>
+    </view>
+    <view hidden="{{hiddenEditable}}">
+        <view class="split-line"></view>
+        <view class="setting-box flex-row-between">
+            <text bindtap="bandtapBaseSettingPopup">题目设置</text>
+            <image src="../img/ddd.png" class="radio-size" bindtap="bindtapMoreSettingPopup"></image>
+        </view>
+    </view>
+</view>
+<!-- 题目设置 -->
+<view class="mask-layer" hidden="{{hiddenBaseSetting}}"></view>
+<view class="fix-bottom-box" hidden="{{hiddenBaseSetting}}">
+    <view class="flex-row-between base-setting-box-title">
+        <view class="width-33 text-align-left" bindtap="bindtapBaseSettingCancel">取消</view>
+        <view class="width-33 text-align-center">题目设置</view>
+        <view class="width-33 text-align-right" bindtap="bindtapBaseSettingConfirm">确定</view>
+    </view>
+    <view class="setting-line-box flex-row-between">
+        <view>此题必答</view>
+        <switch class="switch-size-7" checked="{{isRequire}}" bindchange="bindchangeIsRequire" />
+    </view>
+    <view class="split-line"></view>
+</view>
+<!-- 更多设置 -->
+<view class="mask-layer" hidden="{{hiddenMoreSetting}}"></view>
+<view class="fix-bottom-box" hidden="{{hiddenMoreSetting}}">
+    <view class="more-setting-line-box" bindtap="bindtapCopy">复制</view>
+    <view class="split-line"></view>
+    <view class="more-setting-line-box" bindtap="bindtapMovePrev">上移</view>
+    <view class="split-line"></view>
+    <view class="more-setting-line-box" bindtap="bindtapMoveNext">下移</view>
+    <view class="split-line"></view>
+    <view class="more-setting-line-box" bindtap="bindtapDelete">删除</view>
+    <view class="split-line-10"></view>
+    <view class="more-setting-line-box setting-cancel-color" bindtap="bindtapMoreSettingCancel">取消</view>
+</view>

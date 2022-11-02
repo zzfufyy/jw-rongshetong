@@ -1,0 +1,180 @@
+// pages/commessxq/commessxq.js
+const Loading = require('../../utils/loading_util');
+const CONSTANT = require('../../common/constant');
+const { Salary } = require('../../common/constant');
+const GLOBAL_CONSTANT = require('../../common/globalConstant');
+const { Completer } = require('../../utils/function_util');
+
+const img_util = require('../../utils/img_util');
+const url_util = require('../../utils/url_util');
+
+// 加载服务
+const recruitCompanyService = require('../../common/recruitCompanyService');
+
+// 加载分页
+const commessxqEx = require('./commessxqEx');
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        companyPortraitPath: '/img/tx.png',
+        companyName: '长沙竟网信息科技有限公司',
+        communityName: '东湖社区',
+        companyAddress: '长沙市岳麓区国际公寓A座1917',
+        companyIntroduction: '团队已拥有从业至少十年以上的项目经理，程序研发人员，采用国外的先进的PM+QA的管理模式。凭借自身的技术力量和完善的运营模式。致力于为众多的企业提供整体信息化解决方案和全方位电子商务实施方案。',
+        companyPhotoPath: [
+            { photoPath: '/img/tx.png', },
+            { photoPath: '/img/xt.png', },
+            { photoPath: '/img/xwgg.png', },
+        ],
+        jobList: [
+            // {
+            //     jobName: 'UI设计师', salaryScope: '7000-8000元/月', recruitingNumber: '1', jy: '经验不限', xl: '学历不限', age: '年龄不限',
+            //     yq: '1.根据设计要求完成建筑风格、外形等总体设计;2.提供各种建筑主体设计、户型设计、外墙设计、景 观设计等;'
+            // },
+            // {
+            //     jobName: 'UI设计师', salaryScope: '7000-8000元/月', recruitingNumber: '1', jy: '经验不限', xl: '学历不限', age: '年龄不限',
+            //     yq: '1.根据设计要求完成建筑风格、外形等总体设计;2.提供各种建筑主体设计、户型设计、外墙设计、景 观设计等;'
+            // },
+        ]
+    },
+    stateCompleter: {
+        companyUuidCompleter: new Completer(),
+    },
+    //企业相册点击放大
+    preimg1(e) {
+        let zwpj = this.data.zwpj
+        let arrimg = []
+        for (let i = 0; i < zwpj.length; i++) {
+            arrimg.push(zwpj[i].imgqy)
+        }
+        let oimg = e.currentTarget.dataset.src
+        wx.previewImage({
+            current: oimg, // 当前显示图片的http链接
+            urls: arrimg // 需要预览的图片http链接列表
+        })
+    },
+    //点击跳转职位详情
+    bindtapJobDetail(e) {
+        let currentIndex = e.currentTarget.dataset.index;
+        let currentJob = this.data.jobList[currentIndex];
+        wx.navigateTo({
+            url: '/pages/zwxq/zwxq?recruitJobUuid=' + currentJob.jobUuid,
+        })
+    },
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: async function (options) {
+
+        let companyUuid = options.companyUuid;
+
+        this.stateCompleter.companyUuidCompleter = new Completer();
+
+        this.stateCompleter.companyUuidCompleter.resolve(companyUuid);
+        try{
+            Loading.begin();
+            await this.loadCompanyContent();
+            await this.loadJobListContent();
+        }catch(e){
+            console.error(e)
+        }finally{
+            Loading.end();
+        }
+        
+        let that = this
+        wx.getSystemInfo({
+            success: (res) => {
+                console.log(res)
+                let imgwd = (res.windowWidth - 40 - 30) / 3;
+                let bight = (res.windowWidth - 40 - 30) / 4
+                let windowWidth = res.windowWidth;
+                let wht = windowWidth - 48 - 82
+                that.setData({
+                    wht: wht,
+                    imgwd: imgwd,
+                    bight: bight
+                })
+            },
+        });
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: async function () {
+        try{
+            Loading.begin();
+            await this.loadJobListContent();
+        }catch(e){
+            console.error(e);
+        }finally{
+            Loading.end();
+        }
+        
+    },
+
+    loadCompanyContent: async function () {
+        // 加载企业信息
+        let companyUuid = await this.stateCompleter.companyUuidCompleter.promise;
+        let companyData = await recruitCompanyService.infoWithAssociated(companyUuid);
+        companyData = companyData.data;
+        this.setData({
+            companyPortraitPath: img_util.handleCompanyPortraitPath(companyData.portraitPath),
+            companyName: companyData.companyName,
+            communityName: companyData.communityName,
+            companyAddress: companyData.address,
+            companyIntroduction: companyData.introduction,
+            companyPhotoPath: img_util.handleCompanyPhotoPath(companyData.photoPath).map(v => { return { photoPath: v } })
+        })
+        // 加载招聘岗位page
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    },
+    
+    ...commessxqEx.createPageMethods(),
+
+})

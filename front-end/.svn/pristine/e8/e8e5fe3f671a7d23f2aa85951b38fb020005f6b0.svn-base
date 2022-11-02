@@ -1,0 +1,38 @@
+.container{
+	background: #F5F5F5;
+}
+.tit{
+	padding: 18px 30px 0 23px;
+	font-size: 20px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: bold;
+	color: #333333;
+}
+.shxq{
+	padding: 10px 30px 20px 23px;font-size: 16px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #333333;
+
+}
+
+.pd{
+	padding: 18px 30px 18px 23px;
+}
+.itemtit{
+	font-size: 18px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: bold;
+	color: #333333;padding-bottom: 15px;
+
+}
+radio,checkbox{zoom:0.8;    width: 20px;
+	height: 20px;
+}
+.ltbox{width: 25px;}
+.rttext{width: 90%;}
+.weui_cell__hd{
+	margin-bottom: 10px;
+}
+
+

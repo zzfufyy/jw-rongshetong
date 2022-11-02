@@ -1,0 +1,52 @@
+<view class="container flex-col-containter">
+    <view class="view-banner">
+        <image class="img-full" src="../../img/schoolHomePage/banner_changsha_university.png" />
+    </view>
+    <view class="view-tag flex-row-between ">
+        <navigator  wx:for="{{functionTagList}}" wx:key="key" class="tag-item" 
+            data-id="{{item.tagId}}" app-id="{{item.appId}}" 
+            style="background: {{item.backgroundColor}};"
+            bindtap="bindtapGoLink"
+        >
+            <image class="tag-icon" src="{{item.logoPathBig}}" />
+            <text> {{item.tagName}}</text>
+        
+        </navigator >
+    </view>
+    <view class="split-line-20" />
+    <view class="news-title-box flex-row-between">
+        <view class="news-tilte-left">
+            <image class="news-title-icon" src="../../img/newimg.png" />
+            <view>新闻公告</view>
+        </view>
+        <view class="news-title-right" bindtap="bindtapTagNewsAnnouncement">全部 ></view>
+    </view>
+    <view class="split-line-2"></view>
+    <block wx:for="{{newsList}}" wx:key="key">
+        <navigator hover-class="none" id="{{item.id}}" bindtap="bindtapAllNews" class="mainbox clearfloat">
+            <view class="ft leftimgbox">
+                <image class="ltimg" src="{{item.articlePortraitPath}}" data-index="{{index}}" binderror="binderrorArticlePortraitPath"></image>
+            </view>
+            <view class="fr rightbox">
+                <view class="title">{{item.articleTitle}}</view>
+                <view class="ptit">{{item.articleIntroduction}}</view>
+                <view class="clearfloat">
+                    <view class="ptime ft">{{item.articleAuthor}}</view>
+                    <view class="ptime fr">{{item.articleReleaseTime}}</view>
+                </view>
+            </view>
+        </navigator>
+        <view class="split-line-2"></view>
+    </block>
+</view>
+
+<view hidden="{{hiddenChooseIdentity}}">
+    <view class="full-mask-layer"></view>
+    <view class="identity-box">
+        <view class="identity-line-1">请确认你的身份</view>
+        <view class="identity-line-2">确认后将为你提供专属服务</view>
+        <view class="identity-item" bindtap="bindtapChooseCandidate">我是求职者 ></view>
+        <view class="identity-item margin-top-9px" bindtap="bindtapChooseRecruiter">我是招聘方 ></view>
+    </view>
+</view>
+<authorize id="authorize"></authorize>

@@ -1,0 +1,137 @@
+// pages/messgecollect1/messgecollect1.js
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+		sjfs:[
+			{value: 'USA', name: '有专业设计'},
+      {value: 'CHN', name: '采用标准化图集', },
+      {value: 'CHN', name: '无专业设计、未采用标准图集', },
+		],
+		sgdw:[
+			{value: 'USA', name: '自行建造'},
+      {value: 'CHN', name: '建筑工匠建造', },
+      {value: 'CHN', name: '有资质的施工队伍建造', },
+		],
+		jglx:[
+			{value: 'USA', name: '砌体结构'},
+      {value: 'CHN', name: '底部框架-抗震墙上部砌体结构', },
+			{value: 'CHN', name: '钢筋混凝土结构', },
+			{value: 'USA', name: '钢结构'},
+      {value: 'CHN', name: '木（竹）结构', },
+			{value: 'CHN', name: '土木/石木结构', },
+			{value: 'USA', name: '混杂结构'},
+      {value: 'CHN', name: '其他', },
+		],
+		czcl:[
+			{value: 'USA', name: '红砖'},
+      {value: 'CHN', name: '水泥砌块', },
+			{value: 'CHN', name: '石块', },
+			{value: 'USA', name: '其他'},
+		],
+		lblx:[
+			{value: 'USA', name: '木楼板'},
+      {value: 'CHN', name: '预制板', },
+			{value: 'CHN', name: '现浇板', },
+		],
+		wglx:[
+			{value: 'USA', name: '木屋盖'},
+      {value: 'CHN', name: '预制板', },
+			{value: 'CHN', name: '现浇板', },
+		],
+		kzjg:[
+			{value: 'USA', name: '基础地圈梁'},
+      {value: 'CHN', name: '构造柱', },
+			{value: 'CHN', name: '圈梁', },
+		],
+		iskj:[
+			{value: 'USA', name: '是'},
+      {value: 'CHN', name: '否', },
+		],
+		kjnr:[
+			{value: 'USA', name: '楼顶加层'},
+      {value: 'CHN', name: '周边扩建（建筑外扩）', },
+			{value: 'CHN', name: '楼内建夹层', },
+			{value: 'USA', name: '室内加隔墙'},
+      {value: 'CHN', name: '楼体抬高', },
+			{value: 'CHN', name: '扩大门窗', },
+			{value: 'USA', name: '加建地下室'},
+      {value: 'CHN', name: '减柱减隔墙', },
+			{value: 'CHN', name: '其他', },
+		],
+		isgbzt:[
+			{value: 'USA', name: '是'},
+      {value: 'CHN', name: '否', },
+		],
+	},
+	prew(){
+		wx.navigateBack({
+			delta: 1,
+			success: (res) => {},
+			fail: (res) => {},
+			complete: (res) => {},
+		})
+	},
+	next(){
+		wx.navigateTo({
+			url: '/pages/messgecollect2/messgecollect2',
+		})
+	},
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: function (options) {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	}
+})

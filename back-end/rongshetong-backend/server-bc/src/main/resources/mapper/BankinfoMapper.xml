@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.BankinfoMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Bankinfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="bankname" jdbcType="VARCHAR" property="bankname" />
+    <result column="bankuid" jdbcType="VARCHAR" property="bankuid" />
+    <result column="bankimg" jdbcType="VARCHAR" property="bankimg" />
+    <result column="bankimg2" jdbcType="VARCHAR" property="bankimg2" />
+    <result column="bankimg3" jdbcType="VARCHAR" property="bankimg3" />
+    <result column="bankimg4" jdbcType="VARCHAR" property="bankimg4" />
+    <result column="bankcontext" jdbcType="VARCHAR" property="bankcontext" />
+    <result column="fke" jdbcType="INTEGER" property="fke" />
+    <result column="cjnum" jdbcType="INTEGER" property="cjnum" />
+    <result column="lxdh" jdbcType="VARCHAR" property="lxdh" />
+    <result column="adress" jdbcType="VARCHAR" property="adress" />
+    <result column="rzqys" jdbcType="INTEGER" property="rzqys" />
+    <result column="sbtime" jdbcType="VARCHAR" property="sbtime" />
+    <result column="yl1" jdbcType="VARCHAR" property="yl1" />
+    <result column="yl2" jdbcType="VARCHAR" property="yl2" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="bgcolor" jdbcType="VARCHAR" property="bgcolor" />
+    <result column="yxtjid" jdbcType="INTEGER" property="yxtjid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, bankname, bankuid, bankimg, bankimg2, bankimg3, bankimg4, bankcontext, fke, cjnum, 
+    lxdh, adress, rzqys, sbtime, yl1, yl2, type, bgcolor, yxtjid
+  </sql>
+</mapper>

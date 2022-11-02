@@ -1,0 +1,40 @@
+<view class="container">
+    <view class="naxbox" style="padding-bottom: 5px;">
+        <view class="name">公司名称</view>
+        <input type="text" placeholder="请输入公司名称" class="wxh truename" value="{{companyName}}" bindinput="bindinputCompanyName" />
+    </view>
+    <view class="naxbox" style="padding-bottom: 5px;">
+        <view class="name">职位名称</view>
+        <input type="text" placeholder="请输入职位名称" class="wxh truename" value="{{jobName}}" bindinput="bindinputJobName" />
+    </view>
+    <view class="naxbox clearfloat">
+        <view class="ft" style="width: 49%;">
+            <view class="name">开始时间</view>
+            <view class="phonenum">
+                <picker mode="date" value="{{date}}" fields="month" end="{{enddate}}" bindchange="bindchangeJobBeginTime">
+                    <view class="picker">
+                        <input bindinput="" disabled="true" type="text" placeholder="请选择" style="width:100%;" value="{{jobBeginTime}}" />
+                    </view>
+                </picker>
+            </view>
+        </view>
+        <view class="fr" style="width: 49%;">
+            <view class="name">结束时间</view>
+            <view class="phonenum">
+                <picker mode="date" value="{{date}}" fields="month" end="{{enddate}}" bindchange="bindchangeJobEndTime">
+                    <view class="picker">
+                        <input bindinput="" disabled="true" type="text" placeholder="请选择" style="width:100%;" value="{{jobEndTime}}" />
+                    </view>
+                </picker>
+            </view>
+        </view>
+    </view>
+    <view class="line15"></view>
+    <view class="jobcont">
+        <view class="contnr">
+            <view class="gznr">工作内容</view>
+            <textarea class="areanr" style="width:90%!important;margin: 0 auto;" name="contnr" id="" cols="30" value="{{jobContent}}" bindinput="bindinputJobContent"></textarea>
+        </view>
+    </view>
+</view>
+<view class="tijsq" bindtap="bindtapSave">保存</view>

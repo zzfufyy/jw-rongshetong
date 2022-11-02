@@ -1,0 +1,92 @@
+page {
+    background: #F7F7F7;
+    padding-bottom: 70px;
+}
+
+.addques {
+    margin: 0 20px;
+    background-color: #fff;
+    text-align: center;
+    height: 48px;
+    line-height: 48px;
+    margin-top: 20px;
+    font-size: 16px;
+    border: 1px dashed #D2D2D2;
+    color: #666666;
+}
+
+.jiah {
+    font-size: 25px;
+    vertical-align: middle;
+    margin-top: -5px;
+    display: inline-block;
+}
+
+.btmsz {
+    margin: 0 20px;
+    background-color: #fff;
+    margin-top: 20px;
+}
+
+.wx-switch-input {
+    zoom: 0.8;
+}
+
+.an {
+    position: absolute;
+    right: 13px;
+}
+
+.bd {
+    margin-left: 18px;
+}
+
+.gjsz {
+    min-height: 52px;
+    line-height: 52px;
+    position: relative;
+}
+
+.btmbox {
+    background-color: #fff;
+    height: 68px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.tijsq {
+    width: 90%;
+}
+
+/* .toptitle{
+	font-size: 12px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #2A7FFE;
+	height: 30px;
+	line-height: 30px;
+	background: #E9F1FE;padding-left: 20px;
+} */
+.shurtit {
+    background-color: #fff;
+    padding-top: 20px;
+}
+
+.titbox {
+    margin: 20px;
+    margin-top: 0;
+    padding-bottom: 19px;
+}
+
+.ipt {
+    margin-top: 15px;
+}
+
+.form-title {
+    font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+    font-size: 20px;
+    font-weight: 500;
+}

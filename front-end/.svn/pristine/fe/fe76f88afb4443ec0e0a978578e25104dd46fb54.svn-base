@@ -1,0 +1,54 @@
+<view class="container" style="padding-bottom: 60px;">
+    <view class="xinbox" style="padding-top: 25px;">
+        <view class="boxtt">居住人数*</view>
+        <view class="iptbox">
+            <view class="pi">
+                <input type="text" class="xwd" bindinput="bindinputResidentNumber" value="{{residentNumber}}" /><text>人</text>
+            </view>
+        </view>
+    </view>
+    <view class="line1"></view>
+    <view class="xinbox clearfloat pdt">
+        <view class="jzrs ft">居住人员信息*</view>
+        <view class="tj fr" bindtap="bindtapAddResident">+ 添加</view>
+    </view>
+    <view class="manibox">
+        <view class="jzrxx" wx:for="{{residentList}}" wx:key="key" bindtap="bindtapModifyResident" data-id="{{item.id}}">
+            <view class="topbx clearfloat">
+                <view class="ft ltbox">
+                    {{item.personName}} {{genderList[item.personGender]}} {{item.personAge}}岁
+                </view>
+                <view class="fr rtbox">
+                    <image src="/img/jt.png" class="jtimg"></image>
+                </view>
+            </view>
+            <view class="clearfloat">
+                <view class="ft ltsf">{{item.personIdcard}}</view>
+            </view>
+            <view class="clearfloat">
+                <view class="ft ltsf">{{item.personPhone}}</view>
+            </view>
+            <view class="clearfloat">
+                <view class="ft ltsf">{{item.provinceName}}{{item.cityName}}{{item.districtName}}</view>
+                <view class="fr rtsf"  catchtap="catchtapDeleteResident" data-id="{{item.id}}">删除</view>
+            </view>
+        </view>
+    </view>
+
+    <!-- <view class="zzc" hidden="{{showCanvas}}"></view>
+	<view class="sxbox" hidden="{{showCanvas}}">
+		<canvas canvas-id="canvas" style="width:{{width+'px'}};height:{{height+'px'}}" catchtouchstart="catchtouchstart" catchtouchmove="catchtouchmove" catchtouchend="catchtouchend"></canvas>
+	<view class="btn-reset" catchtap="clearCanvas">重新绘制</view>
+	<view class="btn-ok" catchtap="canvasToImg">确认</view>
+	</view> -->
+    <!-- <view hidden="{{!showCanvas}}">
+		<image class="qmclass" src="{{img}}" mode="widthFix"></image>
+		
+	</view> -->
+    <view hidden="{{!hiddenSign}}" class="qmclass" bindtap="bindtapSign">点击开始签名</view>
+    <image hidden="{{hiddenSign}}" bindtap="bindtapSign" class="qmclass1" src="{{signImgPath}}" mode="widthFix"></image>
+
+    <view class="qstj">
+        <view class="tijsq" bindtap="bindtapSubmit">确认提交</view>
+    </view>
+</view>

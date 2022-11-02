@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.NewsMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.News">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="xwtitle" jdbcType="VARCHAR" property="xwtitle" />
+    <result column="xwdesc" jdbcType="VARCHAR" property="xwdesc" />
+    <result column="xwcontext" jdbcType="VARCHAR" property="xwcontext" />
+    <result column="fbtime" jdbcType="TIMESTAMP" property="fbtime" />
+    <result column="cjr" jdbcType="VARCHAR" property="cjr" />
+    <result column="xwtp" jdbcType="VARCHAR" property="xwtp" />
+    <result column="lll" jdbcType="VARCHAR" property="lll" />
+    <result column="ly" jdbcType="VARCHAR" property="ly" />
+    <result column="yl1" jdbcType="VARCHAR" property="yl1" />
+    <result column="yl2" jdbcType="VARCHAR" property="yl2" />
+    <result column="yl3" jdbcType="VARCHAR" property="yl3" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, xwtitle, xwdesc, xwcontext, fbtime, cjr, xwtp, lll, ly, yl1, yl2, yl3, state
+  </sql>
+</mapper>

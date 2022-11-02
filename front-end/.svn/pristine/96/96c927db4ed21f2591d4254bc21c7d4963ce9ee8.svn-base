@@ -1,0 +1,11 @@
+// 社区服务主页监听器方法
+const createListenerMethods = () => ({
+    async communityInfoChangeListener() {
+        await this.loadContent();
+    },
+
+});
+
+module.exports = {
+    createListenerMethods: createListenerMethods,
+}

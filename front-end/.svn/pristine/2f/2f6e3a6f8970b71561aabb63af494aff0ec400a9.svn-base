@@ -1,0 +1,277 @@
+
+// 加载常量
+const CONSTANT = require('../../common/constant');
+// 加载工具类
+const sort_util = require('../../utils/sort_util');
+const object_util = require('../../utils/object_util');
+const Loading = require('../../utils/loading_util');
+// 加载服务
+const communityInformationService = require("../../common/communityInformationService");
+const app = getApp();
+Component({
+    options: {
+        multipleSlots: true // 在组件定义时的选项中启用多slot支持
+    },
+    /**
+     * 组件的属性列表
+     */
+    properties: {
+        // 默认选择社区为1
+        max_choosed_number: {
+            type: Number,
+            value: 1,
+        },
+        choosedCommunityList: {
+            type: Array,
+            value: [],
+        }
+    },
+
+    /** 组件数据 */
+    data: {
+        flag: true,
+        oht: "",
+        hiddenPopup: true,
+        districtList: [],
+        // choosedCommunityList: [
+        //      {communityUuid: "5850cc9a-a39f-2736-b318-c61deaea3b20", communityName: "茶园坡社区"}
+        // ],
+    },
+    /**
+     * 
+     * 绑定使用页面事件： submit
+     * 通过 e.detail.value获取
+     * 选定社区列表
+     */
+
+    /** 组件方法 */
+    methods: {
+        //隐藏弹框
+        hidePopup: function () {
+            this.setData({
+                hiddenPopup: true,
+            })
+        },
+        //展示弹框
+        showPopup() {
+            this.setData({
+                hiddenPopup: false,
+            })
+        },
+        // 点击遮罩层
+        bindtapMaskLayer: function () {
+            this.setData({
+                hiddenPopup: true,
+            })
+        },
+        // 保存提交事件 - 绑定页面事件
+        bindtapChoosedCommunitySubmit() {
+            this.setData({
+                hiddenPopup: true,
+            });
+            let detail = {
+                value: this.data.choosedCommunityList,
+            }
+            this.triggerEvent('submit', detail, {})
+        },
+        // 点击选择市辖区
+        bindtapChooseDistrict: async function (e) {
+            // 获取item项的id，和数组的下标值
+            let currentDistrictName = e.target.dataset.name;
+            let currentDistrictList = this.data.districtList;
+            this.setData({
+                districtList: currentDistrictList.map(v => {
+                    v.checked = (v.districtName == currentDistrictName) ? true : false
+                    return v;
+                })
+            })
+            // // 先清空
+            this.setData({
+                streetList: [],
+                communityList: [],
+            })
+            // 后加载对应的街道
+            try {
+                if(!this.lock.isLock){
+                    Loading.begin(this.lock);
+                    await this._loadStreetList(currentDistrictName);
+                }
+            } catch (e) {
+                console.error(e)
+            } finally {
+                Loading.end(this.lock)
+            }
+        },
+        // 期望求职区域--街道选择
+        bindtapChooseStreet: async function (e) {
+            let currentStreetName = e.target.dataset.name;
+            let currentStreetList = this.data.streetList;
+            this.setData({
+                streetList: currentStreetList.map(v => {
+                    v.checked = (currentStreetName == v.streetName) ? true : false
+                    return v;
+                }),
+            });
+               // 后加载对应的街道
+               try {
+                if(!this.lock.isLock){
+                    Loading.begin(this.lock);
+                    await this._loadCommunityList(currentStreetName);
+                }
+            } catch (e) {
+                console.error(e)
+            } finally {
+                Loading.end(this.lock)
+            }
+        },
+        // 期望求职区域--社区选择
+        bindtapChooseCommunity(e) {
+            let currentCommunityUuid = e.target.dataset.id;
+            let currentCommunityList = this.data.communityList;
+            let currentChoosedCommunityList = object_util.copyObject(this.data.choosedCommunityList);
+
+            currentCommunity = currentCommunityList.find(v => {
+                return currentCommunityUuid === v.communityUuid;
+            });
+            if (currentCommunity.checked == false) {
+                if (currentChoosedCommunityList.length >= this.data.max_choosed_number) {
+                    wx.showModal({
+                        title: `仅能选择${this.data.max_choosed_number}个社区`,
+                    })
+                    return;
+                } else {
+                    currentChoosedCommunityList.push({
+                        communityUuid: currentCommunity.communityUuid,
+                        communityName: currentCommunity.communityName,
+                    }),
+                        this.setData({
+                            choosedCommunityList: currentChoosedCommunityList
+                        })
+                }
+            } else {
+                // 去除
+                this.setData({
+                    choosedCommunityList: object_util.copyObject(
+                        currentChoosedCommunityList.filter(v => {
+                            return v.communityUuid != currentCommunity.communityUuid;
+                        })
+                    ),
+                })
+            }
+            this.setData({
+                communityList: currentCommunityList.map(v => {
+                    if (currentCommunityUuid == v.communityUuid) {
+                        v.checked = !v.checked;
+                    }
+                    return v;
+                }),
+            })
+        },
+        //点击去掉已选择社区
+        bindtapCancelChoosedCommunity(e) {
+            let currentCommunityUuid = e.currentTarget.dataset.id;
+            let currentChoosedCommunity = this.data.choosedCommunityList;
+            this.setData({
+                communityList: this.data.communityList.map(v => {
+                    v.checked = false;
+                    return v;
+                }),
+                choosedCommunityList: currentChoosedCommunity.filter(v => {
+                    return !(v.communityUuid == currentCommunityUuid);
+                })
+            })
+            console.log(this.data.choosedCommunityList);
+        },
+
+        // 私有 - 加载街道函数
+        async _loadStreetList(districtName) {
+            let streetList = await communityInformationService.listStreetNameByDistrictName(districtName);
+            streetList = streetList.data;
+            this.setData({
+                streetList: streetList.map(v => {
+                    return {
+                        streetName: v,
+                        checked: false,
+                    }
+                }),
+            })
+        },
+        // 私有 - 加载社区函数
+        async _loadCommunityList(streetName) {
+            let communityList = await communityInformationService.listByStreetName(streetName);
+            let choosedCommunityList = this.data.choosedCommunityList;
+            communityList = communityList.data;
+            communityList = communityList.map(v => {
+                if (choosedCommunityList.findIndex(r => {
+                    return r.communityUuid === v.id;
+                }) == -1) {
+                    v.checked = false;
+                } else {
+                    v.checked = true;
+                }
+                return {
+                    communityUuid: v.id,
+                    communityName: v.communityName,
+                    streetName: v.streetName,
+                    districtName: v.districtName,
+                    checked: v.checked,
+                };
+            });
+            console.log(communityList);
+            this.setData({
+                communityList: communityList
+            });
+        },
+    },
+
+    /** 组件属性 */
+    lock: new Loading.Lock(),
+    /** 组件生命周期 */
+    lifetimes: {
+        created: function () {
+            this.lock = new Loading.Lock();
+        },
+        ready: async function () {
+            // 加载 市辖区列表
+            let districtNameList = await communityInformationService.listDistrictNameByCityName(CONSTANT.CURRENT_CITY);
+            districtNameList = districtNameList.data;
+            let districtList = districtNameList.map(v => {
+                return {
+                    districtName: v,
+                    checked: false,
+                }
+            })
+            districtList = sort_util.sortChangshaDistrict(districtList);
+            this.setData({
+                districtList: districtList,
+            })
+
+        }
+    },
+
+
+
+    /** 页面生命周期 */
+    pageLifetimes: {
+        show: function () {
+            let that = this;
+            wx.getSystemInfo({
+                success: (res) => {
+                    console.log(res)
+                    let windowHeight = res.windowHeight;
+                    let wht = windowHeight * 0.8 - 86
+                    let oht = wht;
+                    that.setData({
+                        oht: oht
+                    })
+                },
+            });
+        },
+        hide: function () {
+            // 页面被隐藏
+        },
+        resize: function (size) {
+            // 页面尺寸变化
+        }
+    }
+})

@@ -1,0 +1,73 @@
+const CONSTANT = require('../../../common/constant');
+
+Component({
+    options: {
+        multipleSlots: true // 在组件定义时的选项中启用多slot支持
+    },
+    /**
+     * 组件的属性列表
+     */
+    properties: {
+    },
+
+    /** 组件数据 */
+    data: {
+        // 选项list
+        optionList: [
+            { optionTitle: '', checked: false },
+            { optionTitle: '', checked: false },
+        ],
+        // 题目标题
+        subjectTitle: '',
+        // 题目类型
+        subjectType: CONSTANT.SUBJECT_TYPE.SINGLE_SELECT,
+        // 是否必须
+        isRequired: false,
+    },
+    /**
+     * 
+     * 绑定使用页面事件： submit
+     * 通过 e.detail.value获取
+     * 选定社区列表
+     */
+
+    /** 组件方法 */
+    methods: {
+        // 页面点击事件
+
+        // 输入选项
+        // 添加 选项
+        bindtapAddOption(e) {
+            this.setData({
+                optionList: this.data.optionList.push({
+                    optionTitle: '', checked: false,
+                })
+            })
+        },
+        // 交互方法:
+        getData(){
+            return this.data;
+        }
+    },
+
+    /** 组件属性 */
+    /** 组件生命周期 */
+    lifetimes: {
+        created: function () {
+        },
+        ready: async function () {
+            
+        }
+    },
+    /** 页面生命周期 */
+    pageLifetimes: {
+        show: function () {
+        },
+        hide: function () {
+            // 页面被隐藏
+        },
+        resize: function (size) {
+            // 页面尺寸变化
+        }
+    }
+})

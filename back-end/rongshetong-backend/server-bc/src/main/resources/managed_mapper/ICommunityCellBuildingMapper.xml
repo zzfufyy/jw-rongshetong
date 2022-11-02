@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.ICommunityCellBuildingMapper">
+
+    <delete id="batchDeleteByBuildingOrderList" >
+        DELETE FROM
+        community_cell_building
+        WHERE cell_uuid = #{cellUuid}
+        AND building_order in (
+            <foreach collection="listBuildingOrder" item="bo" index="index" separator=",">
+              #{bo}
+            </foreach>
+        )
+    </delete>
+
+
+
+
+    <insert id="insertByList" parameterType="java.util.List">
+        INSERT INTO community_cell_building(
+            id,
+            building_order,
+            building_name,
+            num_layer,
+            num_layer_family,
+            cell_uuid,
+            community_uuid,
+            status,
+            create_time
+        ) VALUES
+        <foreach collection="listCommunityCellBuilding" item="ccb" index="index" separator=",">
+            (
+                #{ccb.id},
+                #{ccb.buildingOrder},
+                #{ccb.buildingName},
+                #{ccb.numLayer},
+                #{ccb.numLayerFamily},
+                #{ccb.cellUuid},
+                #{ccb.communityUuid},
+                0,
+                now()
+            )
+        </foreach>
+    </insert>
+</mapper>

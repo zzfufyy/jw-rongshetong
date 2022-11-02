@@ -1,0 +1,40 @@
+@import "/clcss.wxss";
+
+
+.tijsq {
+	width: 40%;
+}
+.textbox{
+	font-size: 12px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #2D80FD;
+	margin: 0 14px;
+}
+.xinbox {
+	margin: 0px 22px 10px 14px;
+}
+.boxtt {
+	font-size: 18px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: 500;
+	color: #333333;
+}
+.qmclass {
+	height: 150px;
+	background: #F7F8FA;
+	border-radius: 4px 4px 4px 4px;
+	opacity: 1;
+	border: 1px solid #F3F3F3;
+	font-size: 14px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #999999;
+	line-height: 150px;
+	text-align: center;
+}
+.qmclass1 {
+	margin: 0 20px;
+	height: 150px;
+	border-radius: 4px 4px 4px 4px;
+}

@@ -1,0 +1,152 @@
+<view class="p40"></view>
+		<view class="toptit">茶陵县城乡居民建房安全隐患排查整治信息采集表</view>
+		<view class="line10"></view>
+		<view class="first mt14">第二部分：建设情况</view>
+		<view class="first mt14">设计方式【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+        <label class="weui-cell weui-check__label" wx:for="{{sjfs}}" wx:key="{{item.value}}">
+
+          <view class="weui-cell__hd">
+            <radio value="{{item.value}}" />{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+		<view class="first mt14">所在区域【多选题】</view>
+		<!-- <block> -->
+		<view class="mt14">
+			<checkbox-group  bindchange="checkboxChange">
+				<label class="weui-cell weui-check__label" wx:for="{{itemsarea}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<checkbox value="{{item.value}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+		<!-- </block> -->
+		<view class="first mt14">产权类型【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+        <label class="weui-cell weui-check__label" wx:for="{{cqlist}}" wx:key="{{item.value}}">
+
+          <view class="weui-cell__hd">
+            <radio value="{{item.value}}" />{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+		<view class="first mt14">户主姓名</view>
+		<view class="input ">
+			<input class="slect" type="text" placeholder="请输入" />
+		</view>
+		<view class="first mt14">身份证号</view>
+		<view class="input ">
+			<input class="slect" type="text" placeholder="请输入" />
+		</view>
+		<view class="first mt14">房屋用途【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+				<label class="weui-cell weui-check__label" wx:for="{{ytlist}}" wx:key="{{item.value}}">
+
+					<view class="weui-cell__hd">
+						<radio value="{{item.value}}" />{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+		<view class="first mt14">是否用作经营性用途【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+				<label class="weui-cell weui-check__label" wx:for="{{isjy}}" wx:key="{{item.value}}">
+
+					<view class="weui-cell__hd">
+						<radio value="{{item.value}}" />{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+		<view class="first mt14">经营业态种类包含【多选题】</view>
+		<view class="mt14">
+			<checkbox-group  bindchange="checkboxChange">
+				<label class="weui-cell weui-check__label" wx:for="{{jyzt}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<checkbox value="{{item.value}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+		<view class="first mt14">是否出具专业鉴定报告【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+				<label class="weui-cell weui-check__label" wx:for="{{zyjd}}" wx:key="{{item.value}}">
+
+					<view class="weui-cell__hd">
+						<radio value="{{item.value}}" />{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+		
+		<view class="first mt14">土地性质【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+				<label class="weui-cell weui-check__label" wx:for="{{tdxz}}" wx:key="{{item.value}}">
+
+					<view class="weui-cell__hd">
+						<radio value="{{item.value}}" />{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+		
+		<view class="first mt14">国有土地用途【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+				<label class="weui-cell weui-check__label" wx:for="{{gytdyt}}" wx:key="{{item.value}}">
+
+					<view class="weui-cell__hd">
+						<radio value="{{item.value}}" />{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+		
+		<view class="first mt14">集体土地用途【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="radioChange">
+				<label class="weui-cell weui-check__label" wx:for="{{srtdxz}}" wx:key="{{item.value}}">
+
+					<view class="weui-cell__hd">
+						<radio value="{{item.value}}" />{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+		
+		<view class="first mt14">房屋建筑主体层数</view>
+		<view class="input ">
+			<input class="slect" type="text" placeholder="请输入" />
+		</view>
+		
+		<view class="first mt14">房屋建筑局部层数</view>
+		<view class="input ">
+			<input class="slect" type="text" placeholder="请输入" />
+		</view>
+		
+		<view class="first mt14">房屋建筑高度</view>
+		<view class="input ">
+			<input class="slect" type="text" placeholder="请输入" />
+		</view>
+		
+		<view class="first mt14">房屋建筑面积（平方米）</view>
+		<view class="input ">
+			<input class="slect" type="text" placeholder="请输入" />
+		</view>
+		
+		<view class="first mt14">房屋建成时间（年）</view>
+		<view class="input ">
+			<input class="slect" type="text" placeholder="请输入" />
+		</view>
+		
+		<navigator hover-class="none" url="/pages/messgecollect2/messgecollect2" bindtap="next" class="tijsq">下一步</navigator>

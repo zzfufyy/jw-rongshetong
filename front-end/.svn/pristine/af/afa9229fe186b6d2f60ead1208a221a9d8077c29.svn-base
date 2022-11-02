@@ -1,0 +1,307 @@
+
+// 加载常量
+const CONSTANT = require('../../common/constant');
+// 加载工具类
+const sort_util = require('../../utils/sort_util');
+const object_util = require('../../utils/object_util');
+const string_util = require('../../utils/string_util');
+const Loading = require('../../utils/loading_util');
+// 加载服务
+const communityInformationService = require("../../common/communityInformationService");
+const jobCategoryService = require("../../common/jobCategoryService");
+const candidateForCategoryService = require("../../common/candidateForCategoryService");
+const app = getApp();
+Component({
+    options: {
+        multipleSlots: true // 在组件定义时的选项中启用多slot支持
+    },
+    /**
+     * 组件的属性列表
+     */
+    properties: {
+        max_choosed_number: {
+            type: Number,
+            value: 3,
+        },
+        // 交互数据
+        jobCategoryList: {
+            type: Array,
+            value: [],
+        },
+    },
+
+    /** 组件数据 */
+    data: {
+        hiddenPopup: true,
+        
+        jobCategoryListCopy: [],
+
+    },
+    /**
+     * 
+     * 绑定使用页面事件： submit
+     * 通过 e.detail.value获取
+     * 选定社区列表
+     */
+
+    /** 组件方法 */
+    methods: {
+
+    
+        //隐藏弹框
+        hidePopup: function () {
+            this.setData({
+                hiddenPopup: true,
+            })
+        },
+        //展示弹框
+        showPopup() {
+            this._resetSearchText();
+            this.setData({
+                // 建立副本, 除了保存 其余都还原副本
+                jobCategoryListCopy: object_util.copyObject(this.data.jobCategoryList),
+                hiddenPopup: false,
+            })
+        },
+
+        // 点击遮罩层
+        bindtapMaskLayer: function () {
+            this._resetSearchText();
+            this.setData({
+                jobCategoryList: object_util.copyObject(this.data.jobCategoryListCopy),
+                hiddenPopup: true,
+            })
+        },
+        // 取消
+        bindtapJobCategoryCancel(e) {
+            this._resetSearchText();
+            this.setData({
+                jobCategoryList: object_util.copyObject(this.data.jobCategoryListCopy),
+                hiddenPopup: true,
+            })
+        },
+        // 保存提交事件 - 绑定页面事件
+        bindtapChoosedJobCategorySubmit() {
+            this.setData({
+                hiddenPopup: true,
+            });
+            console.log(this);
+            let detail = {
+                value: this.data.jobCategoryList,
+            }
+            console.log(detail)
+            this.triggerEvent('submit', detail, {})
+        },
+        // 搜索框input事件
+        bindinputSearchJobCategory(e) {
+            let searchText = e.detail.value;
+            this.setData({
+                searchText: e.detail.value,
+            })
+            let currentJobCategoryList = this.data.jobCategoryList;
+            // 遍历查找是否包含字符串
+            this.setData({
+                jobCategoryList: currentJobCategoryList.map(v => {
+                    if (v.checked == true) {
+                        return v;
+                    }
+                    if (v.categoryName.toLowerCase().indexOf(searchText.toLowerCase()) == -1) {
+                        v.display = "none";
+                    } else {
+                        v.display = "block";
+                    }
+                    return v;
+                })
+            });
+        },
+
+        // 绑定confirm事件
+        async bindconfirmSearchJobCategory(e) {
+            let searchText = e.detail.value;
+            this.setData({
+                searchText: e.detail.value,
+            })
+            if (string_util.isEmpty(searchText)) {
+                // 空内容直接返回
+                return;
+            }
+            let currentJobCategoryList = this.data.jobCategoryList;
+            // 遍历查找是否存在该字符串，否则进行模糊查询
+            if (currentJobCategoryList.findIndex(v => { return v.categoryName.toLowerCase() == v.categoryName.toLowerCase() })) {
+                // 和input事件 相同 直接返回
+                return;
+            } else {
+                let newDataList = [];
+                try {
+                    Loading.begin();
+                    // 先尝试插入，再查找
+                    await jobCategoryService.insertByEntity({
+                        categoryName: searchText
+                    });
+                    // 数据库查找 读取3条 合并记录
+                    newDataList = (await jobCategoryService.loadListByNumber(3, searchText)).data;
+                    // 去重
+                    newDataList = newDataList.filter(v => {
+                        return currentJobCategoryList.findIndex(r => r.categoryUuid == v.id) == -1;
+                    });
+                    // 合并
+                    newDataList = newDataList.map(v => {
+                        return {
+                            categoryName: v.categoryName,
+                            categoryUuid: v.id,
+                            checked: false,
+                            display: 'block',
+                        }
+                    })
+
+                } catch (error) {
+                    console.error(e);
+                } finally {
+                    Loading.end();
+                }
+                this.setData({
+                    jobCategoryList: object_util.copyObject(currentJobCategoryList.concat(newDataList)),
+                    jobCategoryListCopy: object_util.copyObject(this.data.jobCategoryListCopy.concat(newDataList)),
+                })
+
+            }
+        },
+        // 移除已选择
+        bindtapRemoveJobCategory(e) {
+            let currentIndex = e.currentTarget.dataset.index;
+            let currentJobCategoryList = this.data.jobCategoryList;
+            this.setData({
+                jobCategoryList: object_util.copyObject(
+                    currentJobCategoryList.map((v, i) => {
+                        if (i == currentIndex) {
+                            v.checked = false;
+                            v.display = 'block';
+                        }
+                        return v;
+                    })
+                )
+            })
+        },
+        // 点击选择事件
+        bindtapChooseJobCategory(e) {
+            let currentIndex = e.currentTarget.dataset.index;
+            if (this.data.jobCategoryList.filter(v => v.checked).length >= this.data.max_choosed_number) {
+                wx.showModal({
+                    title: `仅能选择${this.data.max_choosed_number}个职位`,
+                })
+                return;
+            }
+            let currentJobCategoryList = this.data.jobCategoryList;
+            this.setData({
+                jobCategoryList: object_util.copyObject(
+                    currentJobCategoryList.map((v, i) => {
+                        if (i == currentIndex) {
+                            v.checked = true;
+                            v.display = 'none';
+                        }
+                        return v;
+                    })
+                )
+            })
+        },
+        /** BEGIN 内部方法 */
+        //重置搜索框方法
+        _resetSearchText() {
+            this.setData({
+                searchText: '',
+            })
+            let currentJobCategoryList = this.data.jobCategoryList;
+            this.setData({
+                jobCategoryList: currentJobCategoryList.map(v => {
+                    if (v.checked == true) {
+                        return v;
+                    }
+                    v.display = "block";
+                    return v;
+                })
+            });
+        },
+        async initCandidateJobCategoryList() {
+            await app.getOpenidReady();
+            let openid = app.getOpenid();
+            // 加载求职者 - 期望职位
+            let candidateForCategoryResult = await candidateForCategoryService.loadListByCandidateOpenid(openid);
+            console.debug("加载求职者openid：" + openid + " 的求职期望列表：");
+            let choosedList = candidateForCategoryResult.data.map(r => {
+                return {
+                    categoryName: r.categoryName,
+                    categoryUuid: r.categoryUuid,
+                    checked: true,
+                    display: 'none',
+                }
+            })
+            // 去重：
+            let tempJobCategoryList = this.data.jobCategoryList;
+            tempJobCategoryList = tempJobCategoryList.filter(v => {
+                return choosedList.findIndex(r => { return r.categoryUuid == v.categoryUuid }) == -1
+            });
+            tempJobCategoryList = tempJobCategoryList.concat(choosedList)
+            let noCheckedNum = 0;
+            tempJobCategoryList = tempJobCategoryList.filter(v => {
+                if (v.checked == false) {
+                    noCheckedNum += 1;
+                }
+                return v.checked == true || noCheckedNum <= 10;
+            });
+            this.setData({
+                jobCategoryList: tempJobCategoryList
+            })
+        },
+        /** END 内部方法 */
+    },
+
+
+    /** 组件属性 */
+    lock: new Loading.Lock(),
+    /** 组件生命周期 */
+    lifetimes: {
+        created: function () {
+            this.lock = new Loading.Lock();
+        },
+        ready: async function () {
+            // 加载职位列表
+            let loadCategoryData = (await jobCategoryService.loadList()).data;
+            let jobCategoryList = loadCategoryData.map(v => {
+                return {
+                    categoryName: v.categoryName,
+                    categoryUuid: v.id,
+                    checked: false,
+                    display: 'block',
+                }
+            })
+            this.setData({
+                jobCategoryList: jobCategoryList,
+            })
+            // 根据openid初始化
+            console.info("选择职位组件初始化完毕");
+        }
+    },
+    /** 页面生命周期 */
+    pageLifetimes: {
+        show: function () {
+            let that = this;
+            wx.getSystemInfo({
+                success: (res) => {
+                    console.log(res)
+                    let windowHeight = res.windowHeight;
+                    let wht = windowHeight * 0.8 - 86
+                    let oht = wht;
+                    that.setData({
+                        oht: oht
+                    })
+                },
+            });
+        },
+        hide: function () {
+            // 页面被隐藏
+        },
+        resize: function (size) {
+            // 页面尺寸变化
+        }
+    }
+})

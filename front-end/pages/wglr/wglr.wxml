@@ -1,0 +1,9 @@
+<view class="container">
+	<view class="sqname">{{communityName}} ></view>
+	<view class="mainbox">
+		<navigator hover-class="none" url="/pages/wglrxq/wglrxq?cellUuid={{item.id}}" class="xqbox" wx:for="{{cellList}}" wx:key="key">
+			<view class="xqname">{{item.cellName}}</view>
+			<view class="sqlocal">共{{item.numBuilding}}栋{{item.numLayer}}层{{item.numLayerFamily}}户 {{item.numRegistered}}户已登记 {{item.numUnregistered}}户未登记</view>
+		</navigator>
+	</view>
+</view>

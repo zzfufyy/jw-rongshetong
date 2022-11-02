@@ -1,0 +1,153 @@
+// 加载 工具类
+const Paging = require('../../utils/paging_util');
+const CONSTANT = require('../../common/constant');
+
+const string_util = require('../../utils/string_util');
+const img_util = require('../../utils/img_util');
+const date_util = require('../../utils/date_util');
+const format_util = require('../../utils/format_util');
+
+// 加载服务类
+const userRecruiterService = require('../../common/userRecruiterService');
+const userCandidateService = require('../../common/userCandidateService');
+const recruitCompanyService = require('../../common/recruitCompanyService');
+
+
+// 定义常量
+const app = getApp();
+
+
+const createPageMethods = () => ({
+    // 分页状态
+    state: {
+        pageConfig: new Paging.PageConfig(5),
+        location: CONSTANT.defaultLocation,
+    },
+    // 没有更多页面了
+    _noMoreData() {
+        this.setData({
+            noMoreData: true,
+        });
+    },
+    _loadLocation: async function (openid, userIndentity) {
+        // debugger
+        let location = {
+            longitude: 0,
+            latitude: 0,
+        };
+        let companyUuid = '';
+        if (userIndentity === "user") {
+            try {
+                let userCandidateData = await userCandidateService.loadEntityById(openid);
+                userCandidateData = userCandidateData.data;
+                location = {
+                    longitude: userCandidateData.lon,
+                    latitude: userCandidateData.lat,
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        } else if (userIndentity === "company") {
+            try {
+
+                let userRecruiterData = await userRecruiterService.loadEntityById(openid);
+                let userRecruiterInfo = userRecruiterData.data;
+
+                let companyData = await recruitCompanyService.loadEntityById(userRecruiterInfo.companyUuid);
+                companyData = companyData.data;
+                companyUuid = companyData.id;
+                location = {
+                    longitude: companyData.lon,
+                    latitude: companyData.lat,
+                }
+            } catch (error) {
+                console.error(e)
+            }
+            this.setData({
+                companyUuid: companyUuid,
+                location: location,
+            })
+        }
+        return location;
+    },
+    // 清空内容
+    clearContent: async function () {
+        this.state.pageConfig.reset();
+        // 重置数据内容
+        this.setData({
+            candidateList: []
+        })
+    },
+
+    // 加载内容
+    loadContent: async function () {
+        // 加載openid
+        await app.getOpenidReady();
+        let openid = wx.getStorageSync('openid');
+        let userIndentity = await this.stateCompleter.userIdentityCompleter.promise;
+
+        // 加載位置 location
+        let location = await this._loadLocation(openid, userIndentity);
+
+        // 回调 没有数据的处理方式
+        this.state.pageConfig.setNoMoreDataCallback(this._noMoreData);
+
+        // 初始化分页配置
+        let pageConfig = this.state.pageConfig;
+
+        // 构建查询条件 condition
+        let condition = {
+            ...location
+        }
+        let pagingParam = pageConfig.buildNextParam(condition);
+        if (!pagingParam) {
+            return;
+        }
+        // 获取分页内容
+        let pageInfo;
+        // 请求数据
+        try {
+
+            pageInfo = await userCandidateService.pagedByCondition(pagingParam)
+            pageInfo = pageInfo.data;
+            console.log(pageInfo);
+        } catch (e) {
+            console.error(e);
+        } finally {
+        }
+        let dataList = pageConfig.handlePageInfo(pageInfo);
+        // 拼接数据示例
+        // {
+        //     jobname: '服务员/保洁', 
+        //     usertag: [{ tagbq: '女' }, { tagbq: '29岁' }, { tagbq: '3000-5000/月' }],
+        //     name: '张三', 
+        //     tximg: '/img/tx.png', hxtime: '10分钟前', sqname: '天源社区', companyjuli: '1.2',
+        // },
+        let current = this.data.candidateList;
+        let newList = dataList.map(r => ({
+            candidateOpenid: r.candidateOpenid,
+            realName: r.realName,
+            jobName: string_util.isEmpty(r.categoryName) ? '' : r.categoryName.replaceAll(',', '/'),
+            userTag: [
+                { tagbq: CONSTANT.genderList[r.gender] },
+                { tagbq: string_util.isEmpty(r.birthday) ? '' : date_util.getAgeByBirthday(r.birthday) + '岁' },
+                { tagbq: new CONSTANT.Salary(r.expectSalaryMin, r.expectSalaryMax).value },
+            ],
+            gender: r.gender,
+            portraitPath: img_util.handlePersonnelPortraitPath(r.portraitPath, r.gender),
+            communityName: string_util.isEmpty(r.communityName) ? '' : r.communityName,
+            distance: format_util.formatDistance(r.distance),
+            phone: r.phone,
+        }));
+
+        // 拼接数据
+        this.setData({
+            candidateList: current.concat(newList),
+        });
+    },
+
+});
+
+module.exports = {
+    createPageMethods: createPageMethods,
+}

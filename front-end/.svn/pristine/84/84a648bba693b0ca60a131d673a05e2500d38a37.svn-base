@@ -1,0 +1,75 @@
+.img{
+	width: 149px;height: 149px;margin: 0 auto;margin-top: 45px;
+}
+.imgb{text-align: center;}
+.fbcg{
+	font-size: 16px;
+	font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+	font-weight: bold;margin-top:20px;
+	color: #333333;text-align: center;
+}
+.hytx{
+	font-size: 12px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #999999;
+	margin-top: 9px;text-align: center;
+}
+.imgbox{
+	padding-bottom: 47px;background: #fff;
+}
+page{
+	background: #F5F5F5;
+}
+.namexs{background: #fff;padding: 15px 0 17px 15px;}
+.ducoment{
+	width: 44px;height: 44px;margin-right: 10px;
+}
+.name{
+	font-size: 16px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #333333;
+}
+.fxtx{
+	font-size: 12px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #CCCCCC;margin-top: 9px;
+}
+.fxboxbig{
+	background: #fff;
+}
+.fxhy {
+	font-size: 15px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #999999;
+	padding: 17px 20px;
+}
+.fxbox {
+	padding-bottom: 20px;
+}
+.wxhy {
+	display: inline-block;
+}
+.button {
+	width: 60px!important;
+	text-align: center!important;
+	font-size: 12px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #333333;
+	padding: 0!important;
+	background: #fff;
+	margin-left: 20px!important;
+}
+.hyimg {
+	width: 50px;
+	height: 50px;
+}
+.user{
+	width: 14px;height: 14px;
+}
+
+

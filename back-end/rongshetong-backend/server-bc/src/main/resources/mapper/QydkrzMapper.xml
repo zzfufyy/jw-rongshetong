@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.QydkrzMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Qydkrz">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="sqr" jdbcType="VARCHAR" property="sqr" />
+    <result column="sfzh" jdbcType="VARCHAR" property="sfzh" />
+    <result column="qyzcszd" jdbcType="VARCHAR" property="qyzcszd" />
+    <result column="qyname" jdbcType="VARCHAR" property="qyname" />
+    <result column="sfzfimg" jdbcType="VARCHAR" property="sfzfimg" />
+    <result column="sfzzimg" jdbcType="VARCHAR" property="sfzzimg" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="qyid" jdbcType="VARCHAR" property="qyid" />
+    <result column="cjsj" jdbcType="TIMESTAMP" property="cjsj" />
+    <result column="shsj" jdbcType="TIMESTAMP" property="shsj" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, sqr, sfzh, qyzcszd, qyname, sfzfimg, sfzzimg, status, qyid, cjsj, shsj
+  </sql>
+</mapper>

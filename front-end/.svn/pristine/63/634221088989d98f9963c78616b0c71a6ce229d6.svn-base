@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "数据报表",
+  "usingComponents": {
+    "pagenation": "/components/pagenation/pagenation"
+  }
+}

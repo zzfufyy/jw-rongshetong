@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.YhpmMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Yhpm">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="fbankName" jdbcType="VARCHAR" property="fbankname" />
+    <result column="sxe" jdbcType="INTEGER" property="sxe" />
+    <result column="priceCount" jdbcType="INTEGER" property="pricecount" />
+    <result column="forderCount" jdbcType="INTEGER" property="fordercount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, fbankName, sxe, priceCount, forderCount
+  </sql>
+</mapper>

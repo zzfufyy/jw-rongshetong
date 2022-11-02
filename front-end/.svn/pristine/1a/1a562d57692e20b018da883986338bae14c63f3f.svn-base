@@ -1,0 +1,57 @@
+<view class="container">
+	<view  class="clearfloat crbox">
+		<view class="ft tximgbox">
+			<image class="imgtx" src="{{imgtx}}"></image>
+		</view>
+		<view class="ft comnamebox" style="width: {{wht}}px;">{{name}}</view>
+	</view>
+	<view class="txtbox">
+		<view class="sqname">{{sqname}}</view>
+		<view class="sqname" style="margin-top: 5px;">{{local}}</view>
+	</view>
+	<view class="line1"></view>
+
+	<view class="clearfloat personbox">
+		<view class="clearfloat tybox" >
+			<view class="ft qzyx">企业介绍</view>
+		</view>
+		<view class="clearfloat yxjobname" >
+			<text>{{qyjs}}</text>
+		</view>
+	</view>
+	<view class="line1"></view>
+
+	<view class="clearfloat personbox">
+		<view class="clearfloat tybox" >
+			<view class="ft qzyx">企业相册</view>
+		</view>
+		<view class="clearfloat yxjobname flexbox" style="padding-left: 0;">
+			<text >{{qyxc}}</text>
+			<image wx:for="{{zwpj}}" data-src="{{item.imgqy}}" bindtap="preimg1" wx:key="key" style="width: {{imgwd}}px;height: {{bight}}px;" mode="widthFix" class="qyfc" src="{{item.imgqy}}"></image>
+		</view>
+	</view>
+	<view class="line1"></view>
+
+	<view class="clearfloat personbox" style="border-bottom: 0;">
+		<view class="clearfloat tybox" >
+			<view class="ft qzyx">招聘岗位</view>
+		</view>
+		<view class="zpgwlist" wx:for="{{zpgwlist}}" wx:key="key" bindtap="zwxq">
+			<view class="clearfloat yxjobname ">
+				<view class="ft ltjobbox">
+					<view class="jobnzwname">{{item.jobnzwname}}</view>
+					<view class="jobzwmon">{{item.jobzwmon}}</view>
+				</view>
+				<view class="fr frimg">
+					<image class="imgjt" src="/img/jt.png"></image>
+				</view>
+			</view>
+			<view class="clearfloat yxjobname " >
+				<view class="jobzwmon ">招{{item.num}}人 · {{item.jy}} · {{item.xl}} · {{item.age}}</view>
+				<view class="jyzwbox">
+					{{item.yq}}
+				</view>
+			</view>
+		</view>
+	</view>
+</view>

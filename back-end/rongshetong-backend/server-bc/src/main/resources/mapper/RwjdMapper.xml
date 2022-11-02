@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.RwjdMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Rwjd">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="datetime" jdbcType="TIMESTAMP" property="datetime" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="bh" jdbcType="INTEGER" property="bh" />
+    <result column="isfinish" jdbcType="INTEGER" property="isfinish" />
+    <result column="rwid" jdbcType="VARCHAR" property="rwid" />
+    <result column="thly" jdbcType="VARCHAR" property="thly" />
+    <result column="slroppenid" jdbcType="VARCHAR" property="slroppenid" />
+    <result column="slr" jdbcType="VARCHAR" property="slr" />
+    <result column="slphone" jdbcType="VARCHAR" property="slphone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, name, datetime, openid, bh, isfinish, rwid, thly, slroppenid, slr, slphone
+  </sql>
+</mapper>

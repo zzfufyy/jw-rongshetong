@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "楼宇就业",
+    "usingComponents": {
+        "choose-street": "/components/chooseStreet/chooseStreet"
+    }
+}

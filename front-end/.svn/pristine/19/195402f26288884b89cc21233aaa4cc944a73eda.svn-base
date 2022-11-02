@@ -1,0 +1,38 @@
+<view class="container">
+	<view class="imgbox">
+		<view class="imgb">
+			<image src="/img/fbcgimg.png" class="img"></image>
+		</view>
+		<view class="fbcg">恭喜您发布成功</view>
+		<view class="hytx">你可以将发布的投票活动分享至微信好友填写</view>
+	</view>
+	<view class="line10"></view>
+	<view class="namexs clearfloat">
+		<view class="ft">
+			<image src="/img/ducoment.png" class="ducoment"></image>
+		</view>
+		<view class="ft">
+			<view class="name">{{title}}</view>
+			<view class="fxtx"><image src="/img/icon／wode.png" class="user"></image>分享后可填写</view>
+		</view>
+	</view>
+	<view class="line10"></view>
+	<view class="fxboxbig">
+		<view class="fxhy">分享到</view>
+		<view class="fxbox">
+			<view class="wxhy">
+				<button class="button" open-type="share">
+					<image src="/img/wxhy.png" class="hyimg"></image>
+					<view style="margin-top: 10px;">微信好友</view>
+				</button>
+			</view>
+
+			<view class="wxhy">
+				<button class="button">
+					<image src="/img/ewming.png" class="hyimg"></image>
+					<view style="margin-top: 10px;">二维码</view>
+				</button>
+			</view>
+		</view>
+	</view>
+</view>

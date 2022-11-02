@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.DkzpMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Dkzp">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="oldbkid" jdbcType="VARCHAR" property="oldbkid" />
+    <result column="newbkid" jdbcType="VARCHAR" property="newbkid" />
+    <result column="oldorganid" jdbcType="VARCHAR" property="oldorganid" />
+    <result column="neworganid" jdbcType="VARCHAR" property="neworganid" />
+    <result column="zpsj" jdbcType="VARCHAR" property="zpsj" />
+    <result column="oldbkname" jdbcType="VARCHAR" property="oldbkname" />
+    <result column="newbkname" jdbcType="VARCHAR" property="newbkname" />
+    <result column="oldorganname" jdbcType="VARCHAR" property="oldorganname" />
+    <result column="neworganname" jdbcType="VARCHAR" property="neworganname" />
+    <result column="yl1" jdbcType="VARCHAR" property="yl1" />
+    <result column="yl2" jdbcType="VARCHAR" property="yl2" />
+    <result column="yl3" jdbcType="VARCHAR" property="yl3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, oldbkid, newbkid, oldorganid, neworganid, zpsj, oldbkname, newbkname, oldorganname, 
+    neworganname, yl1, yl2, yl3
+  </sql>
+</mapper>

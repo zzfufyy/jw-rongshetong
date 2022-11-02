@@ -1,0 +1,34 @@
+const $ = require('../utils/request_util')
+
+const loadEntityById = function (buildingUuid) {
+    return $.request({
+        url: '/community-cell-building/info?id=' + buildingUuid,
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader,
+    })
+}
+const listByCommunityUuid = function (communityUuid) {
+    return $.request({
+        url: '/community-cell-building/listByCommunityUuid?communityUuid=' + communityUuid,
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader,
+    });
+};
+
+const listByCellUuid = function (cellUuid) {
+    return $.request({
+        url: '/community-cell-building/listByCellUuid?cellUuid=' + cellUuid,
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader,
+    });
+};
+
+
+module.exports = {
+    listByCommunityUuid: listByCommunityUuid,
+    loadEntityById: loadEntityById,
+    listByCellUuid: listByCellUuid,
+}

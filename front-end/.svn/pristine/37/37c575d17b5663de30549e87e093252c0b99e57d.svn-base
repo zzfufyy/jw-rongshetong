@@ -1,0 +1,225 @@
+// pages/sqfw/sqfw.js
+const $ = require('../../utils/request_util');
+const Loading = require('../../utils/loading_util');
+const date_util = require('../../utils/date_util');
+const url_util = require('../../utils/url_util');
+
+const CONSTANT = require('../../common/constant');
+const GLOBAL_CONSTANT = require('../../common/globalConstant');
+const { Salary } = require('../../common/constant');
+// 加载服务
+const recruitJobService = require('../../common/recruitJobService');
+const viewRecordService = require('../../common/viewRecordService');
+const informationNewsService = require('../../common/informationNewsService');
+const communityInformationService = require('../../common/communityInformationService');
+const userCommunityService = require('../../common/userCommunityService');
+const { Completer } = require('../../utils/function_util');
+const string_util = require('../../utils/string_util');
+
+const app = getApp();
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+		openid: '',
+		// 社区用户授权级别  0:普通 1: 社区管理员 2: 网格录入员
+		authorizationLevel: 0,
+		// 暂时不用: 社区用户级别授权 是否已认证
+		authorizationIdentification: 0,
+
+		communityUuid: '',
+		communityName: '', //communityName: '东湖社区',
+		communityAddress: '湖南省长沙市芙蓉区晚报西街13号', //communityAddress: '湖南省长沙市芙蓉区晚报西街13号',
+		communityPhone: '',
+		communityPortraitPath: '',
+		zhjy: [
+			{ id: 'tagCompanyRecruit', name: '企业招聘', url: '/pages/comzp/comzp', bac: '#EEF7FE', iconimg: '/img/qyzp.png', },
+			{ id: 'tagCandidateRecruit', name: '求职就业', url: '/pages/qzjy/qzjy', bac: '#FEFAEE', iconimg: '/img/qzjy.png', },
+			{ id: 'tagCellInput', name: '网格录入', url: '/pages/wglr/wglr', bac: '#F3EEFC', iconimg: '/img/wglr.png', },
+			{ id: 'tagCommunityManagement', name: '社区管理', url: '/pages/sqgl/sqgl', bac: '#EEFBFE', iconimg: '/img/sqgl.png', },
+			{ id: 'tagRongEDai', name: '蓉e贷', url: '', bac: '#F5FFE8', iconimg: '/img/ryd.png', },
+			{ id: 'tagNewsAnnouncement', name: '新闻公告', url: '/pages/newsms/newsms', bac: '#FFF6F6', iconimg: '/img/xwgg.png', },
+		],
+		newsList: [
+			// {
+			// 	articleTitle: '春风送温暖 就业送真情',
+			// 	articleIntroduction: '【湖南省】关于印发《湖南省“十四五”金融业发展规划》的通知湖南省地方金融监督管理局关于印发《湖南省“十四五”金融业发展规划》的通知',
+			// 	articleAuthor: '岳麓区就业服务中心',
+			// 	articleReleaseTime: '3月02日',
+			// 	articlePortraitPath: 'http://frqryb.oss-accelerate.aliyuncs.com/headphoto/16297916583243346b1330ea-9a71-4ea4-85d0-02c7556c3b40.jpeg'
+			// },
+		],
+	},
+	state: {
+		communityUuidCompleter: new Completer(),
+	},
+	bindtapGoLink(e) {
+		let id = e.currentTarget.dataset.id;
+		let linkUrl = this.data.zhjy.find(v => {
+			return id == v.id;
+		}).url;
+		switch (id) {
+			// 网格录入
+			case 'tagCellInput':
+				if (this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_ADMIN
+					|| this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_RECORDER) {
+					linkUrl += ('?communityUuid=' + this.data.communityUuid);
+				} else {
+					wx.showModal({
+						title: '您没有网格录入的权限',
+					})
+					return;
+				}
+				break;
+			// 社区管理
+			case 'tagCommunityManagement':
+				if (this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_ADMIN) {
+					linkUrl += ('?communityUuid=' + this.data.communityUuid);
+				} else {
+					wx.showModal({
+						title: '您没有社区管理的权限',
+					})
+					return;
+				}
+				break;
+			default:
+				break;
+		}
+		wx.navigateTo({
+			url: linkUrl,
+		})
+	},
+	// 打电话
+	cellphone: function () {
+		let phone = this.data.communityPhone;
+		wx.makePhoneCall({
+			phoneNumber: phone,
+		});
+	},
+	//咨询详情
+	fczcbtnclick() {
+		wx.navigateTo({
+			url: '/pages/zxxq/zxxq',
+		})
+	},
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+	onLoad: async function (options) {
+		await app.getOpenidReady();
+		let openid = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_OPENID);
+		this.setData({ openid: openid });
+		// 传入社区id
+		let communityUuid = options.communityUuid;
+		// let communityUuid = 'e80cf86d-a8ea-11ec-98aa-5076afbf1539'; // 测试
+		// 设置变量到 data
+		this.setData({
+			communityUuid: communityUuid,
+		});
+		// 完成器传入
+		this.state.communityUuidCompleter.resolve(communityUuid);
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: async function () {
+		try {
+			Loading.begin();
+			await this.loadContent();
+		} catch (e) {
+			console.error(e);
+		} finally {
+			Loading.end();
+		}
+
+	},
+	// 加载页面内容
+	loadContent: async function () {
+		// 加载 社区用户 权限
+		await app.getOpenidReady();
+		let openid = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_OPENID);
+
+		// 异步加载communityUuid
+		let communityUuid = await this.state.communityUuidCompleter.promise;
+		console.log(communityUuid);
+		let userCommunityData = await userCommunityService.loadEntityById(openid);
+		console.log(userCommunityData);
+		this.setData({
+			authorizationLevel: userCommunityData.data.authorizationLevel,
+			authorizationIdentification: userCommunityData.data.authorizationIdentification,
+		})
+		// 社区信息加载
+		let communityData = await communityInformationService.loadEntityById(communityUuid);
+		communityData = communityData.data;
+		this.setData({
+			communityUuid: communityData.id,
+			communityName: communityData.communityName,
+			communityAddress: communityData.address,
+			communityPhone: communityData.phone,
+			communityPortraitPath: string_util.isEmpty(communityData.portraitPath) ?
+				CONSTANT.DEFAULT_COMMUNITY_PORTRAIT_PATH : app.globalData.web_path + communityData.portraitPath,
+		});
+		// 新闻加载
+		let newsData = await informationNewsService.loadListByCommunityUuid(communityUuid, 2);
+		let newsList = newsData.data.map(v => {
+			return {
+				articleTitle: v.articleTitle,
+				articleIntroduction: v.articleIntroduction,
+				articleAuthor: v.articleAuthor,
+				articleReleaseTime: date_util.dateToCN(v.articleReleaseTime),
+				articlePortraitPath: url_util.isImageUrlInServer(v.articlePortraitPath) ?
+					app.globalData.web_path + v.articlePortraitPath : v.articlePortraitPath,
+			}
+		});
+		console.log(newsList);
+		this.setData({
+			newsList: newsList,
+		});
+
+	},
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	}
+})

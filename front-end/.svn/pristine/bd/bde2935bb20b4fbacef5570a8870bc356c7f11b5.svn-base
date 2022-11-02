@@ -1,0 +1,60 @@
+<view class="subject-container">
+    <view class="subject-line-box flex-row">
+        <text>{{subjectOrder+1}}.</text>
+        <input class="input-box" placeholder="点击编辑{{subjectType ==2? '【单选题】':'【多选题】'}}" value="{{subjectTitle}}" bindinput="bindinputSujectTitle" />
+    </view>
+    <radio-group class="option-line-box flex-row radio-height" wx:key="key"  wx:for="{{optionList}}"  wx:if="{{subjectType==2}}">
+        <radio checked="{{item.checked}}" />
+        <input class="input-box" placeholder="选项{{index+1}}" value="{{item.optionTitle}}" data-index="{{index}}" bindinput="bindinputOptionTitle" />
+        <image bindtap="bindtapDeleteOption" data-index="{{index}}" src="/img/gbimg.png" class="radio-size"></image>
+    </radio-group>
+    <checkbox-group class="option-line-box flex-row radio-height" wx:key="key" wx:for="{{optionList}}" wx:if="{{subjectType==3}}">
+        <checkbox checked="{{item.checked}}" />
+        <input class="input-box" placeholder="选项{{index+1}}" value="{{item.optionTitle}}" data-index="{{index}}" bindinput="bindinputOptionTitle" />
+        <image bindtap="bindtapDeleteOption" data-index="{{index}}" src="/img/gbimg.png" class="radio-size"></image>
+    </checkbox-group>
+    <view class="add-box flex-column">
+        <view class="add-button text-28rpx" bindtap="bindtapAddOption">+ 选项</view>
+
+    </view>
+    <view class="split-line"></view>
+    <view class="setting-box flex-row-between">
+        <text bindtap="bandtapBaseSettingPopup">题目设置</text>
+        <image src="/img/ddd.png" class="radio-size" bindtap="bindtapMoreSettingPopup"></image>
+    </view>
+</view>
+
+<!-- 题目设置 -->
+<view class="mask-layer" hidden="{{hiddenBaseSetting}}"></view>
+<view class="fix-bottom-box" hidden="{{hiddenBaseSetting}}">
+    <view class="flex-row-between base-setting-box-title">
+        <view class="width-33 text-align-left" bindtap="bindtapBaseSettingCancel">取消</view>
+        <view class="width-33 text-align-center">题目设置</view>
+        <view class="width-33 text-align-right" bindtap="bindtapBaseSettingConfirm">确定</view>
+    </view>
+    <view class="setting-line-box flex-row-between">
+        <view>此题必答</view>
+        <switch class="switch-size-7" checked="{{isRequire}}" bindchange="bindchangeIsRequire" />
+    </view>
+    <view class="split-line-10"></view>
+    <view class="setting-line-box flex-row-between">
+        <view>多选题</view>
+        <switch class="switch-size-7" checked="{{isMultuple}}" bindchange="bindchangeIsMultiple" />
+    </view>
+    <view class="split-line-52">
+    </view>
+</view>
+
+<!-- 更多设置 -->
+<view class="mask-layer" hidden="{{hiddenMoreSetting}}"></view>
+<view class="fix-bottom-box" hidden="{{hiddenMoreSetting}}">
+    <view class="more-setting-line-box" bindtap="bindtapCopy">复制</view>
+    <view class="split-line"></view>
+    <view class="more-setting-line-box" bindtap="bindtapMovePrev">上移</view>
+    <view class="split-line"></view>
+    <view class="more-setting-line-box" bindtap="bindtapMoveNext">下移</view>
+    <view class="split-line"></view>
+    <view class="more-setting-line-box" bindtap="bindtapDelete">删除</view>
+    <view class="split-line-10"></view>
+    <view class="more-setting-line-box setting-cancel-color" bindtap="bindtapMoreSettingCancel">取消</view>
+</view>

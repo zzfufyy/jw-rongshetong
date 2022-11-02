@@ -1,0 +1,106 @@
+<view class="clearfloat container">
+	<view class="titwarn">
+		平台提醒：标*为必填项
+	</view>
+
+	<view wx:for="{{datall}}" wx:key="key" wx:for-index="pindex" style="position: relative;">
+		<image src="/img/del.png" class="jianhao" data-index="{{pindex}}" bindtap='deletePrice'></image>
+		<view >
+			<view class="clearfloat ttbox">
+				<view class="ft leftname">岗位名称</view>
+				<view class="fr rtip">
+					<input type="text" class="iptqy" bindinput='setInputValue2' name="gwmc" placeholder="请输入岗位名称" data-tag="NumLimit" data-index="{{pindex}}"  />
+				</view>
+			</view>
+			<view class="clearfloat ttbox">
+				<view class="ft leftname">薪资范围</view>
+				<view class="qyname rtip fr">
+						<picker bindchange="bindPickerChange"  data-index="{{pindex}}" range="{{item.array}}" value="{{item.index}}" >
+							<view class="picker" style="color:{{color}}">
+								{{item.array[item.index]}}
+								<image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+							</view>
+						</picker>
+					</view>
+			</view>
+			
+			<view class="clearfloat ttbox">
+				<view class="ft leftname">招聘人数*</view>
+				<view class="fr rtip">
+					<input type="text" class="iptqy" bindinput='bindinputRecruitingNumber' name="recruitingNumber" placeholder="请输入招聘人数" data-tag="NumLimit"  data-index="{{pindex}}" />
+				</view>
+			</view>
+			<!-- <view class="line10"></view>
+
+			<view class="clearfloat ttbox">
+				<view class="ft leftname">学历要求</view>
+				<view class="qyname rtip fr">
+					<picker bindchange="bindPickerChange2" data-index="{{pindex}}" range="{{item.array2}}" value="{{item.index2}}" >
+						<view class="picker">
+							{{item.array2[item.index2]}}
+							<image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+						</view>
+					</picker>
+				</view>
+			</view>
+
+			<view class="clearfloat ttbox">
+				<view class="ft leftname">经验要求</view>
+				<view class="qyname rtip fr">
+					<picker bindchange="bindPickerChange3" data-index="{{pindex}}" range="{{item.array3}}" value="{{item.index3}}" >
+						<view class="picker">
+							{{item.array3[item.index3]}}
+							<image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+						</view>
+					</picker>
+				</view>
+			</view>
+
+			<view class="clearfloat ttbox">
+				<view class="ft leftname">年龄要求</view>
+				<view class="qyname rtip fr">
+					<picker bindchange="bindPickerChange4" data-index="{{pindex}}" range="{{item.array4}}" value="{{item.index4}}" >
+						<view class="picker">
+							{{item.array4[item.index4]}}
+							<image class="slect" src="https://demo.csjing.com/img/rtjt.png"></image>
+						</view>
+					</picker>
+				</view>
+			</view> -->
+
+
+			<!-- <view class="line10"></view> -->
+
+			<!-- <view class="clearfloat ttbox">
+				<view class="ft leftname">招聘人姓名*</view>
+				<view class="qyname rtip fr">
+					<input type="text" class="iptqy" bindinput='namephone' name="renum" placeholder="请输入招聘人姓名" data-tag="tagnum" 
+					data-index="{{pindex}}"  />
+				</view>
+			</view>
+			<view class="clearfloat ttbox">
+				<view class="ft leftname">招聘联系电话*</view>
+				<view class="qyname rtip fr">
+					<input type="text" class="iptqy" bindinput='bindinputRecruitingNumber' name="recruitingNumber" placeholder="请输入联系电话" data-tag="NumLimit" 
+					data-index="{{pindex}}"  />
+				</view>
+			</view> -->
+			<view class="line10"></view>
+			<view class="clearfloat ttbox" style="height: auto;">
+				<view class=" leftname">岗位需求</view>
+				<view class="gwxq">
+					<textarea class="textarea" placeholder="请输入岗位需求" name="xsbdz" data-index="{{pindex}}"  bindinput='setInputValue3'  id="" ></textarea>
+				</view>
+			</view>
+		</view>
+		<view class="line10"></view>
+	</view>
+
+	<view class="jxtj" bindtap="jxtj">继续添加</view>
+
+
+	
+</view>
+<view class="bcbox">
+	<view class="tijsq" bindtap="qrfb">保存</view>
+</view>

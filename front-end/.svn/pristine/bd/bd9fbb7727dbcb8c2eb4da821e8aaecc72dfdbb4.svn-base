@@ -1,0 +1,61 @@
+<view class="container">
+    <view class="line-box">
+        <text class="num-box">1.</text> <input class="input-box" placeholder="请输入投票题目标题" bindinput="bindinputSujectTitle"/>
+    </view>
+    <view>
+        <view wx:key="key" class="radio-box clearfloat" wx:for="{{optionList}}">
+            <!-- <radio disabled="true" class="float-left" checked="{{item.checked}}" value="{{index}}" /> -->
+            <image src="/img/cercle.png" class="cercle"></image>
+            <input class="input-box" placeholder="请输入选项" value="{{item.optionTitle}}" data-index="{{index}}" bindinput="bindinputOptionTitle" />
+            <image bindtap="gbimg" src="/img/gbimg.png" class="cercle gbimg"></image>
+
+        </view>
+        <view class="addbtn">+ 选项</view>
+        <view class="line1"></view>
+        <view class="tmsz">
+            <text bindtap="ques">题目设置</text> 
+            <image src="/img/ddd.png" class="cercle gbimg" bindtap="dddbtn"></image>
+        </view>
+    </view>
+</view>
+<!-- 题目设置 -->
+<view class="zzc" hidden="{{quesshow}}"></view>
+<view class="sxbox" hidden="{{quesshow}}">
+    <view class="toptit clearfloat">
+        <view class="ft qx" bindtap="bindtapSettingCancel">取消</view>
+        <view class="ft sz">题目设置</view>
+        <view class="ft qd" bindtap="bindtapSettingConfirm">确定</view>
+    </view>
+    <view class="cont clearfloat" style="position: relative;">
+        <view class="ft bd">此题必答</view>
+        <view class="fr an">
+            <switch class="wx-switch-input" checked="{{switch1Checked}}" bindchange="switch1Change"/>
+        </view>
+    </view>
+    <view class="line1"></view>
+    <view class="cont clearfloat" style="position: relative;">
+        <view class="ft bd">多选题</view>
+        <view class="fr an">
+            <switch class="wx-switch-input" checked="{{ischeckbox}}" bindchange="ischeckbox"/>
+        </view>
+    </view>
+</view>
+
+
+<!-- 题目设置 -->
+<view class="zzc" hidden="{{dddsz}}"></view>
+<view class="sxbox" hidden="{{dddsz}}">
+    <view class="btnbox" bindtap="">复制</view>
+    <view class="line1"></view>
+    <view class="btnbox" bindtap="">上移</view>
+    <view class="line1"></view>
+    <view class="btnbox" bindtap="">下移</view>
+    <view class="line1"></view>
+    <view class="btnbox" bindtap="">删除</view>
+    <view class="line10"></view>
+    <view class="btnbox closeqx" bindtap="bindtapMoreSettingCancel">取消</view>
+
+</view>
+
+
+

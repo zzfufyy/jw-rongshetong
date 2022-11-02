@@ -1,0 +1,20 @@
+<view class="container">
+    <view class="tab-container">
+        <view class="tab-item" wx:for="{{tabList}}" wx:key="index" wx:for-item="tabItem"  data-index="{{index}}" bindtap="bindtapChooseTab">
+            <text class="tab-item-text" >{{tabItem.text}}</text>
+            <view class="tab-item-line {{tabItem.checked?'tab-item-checked':''}}"></view>
+        </view>
+    </view>
+    <scroll-view scroll-y="true" bindscrolltolower="bindscrolltolowerLoadMore" style="height:{{winHeight}}px;width:100%;">
+        <block wx:for="{{newsList}}" wx:key="index" data-index="{{index}}" >
+            <view class="news-item" data-id="{{item.newsUuid}}" bindtap="bindtapGoLinkNewsDetail">
+                <text class="news-item-article">{{item.articleTitle}}</text>
+                <view class="news-item-bottom">
+                    <text class="news-item-bottom-text">{{item.articleReleaseTime}}</text>
+                    <view class="news-item-split-line"></view>
+                    <text class="news-item-bottom-text">{{item.countView}}人浏览</text>
+                </view>
+            </view>
+        </block>
+    </scroll-view>
+</view>

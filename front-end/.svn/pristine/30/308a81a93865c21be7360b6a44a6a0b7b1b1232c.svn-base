@@ -1,0 +1,11 @@
+<!--pages/splt/splt.wxml-->
+<view class="page-body">
+  <view class="page-section tc">
+    <view class="btn-area">
+      <button bindtap="bindPlay" class="page-body-button" type="primary">聊天</button>
+   
+    </view>
+  </view>
+</view>
+
+

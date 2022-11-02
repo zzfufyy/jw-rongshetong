@@ -1,0 +1,148 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch DateUtils",
+            "request": "launch",
+            "mainClass": "com.shopping.base.utils.DateUtils",
+            "projectName": "base-project"
+        },
+        {
+            "type": "java",
+            "name": "Launch EncryptUtil",
+            "request": "launch",
+            "mainClass": "com.shopping.base.utils.EncryptUtil",
+            "projectName": "base-project"
+        },
+        {
+            "type": "java",
+            "name": "Launch JsonUtil",
+            "request": "launch",
+            "mainClass": "com.shopping.base.utils.JsonUtil",
+            "projectName": "base-project"
+        },
+        {
+            "type": "java",
+            "name": "Launch LocationUtils",
+            "request": "launch",
+            "mainClass": "com.shopping.base.utils.LocationUtils",
+            "projectName": "base-project"
+        },
+        {
+            "type": "java",
+            "name": "Launch PayUtil",
+            "request": "launch",
+            "mainClass": "com.shopping.base.utils.PayUtil",
+            "projectName": "base-project"
+        },
+        {
+            "type": "java",
+            "name": "Launch Utils",
+            "request": "launch",
+            "mainClass": "com.shopping.base.utils.Utils",
+            "projectName": "base-project"
+        },
+        {
+            "type": "java",
+            "name": "Launch DateUtil",
+            "request": "launch",
+            "mainClass": "com.shopping.base.utils.date.DateUtil",
+            "projectName": "base-project"
+        },
+        {
+            "type": "java",
+            "name": "Launch ExcelUnit",
+            "request": "launch",
+            "mainClass": "com.shopping.base.utils.excel.ExcelUnit",
+            "projectName": "base-project"
+        },
+        {
+            "type": "java",
+            "name": "Launch BcBootstrap",
+            "request": "launch",
+            "mainClass": "com.shopping.BcBootstrap",
+            "projectName": "server-bc"
+        },
+        {
+            "type": "java",
+            "name": "Launch JwtTokenUtils",
+            "request": "launch",
+            "mainClass": "com.shopping.wx.token.authorization.manager.JwtTokenUtils",
+            "projectName": "server-bc"
+        },
+        {
+            "type": "java",
+            "name": "Launch BaiduSpeechUtil",
+            "request": "launch",
+            "mainClass": "com.shopping.wx.util.BaiduSpeechUtil",
+            "projectName": "server-bc"
+        },
+        {
+            "type": "java",
+            "name": "Launch CommondUtil",
+            "request": "launch",
+            "mainClass": "util.CommondUtil",
+            "projectName": "server-bc"
+        },
+        {
+            "type": "java",
+            "name": "Launch EncrypAES",
+            "request": "launch",
+            "mainClass": "util.Encryp.EncrypAES",
+            "projectName": "server-bc"
+        },
+        {
+            "type": "java",
+            "name": "Launch EncrypDES",
+            "request": "launch",
+            "mainClass": "util.Encryp.EncrypDES",
+            "projectName": "server-bc"
+        },
+        {
+            "type": "java",
+            "name": "Launch EncrypDES3",
+            "request": "launch",
+            "mainClass": "util.Encryp.EncrypDES3",
+            "projectName": "server-bc"
+        },
+        {
+            "type": "java",
+            "name": "Launch MD5Util",
+            "request": "launch",
+            "mainClass": "util.Encryp.MD5Util",
+            "projectName": "server-bc"
+        },
+        {
+            "type": "java",
+            "name": "Launch GenerateNoUtil",
+            "request": "launch",
+            "mainClass": "util.GenerateNoUtil",
+            "projectName": "server-bc"
+        },
+        {
+            "type": "java",
+            "name": "Launch OthSms",
+            "request": "launch",
+            "mainClass": "com.shopping.framework.sms.core.OthSms",
+            "projectName": "spring-boot-starter-sms"
+        },
+        {
+            "type": "java",
+            "name": "Launch JwtTokenUtils(1)",
+            "request": "launch",
+            "mainClass": "com.shopping.framework.token.authorization.manager.JwtTokenUtils",
+            "projectName": "spring-boot-starter-token"
+        }
+    ]
+}

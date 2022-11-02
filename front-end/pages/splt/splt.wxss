@@ -1,0 +1,21 @@
+/* pages/syzl/syzl.wxss */
+.contbox{
+	text-align: center;
+	margin-top: 51px;
+	width: 270px;
+	height: 330px;
+	margin: 51px auto;
+	border: 1px solid #E8E8E8;
+	box-shadow: 0px 3px 6px 1px rgba(153, 153, 153, 0.16);
+	display: flex;
+	/* align-items: center; */
+	justify-content: center;
+	position: relative;
+}
+.ca{
+	position: absolute;
+	bottom: 20px;font-size: 14px;
+	font-family: Source Han Sans CN-Regular, Source Han Sans CN;
+	font-weight: 400;
+	color: #999999;
+}

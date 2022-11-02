@@ -1,0 +1,211 @@
+// pages/test/test.js
+Page({
+
+	/**
+	 * 页面的初始数据
+	 */
+	data: {
+
+		list: [
+      // {id: '1',name: '中央球机',iconimg:'/img/more.png',},
+      { id: 'sygl', name: '诉源治理', url: '/pages/syzl/syzl', bac: '#EEF7FE', iconimg: '/img/more.png', },
+      { id: 'zphui', name: '招聘会', url: '/pages/zphlist/zphlist', bac: '#EEF7FE', iconimg: '/img/more.png', },
+      { id: 'tagCandidateRecruit', name: '求职就业', url: '/pages/comzp/comzp', bac: '#FEFAEE', iconimg: '/img/more.png', },
+      { id: 'tagCompanyRecruit', name: '企业招聘', url: '/pages/qzjy/qzjy', bac: '#EEF7FE', iconimg: '/img/more.png', },
+
+      { id: 'tagCellInput', name: '网格录入', url: '/pages/wglr/wglr', bac: '#F3EEFC', iconimg: '/img/more.png', },
+      { id: 'tagCommunityManagement', name: '社区管理', url: '/pages/sqgl/sqgl', bac: '#EEFBFE', iconimg: '/img/more.png', },
+      { id: 'tagRongEDai', name: '蓉e贷', url: '', bac: '#F5FFE8', iconimg: '/img/more.png', target: 'miniProgram', appId: 'wx96d6e30c9f677d52' },
+
+      // { id: 'tagNewsAnnouncement', name: '更多功能', url: '/pages/test/test', bac: '#EAFBF8', iconimg: '/img/moregn.png', },
+      { id: 'tagNewsAnnouncement', name: '新闻公告', url: '/pages/newsms/newsms', bac: '#FFF6F6', iconimg: '/img/more.png', },
+
+      { id: 'tagInformationCollect', name: '自建房信息采集', url: '/pages/messgecollect/messgecollect', bac: '#EEF7FE', iconimg: '/img/more.png', tp: '-13px' },
+
+    ],
+    isSelect: {id: '2',name: '4号地',iconimg:'/img/more.png',},
+    dialogShow: false,
+    buttons: [{text: '取消'}, {text: '确定'}],
+    showTopTips:false,
+    inputText:'',
+    showkelong:false,
+    kelong: {top: 0,name: '',id: '2',name: '4号地',iconimg:'/img/more.png',},
+    replace: {
+        name: '',
+      },
+	},
+	/**
+	 * 生命周期函数--监听页面加载
+	 */
+  bindtapGoLink(e) {
+    let id = e.currentTarget.dataset.id;
+    let linkUrl = this.data.zhjy.find(v => {
+        return id == v.id;
+    }).url;
+    switch (id) {
+        case 'tagCompanyRecruit':
+            // 传入 授权级别
+            linkUrl += ('?communityUuid=' + this.data.communityUuid);
+            break;
+        case 'tagCandidateRecruit':
+            // 传入 授权级别
+            linkUrl += ('?communityUuid=' + this.data.communityUuid);
+            break;
+        // 网格录入
+        case 'tagCellInput':
+            wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_FLAG_ENTRY_GRID_OR_COMMUNITY, 'grid');
+            if (this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_ADMIN
+                || this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_RECORDER) {
+                linkUrl += ('?communityUuid=' + this.data.communityUuid);
+            } else {
+                wx.showModal({
+                    title: '您没有网格录入的权限',
+                })
+                return;
+            }
+            break;
+        // 社区管理
+        case 'tagCommunityManagement':
+            wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_FLAG_ENTRY_GRID_OR_COMMUNITY, 'community');
+            if (this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_ADMIN) {
+                linkUrl += ('?communityUuid=' + this.data.communityUuid);
+            } else {
+                wx.showModal({
+                    title: '您没有社区管理的权限',
+                })
+                return;
+            }
+            break;
+        // 新闻公告
+        case 'tagNewsAnnouncement':
+            linkUrl += ('?communityUuid=' + this.data.communityUuid);
+            break;
+        // 信息采集
+        case 'tagInformationCollect':
+            linkUrl += ('?communityUuid=' + this.data.communityUuid);
+            break;
+        default:
+            break;
+    }
+    console.log(id)
+    // // 信息采集  权限判断
+    // if (id == 'tagInformationCollect' && CONSTANT.INFO_COLLECT_PERMISSION_LIST.indexOf(this.data.districtName) == -1) {
+    //     wx.showToast({
+    //         icon: 'error',
+    //         title: '您暂无权限',
+    //     })
+    //     return;
+    // }
+    wx.navigateTo({
+        url: linkUrl,
+    })
+  },
+	onLoad: function (options) {
+
+	},
+
+  dragStart: function(e) {
+    var that = this
+    var kelong = that.data.kelong
+    var i = e.currentTarget.dataset.index
+    kelong.name = this.data.list[i].name
+    var query = wx.createSelectorQuery();
+    //选择id
+    query.select('.list').boundingClientRect(function(rect) {
+      kelong.top = e.changedTouches[0].clientY - rect.top
+      console.log("dragStart",kelong.top)
+      that.setData({
+        kelong: kelong,
+        showkelong: true
+      })
+    }).exec();
+  },
+  dragMove: function(e) {
+    var that = this
+    var query = wx.createSelectorQuery();
+    var kelong = that.data.kelong
+    query.select('.list').boundingClientRect(function(rect) {
+      kelong.top = e.changedTouches[0].clientY - rect.top
+      if(kelong.top < 60) {
+        kelong.top = 60
+      } else if (kelong.top > rect.height - 40) {
+        kelong.top = rect.height - 40
+      }
+      that.setData({
+        kelong: kelong,
+      })
+    }).exec();
+  },
+  dragEnd: function(e) {
+    var that = this
+    var i = e.currentTarget.dataset.index
+    var query = wx.createSelectorQuery();
+    var kelong = that.data.kelong
+    // var listnum = that.data.list.length
+    var list = that.data.list
+    query.select('.list').boundingClientRect(function (rect) {
+      kelong.top = e.changedTouches[0].clientY - rect.top
+      var target = parseInt(kelong.top / 48)-1
+      var replace = that.data.replace
+      // console.log("dragEnd",target,i)
+      if (target >= 0) {
+        replace = list.splice(i,1);
+        list.splice(target,0,replace[0]);
+        // console.log("dragEnd",target,i,replace,list)
+      }
+      that.setData({
+        list: list,
+        showkelong:false
+      })
+		}).exec();
+		console.log(list)
+  },
+	/**
+	 * 生命周期函数--监听页面初次渲染完成
+	 */
+	onReady: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面显示
+	 */
+	onShow: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面隐藏
+	 */
+	onHide: function () {
+
+	},
+
+	/**
+	 * 生命周期函数--监听页面卸载
+	 */
+	onUnload: function () {
+
+	},
+
+	/**
+	 * 页面相关事件处理函数--监听用户下拉动作
+	 */
+	onPullDownRefresh: function () {
+
+	},
+
+	/**
+	 * 页面上拉触底事件的处理函数
+	 */
+	onReachBottom: function () {
+
+	},
+
+	/**
+	 * 用户点击右上角分享
+	 */
+	onShareAppMessage: function () {
+
+	}
+})

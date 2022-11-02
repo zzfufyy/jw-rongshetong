@@ -1,0 +1,241 @@
+// pages/schoolHomePage/schoolHomePage.js
+const CONSTANT = require('../../common/constant');
+const GLOBAL_CONSTANT = require('../../common/globalConstant');
+
+const date_util = require('../../utils/date_util');
+const img_util = require('../../utils/img_util');
+const prompt_util = require('../../utils/prompt_util');
+const string_util = require('../../utils/string_util');
+const Loading = require('../../utils/loading_util');
+const {
+    Completer
+} = require('../../utils/function_util');
+
+const informationNewsService = require('../../common/informationNewsService');
+const functionTagService = require('../../common/functionTagService');
+const userStateService = require('../../common/userStateService');
+const userRecruiterService = require('../../common/userRecruiterService');
+const recruitCompanyService = require('../../common/recruitCompanyService');
+const iUserRoleService = require('../../common/iUserRoleService');
+
+const app = getApp();
+Page({
+
+    data: {
+        hiddenChooseIdentity: true,
+        openid: '',
+
+        functionTagList: [],
+
+        communityUuid: '',
+
+    },
+    /** BEGIN 页面事件 */
+    bindtapTagNewsAnnouncement() {
+        wx.navigateTo({
+            url: `/pages/newsms/newsms?communityUuid=${this.data.communityUuid}&communityType=${CONSTANT.COMMUNITY_TYPE.SCHOOL}`,
+        })
+    },
+    bindtapGoLink: async function (e) {
+        let id = e.currentTarget.dataset.id;
+        let linkUrl = this.data.functionTagList.find(v => {
+            return id == v.tagId;
+        }).pagePathLink;
+        console.info(`Choose the functionTag: ${id}`);
+        switch (id) {
+            // 企业招聘  求职就业
+            case 'tagRecruitCompany':
+                linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                break;
+            case 'tagRecruitCandidate':
+                linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                break;
+            case 'tagRecruitFair':
+                break;
+            case 'tagPersonalCenterSchool':
+                // 重置 身份切换完成器
+                this.setData({
+                    hiddenChooseIdentity: false,
+                })
+                this.identitySwitchCompleter = new Completer();
+                await this.identitySwitchCompleter.promise;
+                // 如果是招聘者  修改路由到
+                if (wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_USER_IDENTITY) == CONSTANT.UserRole.Recruiter) {
+                    linkUrl = '/pages/jlxg/jlxg';
+                  // 判断是否有公司
+                  let userRecruiterInfo = (await userRecruiterService.loadEntityById(this.data.openid)).data;
+                  let companyUuid = userRecruiterInfo.companyUuid;
+                  if (string_util.isEmpty(companyUuid)) {
+                      console.debug(`User Openid: ${this.data.openid} hasn't register Company`);
+                      // 跳转到注册公司
+                      linkUrl = '/pages/qyzc/qyzc';
+                  } else {
+                      console.debug(`User Openid: ${this.data.openid} has CompanyUuid: ${companyUuid}`);
+                      let recruitCompanyInfo = (await recruitCompanyService.loadEntityById(companyUuid)).data;
+                      // 已认证
+                      if (recruitCompanyInfo.flagIdentification == 1) {
+                          linkUrl = '/pages/jlxg/jlxg';
+                      // 未认证    
+                      } else {
+                          linkUrl = '/pages/waiteyz/waiteyz';
+                      }
+                  }
+                }
+              
+
+                break;
+            default:
+                break;
+        }
+        console.info(`page navigateTo the page: ${linkUrl}`);
+        wx.navigateTo({
+            url: linkUrl,
+        })
+    },
+    bindtapChooseCandidate: async function () {
+        await iUserRoleService.turnToCandidate();
+        this.setData({
+            hiddenChooseIdentity: true,
+        })
+        this.identitySwitchCompleter.resolve();
+
+    },
+    bindtapChooseRecruiter: async function () {
+        // 
+
+
+        await iUserRoleService.turnToRecruiter();
+        this.setData({
+            hiddenChooseIdentity: true,
+        })
+        this.identitySwitchCompleter.resolve();
+
+    },
+    bindtapGoNews: function (e) {
+        let newsUuid = e.currentTarget.id;
+        wx.navigateTo({
+            url: '/pages/zxxq/zxxq?newsUuid=' + newsUuid,
+        })
+
+    },
+
+    /** END  页面事件 */
+
+    /** BEGIN 内部方法 */
+    // 加载新闻列表 - limit 3
+    _loadNewsList: async function () {
+        await this.communityUuidCompleter.promise;
+        let newsData = (await informationNewsService.loadListByCommunityUuid(this.data.communityUuid, 3)).data;
+        let newsList = newsData.map(v => {
+            return {
+                id: v.id,
+                articleTitle: v.articleTitle,
+                articleIntroduction: v.articleIntroduction,
+                articleAuthor: v.articleAuthor,
+                articleReleaseTime: date_util.dateToCN(v.articleReleaseTime),
+                articlePortraitPath: img_util.handleArticlePortraitPath(v.articlePortraitPath),
+            }
+        });
+        // 构造newsList
+        this.setData({
+            newsList: newsList,
+        })
+    },
+    // 加载功能列表 - 特定
+    _loadFunctionTagList: async function () {
+        let functionTagAllList = (await functionTagService.listAll()).data;
+        let functionTagList = CONSTANT.FUNCTION_TAG_LIST_SCHOOL.map(v => {
+            return functionTagAllList.find(r => {
+                return r.tagId == v;
+            })
+        })
+        this.setData({
+            functionTagList: functionTagList,
+        })
+
+    },
+    // 选择身份
+    _chooseIdentity: async function () {
+
+
+    },
+    /** END 内部方法 */
+
+
+    identitySwitchCompleter: new Completer(),
+    communityUuidCompleter: new Completer(),
+    onLoad: async function (options) {
+        this.communityUuidCompleter = new Completer();
+        await app.getOpenidReady();
+        let communityUuid = 'ea8a6853-fd9f-11ec-9be3-525401030264';
+        this.setData({
+            communityUuid: communityUuid,
+        })
+        this.communityUuidCompleter.resolve(communityUuid);
+        // 用户授权
+        this.authorize = this.selectComponent("#authorize");
+        let authorizeRs = await this.authorize.doAuthorize();
+        if (!authorizeRs) {
+            prompt_util.authorizeNamePortraitFailPrompt();
+        }
+        // openid设置
+        await app.getOpenidReady();
+        let openid = app.getOpenid();
+        this.setData({
+            openid: openid,
+        })
+        let userRole = await iUserRoleService.getUserRole();
+        console.info(`Now user identity: ${userRole}`);
+        try {
+            Loading.begin();
+            // 构建新闻列表
+            await this._loadNewsList();
+            // 构建功能列表
+            await this._loadFunctionTagList();
+
+        } catch (e) {
+            console.error(e)
+        } finally {
+            Loading.end();
+        }
+
+    },
+
+
+
+    onShow: async function () {
+
+    },
+
+
+    onReady: function () {
+
+    },
+
+
+
+
+    onHide: function () {
+
+    },
+
+
+    onUnload: function () {
+
+    },
+
+
+    onPullDownRefresh: function () {
+
+    },
+
+
+    onReachBottom: function () {
+
+    },
+
+
+    onShareAppMessage: function () {
+
+    }
+})

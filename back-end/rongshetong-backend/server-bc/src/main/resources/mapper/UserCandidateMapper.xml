@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.UserCandidateMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.UserCandidate">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="identity_card" jdbcType="VARCHAR" property="identityCard" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="working_age" jdbcType="INTEGER" property="workingAge" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="lon" jdbcType="DOUBLE" property="lon" />
+    <result column="lat" jdbcType="DOUBLE" property="lat" />
+    <result column="marraige_state" jdbcType="INTEGER" property="marraigeState" />
+    <result column="political_state" jdbcType="INTEGER" property="politicalState" />
+    <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+    <result column="personnel_state" jdbcType="INTEGER" property="personnelState" />
+    <result column="portrait_path" jdbcType="VARCHAR" property="portraitPath" />
+    <result column="expect_salary_min" jdbcType="INTEGER" property="expectSalaryMin" />
+    <result column="expect_salary_max" jdbcType="INTEGER" property="expectSalaryMax" />
+    <result column="expect_category_id" jdbcType="VARCHAR" property="expectCategoryId" />
+    <result column="expect_community_id" jdbcType="VARCHAR" property="expectCommunityId" />
+    <result column="edu_school_name" jdbcType="VARCHAR" property="eduSchoolName" />
+    <result column="edu_background_name" jdbcType="VARCHAR" property="eduBackgroundName" />
+    <result column="edu_major" jdbcType="VARCHAR" property="eduMajor" />
+    <result column="edu_begin_time" jdbcType="DATE" property="eduBeginTime" />
+    <result column="edu_end_time" jdbcType="DATE" property="eduEndTime" />
+    <result column="flag_identification" jdbcType="INTEGER" property="flagIdentification" />
+    <result column="count_view" jdbcType="INTEGER" property="countView" />
+    <result column="community_uuid" jdbcType="VARCHAR" property="communityUuid" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+    <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+    <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+    <result column="internship" jdbcType="VARCHAR" property="internship" />
+    <result column="resume" jdbcType="VARCHAR" property="resume" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, real_name, identity_card, gender, birthday, telephone, working_age, email, address, 
+    lon, lat, marraige_state, political_state, introduction, personnel_state, portrait_path, 
+    expect_salary_min, expect_salary_max, expect_category_id, expect_community_id, edu_school_name, 
+    edu_background_name, edu_major, edu_begin_time, edu_end_time, flag_identification, 
+    count_view, community_uuid, priority, status, create_time, ext1, ext2, ext3, internship, 
+    resume
+  </sql>
+</mapper>

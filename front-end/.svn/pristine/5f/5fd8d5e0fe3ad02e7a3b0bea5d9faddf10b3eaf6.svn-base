@@ -1,0 +1,25 @@
+const $ = require('../utils/request_util')
+
+
+const insertByEntity = function (entity) {
+    return $.request({
+        url: '/fair-for-company/add',
+        data: entity,
+        method: $.RequestMethod.POST,
+        header: $.jsonHeader
+    })
+}
+const isSign = function (fairUuid, recruiterOpenid) {
+    return $.request({
+        url: '/fair-for-company/isSign?fairUuid=' + fairUuid + '&recruiterOpenid=' + recruiterOpenid,
+        data: {},
+        method: $.RequestMethod.GET,
+        header: $.jsonHeader
+    })
+}
+
+
+module.exports = {
+    insertByEntity: insertByEntity,
+    isSign: isSign,
+}

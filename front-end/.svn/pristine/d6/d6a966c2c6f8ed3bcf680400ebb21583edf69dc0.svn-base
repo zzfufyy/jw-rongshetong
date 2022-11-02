@@ -1,0 +1,14 @@
+const $ = require('../utils/request_util')
+
+const insertByEntity = function (communityCell) {
+    return $.request({
+        url: '/community-cell/add',
+        data: communityCell,
+        method: $.RequestMethod.POST,
+        header: $.jsonHeader,
+    });
+};
+
+module.exports = {
+    insertByEntity: insertByEntity
+}

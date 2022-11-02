@@ -1,0 +1,7 @@
+/* pages/messgecollect1/messgecollect1.wxss */
+@import "/clcss.wxss"
+
+
+.tijsq {
+	width: 40%;
+}

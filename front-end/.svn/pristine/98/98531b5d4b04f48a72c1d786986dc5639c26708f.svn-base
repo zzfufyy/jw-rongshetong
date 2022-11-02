@@ -1,0 +1,47 @@
+<view class="mask-layer" hidden="{{hiddenPopup}}" bindtap="bindtapMaskLayer"></view>
+<view class="qwzwbox1" hidden="{{hiddenPopup}}">
+    <view style="height: 10px;background: #fff;"></view>
+    <view style="background: #fff;">
+        <view class="cpjs">
+            <view class="clearfloat bigbox">
+                <view class="ft ltbox">
+                    <scroll-view scroll-y style="height:{{oht}}px;" scroll-y="true">
+                        <block wx:for="{{districtList}}" wx:key="index">
+                            <view id="" class="nav_left_items {{item.checked ? 'activ12' : ''}} ltbtn" bindtap="bindtapChooseDistrict" data-name="{{item.districtName}}">
+                                {{item.districtName}}
+                            </view>
+                        </block>
+                    </scroll-view>
+                </view>
+
+                <view class="ft mdbox">
+                    <scroll-view scroll-y style="height:{{oht}}px;" scroll-y="true">
+                        <block wx:for="{{streetList}}" wx:key="index">
+                            <view class="nav_left_items {{item.checked ? 'activ12' : ''}} ltbtn" bindtap="bindtapChooseStreet" data-name="{{item.streetName}}">
+                                {{item.streetName}}
+                            </view>
+                        </block>
+                    </scroll-view>
+                </view>
+                <view class="ft rtboxjd">
+                    <scroll-view scroll-y style="height:{{oht}}px;" scroll-y>
+                        <block wx:for="{{communityList}}" wx:key="index">
+                            <view class="nav_left_items {{item.checked ? 'active' : ''}} ltbtn1" bindtap="bindtapChooseCommunity" data-index="{{index}}" data-id="{{item.communityUuid}}">
+                                {{item.communityName}}
+                            </view>
+                        </block>
+                    </scroll-view>
+                </view>
+            </view>
+            <view class="sqnameboxbig">
+                <view class="sq" wx:for="{{choosedCommunityList}}" wx:key="key">
+                    {{item.communityName}}
+                    <image src="/img/gbimg.png" data-id="{{item.communityUuid}}" bindtap="bindtapCancelChoosedCommunity" class="gbimg"></image>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view>
+        <view class="tijsq" bindtap="bindtapChoosedCommunitySubmit">保存</view>
+    </view>
+</view>

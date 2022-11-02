@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.InformationCollectSelfBuildingMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.InformationCollectSelfBuilding">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="villiage" jdbcType="VARCHAR" property="villiage" />
+    <result column="community" jdbcType="VARCHAR" property="community" />
+    <result column="villiage_group" jdbcType="VARCHAR" property="villiageGroup" />
+    <result column="road" jdbcType="VARCHAR" property="road" />
+    <result column="house_no" jdbcType="VARCHAR" property="houseNo" />
+    <result column="house_area" jdbcType="VARCHAR" property="houseArea" />
+    <result column="house_property_right" jdbcType="VARCHAR" property="housePropertyRight" />
+    <result column="householder_name" jdbcType="VARCHAR" property="householderName" />
+    <result column="householder_idcard" jdbcType="VARCHAR" property="householderIdcard" />
+    <result column="house_living_number" jdbcType="VARCHAR" property="houseLivingNumber" />
+    <result column="house_usage" jdbcType="VARCHAR" property="houseUsage" />
+    <result column="is_business" jdbcType="VARCHAR" property="isBusiness" />
+    <result column="business_scope" jdbcType="VARCHAR" property="businessScope" />
+    <result column="is_authenticate_report" jdbcType="VARCHAR" property="isAuthenticateReport" />
+    <result column="house_land_property" jdbcType="VARCHAR" property="houseLandProperty" />
+    <result column="country_land_usage" jdbcType="VARCHAR" property="countryLandUsage" />
+    <result column="collective_land_usage" jdbcType="VARCHAR" property="collectiveLandUsage" />
+    <result column="house_main_layer" jdbcType="VARCHAR" property="houseMainLayer" />
+    <result column="house_part_layer" jdbcType="VARCHAR" property="housePartLayer" />
+    <result column="house_acerage" jdbcType="VARCHAR" property="houseAcerage" />
+    <result column="house_height" jdbcType="VARCHAR" property="houseHeight" />
+    <result column="house_year" jdbcType="VARCHAR" property="houseYear" />
+    <result column="design_mode" jdbcType="VARCHAR" property="designMode" />
+    <result column="construction_team" jdbcType="VARCHAR" property="constructionTeam" />
+    <result column="structure_type" jdbcType="VARCHAR" property="structureType" />
+    <result column="wall_material" jdbcType="VARCHAR" property="wallMaterial" />
+    <result column="floor_type" jdbcType="VARCHAR" property="floorType" />
+    <result column="roof_type" jdbcType="VARCHAR" property="roofType" />
+    <result column="aseismatic_structure" jdbcType="VARCHAR" property="aseismaticStructure" />
+    <result column="is_expansion" jdbcType="VARCHAR" property="isExpansion" />
+    <result column="expansion_number" jdbcType="VARCHAR" property="expansionNumber" />
+    <result column="expansion_year" jdbcType="VARCHAR" property="expansionYear" />
+    <result column="expansion_content" jdbcType="VARCHAR" property="expansionContent" />
+    <result column="is_change_structure" jdbcType="VARCHAR" property="isChangeStructure" />
+    <result column="is_procedure" jdbcType="VARCHAR" property="isProcedure" />
+    <result column="procedure_type" jdbcType="VARCHAR" property="procedureType" />
+    <result column="is_illegal" jdbcType="VARCHAR" property="isIllegal" />
+    <result column="illegal_type" jdbcType="VARCHAR" property="illegalType" />
+    <result column="is_geology_danger" jdbcType="VARCHAR" property="isGeologyDanger" />
+    <result column="geology_danger_type" jdbcType="VARCHAR" property="geologyDangerType" />
+    <result column="estimate_structure_danger" jdbcType="VARCHAR" property="estimateStructureDanger" />
+    <result column="structure_danger_part" jdbcType="VARCHAR" property="structureDangerPart" />
+    <result column="is_security_authenticate" jdbcType="VARCHAR" property="isSecurityAuthenticate" />
+    <result column="security_authenticate_result" jdbcType="VARCHAR" property="securityAuthenticateResult" />
+    <result column="authenticate_result_part" jdbcType="VARCHAR" property="authenticateResultPart" />
+    <result column="is_fire_safety" jdbcType="VARCHAR" property="isFireSafety" />
+    <result column="fire_safety_danger" jdbcType="VARCHAR" property="fireSafetyDanger" />
+    <result column="management_measure" jdbcType="VARCHAR" property="managementMeasure" />
+    <result column="project_measure" jdbcType="VARCHAR" property="projectMeasure" />
+    <result column="illegal_measure" jdbcType="VARCHAR" property="illegalMeasure" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="collect_team" jdbcType="VARCHAR" property="collectTeam" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, villiage, community, villiage_group, road, house_no, house_area, house_property_right, 
+    householder_name, householder_idcard, house_living_number, house_usage, is_business, 
+    business_scope, is_authenticate_report, house_land_property, country_land_usage, 
+    collective_land_usage, house_main_layer, house_part_layer, house_acerage, house_height, 
+    house_year, design_mode, construction_team, structure_type, wall_material, floor_type, 
+    roof_type, aseismatic_structure, is_expansion, expansion_number, expansion_year, 
+    expansion_content, is_change_structure, is_procedure, procedure_type, is_illegal, 
+    illegal_type, is_geology_danger, geology_danger_type, estimate_structure_danger, 
+    structure_danger_part, is_security_authenticate, security_authenticate_result, authenticate_result_part, 
+    is_fire_safety, fire_safety_danger, management_measure, project_measure, illegal_measure, 
+    create_time, collect_team
+  </sql>
+</mapper>

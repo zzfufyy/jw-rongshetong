@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.ICommunityCellMapper">
+    <resultMap id="BaseResultMap" type="com.shopping.wx.model.CommunityCell">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="cell_name" jdbcType="VARCHAR" property="cellName" />
+        <result column="community_uuid" jdbcType="VARCHAR" property="communityUuid" />
+        <result column="building_name_type" jdbcType="TINYINT" property="buildingNameType" />
+        <result column="num_building" jdbcType="INTEGER" property="numBuilding" />
+        <result column="num_layer" jdbcType="INTEGER" property="numLayer" />
+        <result column="num_layer_family" jdbcType="INTEGER" property="numLayerFamily" />
+        <result column="recorder_openid" jdbcType="VARCHAR" property="recorderOpenid" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+        <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+        <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+    </resultMap>
+    <resultMap id="CommunityCellPlus" type="com.shopping.wx.pojo.dto.community_cell.CommunityCellPlus" extends="BaseResultMap">
+        <result column="community_name" jdbcType="VARCHAR" property="communityName" />
+    </resultMap>
+    <select id="infoWithAssociated" resultMap="CommunityCellPlus">
+        SELECT cc.*, ci.community_name as community_name
+        FROM community_cell cc
+        LEFT JOIN community_information ci
+        ON cc.community_uuid = ci.id
+        WHERE cc.id = #{id}
+    </select>
+
+
+    <resultMap id="CommunityCellDTO" type="com.shopping.wx.pojo.dto.community_cell.CommunityCellDTO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="cell_name" jdbcType="VARCHAR" property="cellName"/>
+        <result column="community_uuid" jdbcType="VARCHAR" property="communityUuid"/>
+        <result column="num_building" jdbcType="INTEGER" property="numBuilding"/>
+        <result column="num_layer" jdbcType="INTEGER" property="numLayer"/>
+        <result column="num_layer_family" jdbcType="INTEGER" property="numLayerFamily"/>
+        <result column="recorder_openid" jdbcType="VARCHAR" property="recorderOpenid"/>
+
+        <result column="recorder_name" jdbcType="VARCHAR" property="recorderName"/>
+        <result column="num_registered" jdbcType="INTEGER" property="numRegistered"/>
+        <result column="num_unregistered" jdbcType="INTEGER" property="numUnregistered"/>
+    </resultMap>
+    <select id="listDTOByCommunityUuid" resultMap="CommunityCellDTO">
+        SELECT cc.id AS id,
+               cc.cell_name AS cell_name,
+               cc.community_uuid AS community_uuid,
+               cc.num_building AS num_building,
+               cc.num_layer AS num_layer,
+               cc.num_layer_family AS num_layer_family,
+               cc.recorder_openid AS recorder_openid,
+               uc.real_name AS recorder_name,
+               SUM(CASE br.flag_register WHEN 1 THEN 1 ELSE 0 END) AS num_registered,
+               SUM(CASE br.flag_register WHEN 0 THEN 1 ELSE 0 END) AS num_unregistered
+        FROM community_cell cc
+        LEFT JOIN user_community uc ON cc.recorder_openid = uc.id
+        LEFT JOIN building_resident br ON cc.id = br.cell_uuid
+        WHERE 1=1
+          AND cc.community_uuid = #{communityUuid}
+        GROUP BY id,
+                 cell_name,
+                 community_uuid,
+                 num_building,
+                 num_layer,
+                 num_layer_family,
+                 recorder_openid,
+                 recorder_name
+    </select>
+</mapper>

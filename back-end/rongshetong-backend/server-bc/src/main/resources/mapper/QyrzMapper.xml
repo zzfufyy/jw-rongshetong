@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.QyrzMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Qyrz">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="fname" jdbcType="VARCHAR" property="fname" />
+    <result column="fidCard" jdbcType="VARCHAR" property="fidcard" />
+    <result column="fcreatetime" jdbcType="TIMESTAMP" property="fcreatetime" />
+    <result column="qyname" jdbcType="VARCHAR" property="qyname" />
+    <result column="fregistNum" jdbcType="VARCHAR" property="fregistnum" />
+    <result column="fcity" jdbcType="VARCHAR" property="fcity" />
+    <result column="farea" jdbcType="VARCHAR" property="farea" />
+    <result column="fstreet" jdbcType="VARCHAR" property="fstreet" />
+    <result column="hyfl" jdbcType="VARCHAR" property="hyfl" />
+    <result column="rygm" jdbcType="VARCHAR" property="rygm" />
+    <result column="zczb" jdbcType="VARCHAR" property="zczb" />
+    <result column="gqxx" jdbcType="VARCHAR" property="gqxx" />
+    <result column="nsdj" jdbcType="VARCHAR" property="nsdj" />
+    <result column="nsxydj" jdbcType="VARCHAR" property="nsxydj" />
+    <result column="yysr" jdbcType="VARCHAR" property="yysr" />
+    <result column="wxopenid" jdbcType="VARCHAR" property="wxopenid" />
+    <result column="shsj" jdbcType="TIMESTAMP" property="shsj" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, status, fname, fidCard, fcreatetime, qyname, fregistNum, fcity, farea, fstreet, 
+    hyfl, rygm, zczb, gqxx, nsdj, nsxydj, yysr, wxopenid, shsj
+  </sql>
+</mapper>

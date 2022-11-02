@@ -1,0 +1,233 @@
+// pages/addxq/addxq.js
+const $ = require('../../utils/request_util');
+const Loading = require('../../utils/loading_util');
+const date_util = require('../../utils/date_util');
+const url_util = require('../../utils/url_util');
+const validate_util = require('../../utils/validate_util');
+const { Completer } = require('../../utils/function_util');
+const string_util = require('../../utils/string_util');
+
+const CONSTANT = require('../../common/constant');
+const GLOBAL_CONSTANT = require('../../common/globalConstant');
+const { Salary } = require('../../common/constant');
+// 加载服务
+
+const communityInformationService = require('../../common/communityInformationService');
+const communityCellService = require('../../common/communityCellService');
+const constant = require('../../common/constant');
+
+
+
+const app = getApp();
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        communityUuid: '',
+        communityName: '',
+
+        index: 0,
+        buildingNameTypeList: CONSTANT.BUILDING_NAME_TYPE.map(v => {
+            return v.name;
+        }),
+        index1: 0,
+
+
+        // 存储 提交data   需注释不显示
+        cellName: '',
+        numBuilding: '',
+        buildingNameType: 0,
+        numLayer: '',
+        numLayerFamily: '',
+
+
+    },
+    // 挂载 参数状态
+    state: {
+        communityUuidCompleter: new Completer(),
+        cellUuidCompleter: new Completer(),
+    },
+    bindinputCellName(e) {
+        this.setData({ cellName: e.detail.value })
+    },
+    bindinputNumBuilding(e) {
+        this.setData({ numBuilding: e.detail.value });
+    },
+    bindinputNumLayer(e) {
+        this.setData({ numLayer: e.detail.value });
+    },
+    bindinputNumLayerFamily(e) {
+        this.setData({ numLayerFamily: e.detail.value });
+    },
+    // 小区选择
+    bindPickerChange: function (e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.setData({
+            index: e.detail.value,
+            communityUuid: e.detail.value,
+
+        })
+    },
+    // 命名格式
+    bindPickerChange1: function (e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.setData({
+            index1: e.detail.value,
+            buildingNameType: CONSTANT.BUILDING_NAME_TYPE[e.detail.value].id,
+        })
+    },
+    // 提交事件
+    async bindtapSubmit() {
+        if (validate_util.numberValidate(this.data.numBuilding)
+            && validate_util.numberValidate(this.data.numLayer)
+            && validate_util.numberValidate(this.data.numLayerFamily)
+            && !string_util.isEmpty(this.data.cellName)) {
+            console.log('通过');
+        } else {
+            wx.showModal({
+                title: '输入的数据有误，请检查后填写的数据',
+            });
+            return;
+        }
+        try {
+            Loading.begin();
+            let insertData = {
+                communityUuid: this.data.communityUuid,
+                cellName: this.data.cellName,
+                numBuilding: this.data.numBuilding,
+                buildingNameType: this.data.buildingNameType,
+                numLayer: this.data.numLayer,
+                numLayerFamily: this.data.numLayerFamily,
+            }
+            if(string_util.isEmpty(this.data.cellUuid)){
+                await communityCellService.insertByEntity(insertData)
+            }else{
+                let updateData ={
+                    ...insertData,
+                    id: this.data.cellUuid,
+                }
+                await communityCellService.updateByEntity(updateData);
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+        // 信息录入成功
+        wx.showToast({
+            icon: 'success',
+            title: '信息录入成功',
+            duration: 1000,
+        })
+        setTimeout(() => { return; }, 800);
+        wx.navigateBack({
+            delta: 1,
+        })
+    },
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: async function (options) {
+        this.state.communityUuidCompleter = new Completer();
+        this.state.cellUuidCompleter = new Completer();
+        let communityUuid = options.communityUuid
+        let cellUuid = options.cellUuid;
+        // 测试id
+        // communityUuid = 'e80cf86d-a8ea-11ec-98aa-5076afbf1539';
+        this.state.communityUuidCompleter.resolve(communityUuid);
+        this.state.cellUuidCompleter.resolve(cellUuid);
+    },
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: async function () {
+        try {
+            Loading.begin();
+            await this.loadContent();
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+    },
+    loadContent: async function () {
+        let communityUuid = await this.state.communityUuidCompleter.promise;
+        let cellUuid = await this.state.cellUuidCompleter.promise;
+        console.log(communityUuid);
+        console.log(cellUuid);
+        if (!string_util.isEmpty(communityUuid)) {
+            wx.setNavigationBarTitle({
+                title: '添加小区',
+            });
+            let communityData = await communityInformationService.loadEntityById(communityUuid);
+            communityData = communityData.data;
+            this.setData({
+                communityName: communityData.communityName,
+            })
+        }
+        if (!string_util.isEmpty(cellUuid)) {
+            wx.setNavigationBarTitle({
+                title: '修改小区',
+            })
+            let cellData = await communityCellService.loadEntityWithAssociatedById(cellUuid);
+            cellData = cellData.data;
+            this.setData({
+                cellUuid: cellData.id,
+                communityUuid: cellData.communityUuid,
+                communityName: cellData.communityName,
+                cellName: cellData.cellName,
+                numBuilding: cellData.numBuilding,
+                buildingNameType: cellData.buildingNameType,
+                numLayer: cellData.numLayer,
+                numLayerFamily: cellData.numLayerFamily,
+            })
+        }
+
+
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    }
+})

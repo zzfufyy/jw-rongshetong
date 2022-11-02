@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.RecruitJobMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.RecruitJob">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="recruiter_name" jdbcType="VARCHAR" property="recruiterName" />
+    <result column="recruiter_telephone" jdbcType="VARCHAR" property="recruiterTelephone" />
+    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="job_introduction" jdbcType="VARCHAR" property="jobIntroduction" />
+    <result column="job_remark" jdbcType="VARCHAR" property="jobRemark" />
+    <result column="delivery_instruction" jdbcType="VARCHAR" property="deliveryInstruction" />
+    <result column="job_require" jdbcType="VARCHAR" property="jobRequire" />
+    <result column="job_require_major" jdbcType="VARCHAR" property="jobRequireMajor" />
+    <result column="job_require_skill" jdbcType="VARCHAR" property="jobRequireSkill" />
+    <result column="job_require_edu" jdbcType="VARCHAR" property="jobRequireEdu" />
+    <result column="job_basic_workfare" jdbcType="VARCHAR" property="jobBasicWorkfare" />
+    <result column="job_extra_workfare" jdbcType="VARCHAR" property="jobExtraWorkfare" />
+    <result column="delivery_end_time" jdbcType="TIMESTAMP" property="deliveryEndTime" />
+    <result column="job_salary_min" jdbcType="INTEGER" property="jobSalaryMin" />
+    <result column="job_salary_max" jdbcType="INTEGER" property="jobSalaryMax" />
+    <result column="job_age_max" jdbcType="TINYINT" property="jobAgeMax" />
+    <result column="job_age_min" jdbcType="TINYINT" property="jobAgeMin" />
+    <result column="job_begin_time" jdbcType="VARCHAR" property="jobBeginTime" />
+    <result column="job_end_time" jdbcType="VARCHAR" property="jobEndTime" />
+    <result column="job_city" jdbcType="VARCHAR" property="jobCity" />
+    <result column="job_address" jdbcType="VARCHAR" property="jobAddress" />
+    <result column="recruiting_number" jdbcType="INTEGER" property="recruitingNumber" />
+    <result column="priority" jdbcType="INTEGER" property="priority" />
+    <result column="count_view" jdbcType="INTEGER" property="countView" />
+    <result column="count_apply" jdbcType="INTEGER" property="countApply" />
+    <result column="recruiter_openid" jdbcType="VARCHAR" property="recruiterOpenid" />
+    <result column="company_uuid" jdbcType="VARCHAR" property="companyUuid" />
+    <result column="category_uuid" jdbcType="VARCHAR" property="categoryUuid" />
+    <result column="school_recruit_conference_uuid" jdbcType="VARCHAR" property="schoolRecruitConferenceUuid" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+    <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+    <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+    <result column="zzid" jdbcType="INTEGER" property="zzid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, company_name, recruiter_name, recruiter_telephone, job_name, category_name, job_introduction, 
+    job_remark, delivery_instruction, job_require, job_require_major, job_require_skill, 
+    job_require_edu, job_basic_workfare, job_extra_workfare, delivery_end_time, job_salary_min, 
+    job_salary_max, job_age_max, job_age_min, job_begin_time, job_end_time, job_city, 
+    job_address, recruiting_number, priority, count_view, count_apply, recruiter_openid, 
+    company_uuid, category_uuid, school_recruit_conference_uuid, status, create_time, 
+    ext1, ext2, ext3, zzid
+  </sql>
+</mapper>

@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "求职意向",
+    "usingComponents": {
+        "choose-community": "/components/chooseCommunity/chooseCommunity"
+    }
+}

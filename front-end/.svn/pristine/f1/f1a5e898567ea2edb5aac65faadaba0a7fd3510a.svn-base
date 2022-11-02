@@ -1,0 +1,39 @@
+@import "../common/formCommonStyle.wxss";
+
+.upload-img-line-box {
+    padding: 10px 0px;
+}
+
+.upload-img-item {
+    margin: 20rpx 13rpx;
+
+}
+
+.upload-img {
+    height: 180rpx;
+    width: 180rpx;
+}
+
+.upload-wait-view {
+    background: #F6F6F6;
+    color: #C4C4C4;
+    font-weight: bold;
+    font-size: 68rpx;
+    text-align: center;
+    opacity: 0.8;
+    border-radius: 10rpx 10rpx 10rpx 10rpx;
+
+    height: 180rpx;
+    width: 180rpx;
+    line-height: 180rpx;
+}
+.max-upload-text{
+    color: #B1B1B1;
+    font-size: 36rpx;
+}
+.max-upload-bracket{
+    color: #B1B1B1;
+    font-size: 40rpx;
+    font-weight: 500;
+}
+

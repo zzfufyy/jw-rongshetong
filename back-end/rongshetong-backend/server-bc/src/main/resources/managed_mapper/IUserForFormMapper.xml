@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.IUserForFormMapper">
+    <resultMap id="BaseResultMap" type="com.shopping.wx.model.UserForForm">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="component_type" jdbcType="TINYINT" property="componentType" />
+        <result column="subject_type" jdbcType="TINYINT" property="subjectType" />
+        <result column="user_openid" jdbcType="VARCHAR" property="userOpenid" />
+        <result column="subject_answer" jdbcType="VARCHAR" property="subjectAnswer" />
+        <result column="upload_img" jdbcType="VARCHAR" property="uploadImg" />
+        <result column="option_uuid" jdbcType="VARCHAR" property="optionUuid" />
+        <result column="subject_uuid" jdbcType="VARCHAR" property="subjectUuid" />
+        <result column="form_uuid" jdbcType="VARCHAR" property="formUuid" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+        <result column="ext2" jdbcType="VARCHAR" property="ext2" />
+        <result column="ext3" jdbcType="VARCHAR" property="ext3" />
+    </resultMap>
+
+    <insert id="insertByList" parameterType="java.util.List">
+        INSERT INTO user_for_form(
+            id,
+            user_openid,
+            subject_answer,
+            upload_img,
+            option_uuid,
+            subject_uuid,
+            form_uuid,
+            status,
+            create_time
+        ) VALUES
+        <foreach collection="listUserForForm" item="uff" index="index" separator=",">
+            (
+            #{uff.id},
+            #{uff.userOpenid},
+            #{uff.subjectAnswer},
+            #{uff.uploadImg},
+            #{uff.optionUuid},
+            #{uff.subjectUuid},
+            #{uff.formUuid},
+            0,
+            now()
+            )
+        </foreach>
+    </insert>
+
+
+    <resultMap id="UploadImgStatisticVo" type="com.shopping.wx.pojo.vo.user_for_form.UploadImgStatisticVo">
+        <result column="component_type" jdbcType="TINYINT" property="componentType" />
+        <result column="subject_type" jdbcType="TINYINT" property="subjectType" />
+        <result column="user_openid" jdbcType="VARCHAR" property="userOpenid" />
+        <result column="subject_answer" jdbcType="VARCHAR" property="subjectAnswer" />
+        <result column="upload_img" jdbcType="VARCHAR" property="uploadImg" />
+        <result column="option_uuid" jdbcType="VARCHAR" property="optionUuid" />
+        <result column="subject_uuid" jdbcType="VARCHAR" property="subjectUuid" />
+        <result column="form_uuid" jdbcType="VARCHAR" property="formUuid" />
+    </resultMap>
+    <select id="pageForUploadImg"  resultMap="UploadImgStatisticVo">
+        SELECT
+            uff.component_type,
+            uff.subject_type,
+            uff.user_openid,
+            uff.subject_answer,
+            GROUP_CONCAT(uff.upload_img SEPARATOR ';') AS upload_img,
+            uff.option_uuid,
+            uff.subject_uuid,
+            uff.form_uuid
+        FROM user_for_form uff
+        WHERE uff.subject_uuid = #{subjectUuid}
+        GROUP BY  component_type,subject_type,user_openid,subject_answer,option_uuid,subject_uuid,form_uuid
+        ORDER BY uff.create_time desc
+    </select>
+
+
+    <resultMap id="SignStatisticVo" extends="BaseResultMap" type="com.shopping.wx.pojo.vo.user_for_form.SignStatisticVo">
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    </resultMap>
+
+    <select id="pageForSign" resultMap="SignStatisticVo">
+        SELECT uff.*,uc.real_name AS user_name
+        FROM user_for_form uff
+        LEFT JOIN user_candidate uc
+        ON uff.user_openid = uc.id
+        WHERE uff.subject_uuid = #{subjectUuid}
+        ORDER BY create_time DESC
+    </select>
+
+    <resultMap id="DetailUserFormVo" type="com.shopping.wx.pojo.vo.user_for_form.DetailUserFormVo">
+        <result column="form_uuid" jdbcType="VARCHAR" property="formUuid" />
+        <result column="user_openid" jdbcType="VARCHAR" property="userOpenid" />
+        <result column="submit_time" jdbcType="TIMESTAMP" property="submitTime" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    </resultMap>
+    <select id="pageDetailUserForm" resultMap="DetailUserFormVo">
+
+        SELECT
+          temp.form_uuid,
+          temp.user_openid,
+          temp.submit_time,
+          uc.real_name as user_name
+        FROM (
+            SELECT
+                uff.form_uuid AS form_uuid,
+                uff.user_openid AS user_openid,
+                MAX(uff.create_time) AS submit_time
+            FROM user_for_form uff
+            WHERE uff.form_uuid = #{formUuid}
+            GROUP BY form_uuid,user_openid
+        ) temp
+        LEFT JOIN user_candidate uc
+        ON temp.user_openid = uc.id
+        ORDER BY submit_time DESC
+    </select>
+
+
+    <resultMap id="ChoiceSelectListVo" extends="BaseResultMap" type="com.shopping.wx.pojo.vo.user_for_form.ChoiceSelectListVo">
+        <result column="option_title" jdbcType="VARCHAR" property="optionTitle" />
+    </resultMap>
+    <select id="loadChoiceSelectListByCondition" resultMap="ChoiceSelectListVo">
+        SELECT uff.*, fso.option_title
+        FROM user_for_form uff
+        LEFT JOIN form_subject_option fso
+        ON uff.option_uuid = fso.id
+        WHERE uff.subject_uuid = #{subjectUuid} AND uff.user_openid = #{userOpenid}
+    </select>
+
+
+</mapper>

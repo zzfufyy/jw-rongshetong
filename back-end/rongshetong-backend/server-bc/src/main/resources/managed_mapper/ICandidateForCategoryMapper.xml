@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.managed_mapper.community_recruitment.ICandidateForCategoryMapper">
+    <resultMap id="BaseResultMap" type="com.shopping.wx.pojo.dto.candidate_for_category.CandidateForCategoryDTO">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="candidate_openid" jdbcType="VARCHAR" property="candidateOpenid"/>
+        <result column="category_uuid" jdbcType="DATE" property="categoryUuid"/>
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName"/>
+    </resultMap>
+    <select id="selectEntityListByCandidateOpenid"
+            resultType="com.shopping.wx.pojo.dto.candidate_for_category.CandidateForCategoryDTO">
+        SELECT
+          cgc.id as id,
+          cgc.candidate_openid  as candidate_openid,
+          cgc.category_uuid as category_uuid,
+          jc.category_name as category_name,
+        FROM candidate_for_category cfc
+        LEFT JOIN job_category jc ON
+        cgc.candidate_openid = jc.candidate_openid
+        WHERE cfc.candidate_openid = #{candidateOpenid}
+    </select>
+
+
+</mapper>

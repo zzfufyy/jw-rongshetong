@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.wx.mapper.TopimgMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.wx.model.Topimg">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="videourl" jdbcType="VARCHAR" property="videourl" />
+    <result column="tplj" jdbcType="VARCHAR" property="tplj" />
+    <result column="yl1" jdbcType="VARCHAR" property="yl1" />
+    <result column="yl2" jdbcType="VARCHAR" property="yl2" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, imgurl, videourl, tplj, yl1, yl2
+  </sql>
+</mapper>

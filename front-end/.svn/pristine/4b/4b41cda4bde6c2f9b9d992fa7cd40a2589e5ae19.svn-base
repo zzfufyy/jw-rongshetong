@@ -1,0 +1,13 @@
+
+<!-- 提示用户需要获取用户信息 -->
+<view class="" hidden="{{hiddenPopup}}">
+    <view class="zzc"></view>
+    <view class="qzbox">
+        <view class="qusf" style="text-align: center;padding-left: 0;color: #333;">温馨提示</view>
+        <view class="textts">获取头像昵称,需要您的授权，为了提供更好的服务，请在稍后的提示框中点击“允许”</view>
+        <view class="clearfloat" style="margin-top: 20px;display: flex;">
+            <button class="ft  pomis" bindtap="bindtapCancel">忽略</button>
+            <button class="tijsq pomis fr" bindtap="bindtapGetUserProfile" style="margin-top: 0px;">允许</button>
+        </view>
+    </view>
+</view>

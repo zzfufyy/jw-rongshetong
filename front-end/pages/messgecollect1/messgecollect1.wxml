@@ -1,0 +1,125 @@
+<view class="p40"></view>
+		<view class="toptit">茶陵县城乡居民建房安全隐患排查整治信息采集表</view>
+		<view class="line10"></view>
+		<view class="first mt14">第二部分：建设情况</view>
+		<view class="first mt14">设计方式【单选题】</view>
+		<view class="mt14">
+			<radio-group bindchange="bindchangedesignMode">
+        <label class="weui-cell weui-check__label" wx:for="{{designMode}}" wx:key="{{item.value}}">
+          <view class="weui-cell__hd">
+            <radio value="{{index}}" />{{item.name}}
+          </view>
+        </label>
+      </radio-group>
+		</view>
+		<!-- </block> -->
+		<view class="first mt14">施工队伍【单选题】</view>
+		<view class="mt14">
+			<radio-group  bindchange="bindchangeconstructionTeam">
+				<label class="weui-cell weui-check__label" wx:for="{{constructionTeam}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<radio value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+		<view class="first mt14">结构类型【多选题】</view>
+		<view class="mt14">
+			<checkbox-group  bindchange="bindchangestructureType">
+				<label class="weui-cell weui-check__label" wx:for="{{structureType}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<checkbox value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+		<view class="first mt14">承重墙体材料【单选题】</view>
+		<view class="mt14">
+			<radio-group  bindchange="bindchangewallMaterial">
+				<label class="weui-cell weui-check__label" wx:for="{{wallMaterial}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<radio value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+		<view class="first mt14">楼板类型【单选题】</view>
+		<view class="mt14">
+			<radio-group  bindchange="bindchangefloorType">
+				<label class="weui-cell weui-check__label" wx:for="{{floorType}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<radio value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+		<view class="first mt14">屋盖类型【单选题】</view>
+		<view class="mt14">
+			<radio-group  bindchange="bindchangeroofType">
+				<label class="weui-cell weui-check__label" wx:for="{{roofType}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<radio value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+		<view class="first mt14">抗震构造【多选题】</view>
+		<view class="mt14">
+			<checkbox-group  bindchange="bindchangeaseismaticStructure">
+				<label class="weui-cell weui-check__label" wx:for="{{aseismaticStructure}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<checkbox value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+		<view class="first mt14">是否进行过改扩建【单选题】</view>
+		<view class="mt14">
+			<radio-group  bindchange="bindchangeisExpansion">
+				<label class="weui-cell weui-check__label" wx:for="{{isExpansion}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<radio value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+		<view class="first mt14">改扩建次数（次）</view>
+		<view class="input ">
+			<input class="slect" type="text" placeholder="请输入" value="{{expansionNumber}}" bindinput="bindinputexpansionNumber" />
+		</view>
+		<view class="first mt14">改造时间（年）</view>
+		<view class="input ">
+			<input class="slect" type="text" placeholder="请输入" value="{{expansionYear}}" bindinput="bindinputexpansionYear" />
+		</view>
+		<view class="first mt14">改扩建内容【多选题】</view>
+		<view class="mt14">
+			<checkbox-group  bindchange="bindchangeexpansionContent">
+				<label class="weui-cell weui-check__label" wx:for="{{expansionContent}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<checkbox value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</checkbox-group>
+		</view>
+		<view class="first mt14">装修是否改变主体结构【单选题】</view>
+		<view class="mt14">
+			<radio-group  bindchange="bindchangeisChangeStructure">
+				<label class="weui-cell weui-check__label" wx:for="{{isChangeStructure}}" wx:key="{{item.value}}">
+					<view class="weui-cell__hd ">
+						<radio value="{{index}}" checked="{{item.checked}}"/>{{item.name}}
+					</view>
+				</label>
+			</radio-group>
+		</view>
+
+	<view class="clearfloat">
+		<navigator class="tijsq ft prew" style="margin-left: 5%;" bindtap="prev" hover-class="none" >上一步</navigator>
+		<navigator hover-class="none" style="margin-right: 5%;" bindtap="next"  class="tijsq fr">下一步</navigator>
+	</view>
+
+
+
+
+
+		
+		

@@ -1,0 +1,35 @@
+function dateToCN(datetime){
+    let time = new Date(datetime);
+    return time.getFullYear() + "年" + (time.getMonth()+1) + "月" + time.getDate() + "日";
+}
+
+function getAgeByBirthday(datetime){
+    let time = new Date(datetime);
+    let nowtime = new Date();
+
+    let nowMonth = nowtime.getMonth() + 1;
+    let nowDay = nowtime.getDate();
+    let timeMonth = time.getMonth() + 1;
+    let timeDay = time.getDate();
+    
+    let age = nowtime.getFullYear() - time.getFullYear();
+    if(timeMonth < nowMonth || (timeMonth == nowMonth && timeDay<nowDay) ){
+        age++;
+    } 
+    return age;
+}
+
+function isToday(datetime){
+    let time = new Date(datetime);
+    let nowTime = new Date();
+    return time.getFullYear() == nowTime.getFullYear() 
+        && time.getMonth() == nowTime.getMonth()
+        && time.getDate() == nowTime.getDate();
+}
+
+module.exports ={
+    isToday: isToday,
+    dateToCN:dateToCN,
+    getAgeByBirthday:getAgeByBirthday,
+    
+}

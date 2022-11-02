@@ -1,0 +1,390 @@
+// pages/sqfw/sqfw.js
+// 加载 常量
+const CONSTANT = require('../../common/constant');
+const GLOBAL_CONSTANT = require('../../common/globalConstant');
+let $ = require('../../utils/request_util');
+// 加载 工具
+const date_util = require('../../utils/date_util');
+const img_util = require('../../utils/img_util');
+const Loading = require('../../utils/loading_util');
+const string_util = require('../../utils/string_util');
+const { Completer } = require('../../utils/function_util');
+const prompt_util = require('../../utils/prompt_util');
+// 加载 服务
+const informationNewsService = require('../../common/informationNewsService');
+const communityInformationService = require('../../common/communityInformationService');
+const userCommunityService = require("../../common/userCommunityService");
+const functionTagService = require("../../common/functionTagService");
+// 附加模块
+const listener = require('./listener');
+
+const app = getApp();
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        openid: '',
+        // 社区用户授权级别  0:普通 1: 社区管理员 2: 网格录入员
+        authorizationLevel: 0,
+
+        // 角色选择
+        juesehide: true,
+        streetName: '',
+        districtName: '',
+        cityName: '',
+        provinceName: '',
+        scene: "",
+        communityUuid: '',
+        communityName: '', //communityName: '东湖社区',
+        communityAddress: '', //communityAddress: '湖南省长沙市芙蓉区晚报西街13号',
+        communityPhone: '',
+        communityPortraitPath: '',
+        // recruiterOpenid: "",
+        // companyUuid: "",
+        // categoryUuid: "",
+        isInformationCollectPermission: false,
+        ewmimg: '',
+        functionTagList: [
+            // { tagId: 'sygl', tagName: '诉源治理', pagePathLink: '/pages/syzl/syzl', backgroundColor: '#EEF7FE', logoPathBig: '/img/syzl.png', },
+            // { tagId: 'zphui', tagName: '招聘会', pagePathLink: '/pages/zphlist_copy/zphlist_copy', backgroundColor: '#EEF7FE', logoPathBig: '/img/zphuiicon.png', },
+            // { tagId: 'tagCandidateRecruit', tagName: '求职就业', pagePathLink: '/pages/comzp/comzp', backgroundColor: '#FEFAEE', logoPathBig: '/img/qzjy.png', },
+            // { tagId: 'tagCompanyRecruit', tagName: '企业招聘', pagePathLink: '/pages/qzjy/qzjy', backgroundColor: '#EEF7FE', logoPathBig: '/img/qyzp.png', },
+
+            // { tagId: 'tagCellInput', tagName: '网格录入', pagePathLink: '/pages/wglr/wglr', backgroundColor: '#F3EEFC', logoPathBig: '/img/wglr.png', },
+            // { tagId: 'tagCommunityManagement', tagName: '社区管理', pagePathLink: '/pages/sqgl/sqgl', backgroundColor: '#EEFBFE', logoPathBig: '/img/sqgl.png', },
+            // { tagId: 'tagRongEDai', tagName: '蓉e贷', pagePathLink: '', backgroundColor: '#F5FFE8', logoPathBig: '/img/ryd.png', target: 'miniProgram', apptagId: 'wx96d6e30c9f677d52' },
+            // { tagId: 'tagInformationCollect', tagName: '自建房信息采集', pagePathLink: '/pages/messgecollect/messgecollect', backgroundColor: '#EEF7FE', logoPathBig: '/img/xxcj.png', tp: '-13px' },
+        ],
+        // 资讯列表
+        newsList: [
+            // {
+            // 	articleTitle: '春风送温暖 就业送真情',
+            // 	articleIntroduction: '【湖南省】关于印发《湖南省“十四五”金融业发展规划》的通知湖南省地方金融监督管理局关于印发《湖南省“十四五”金融业发展规划》的通知',
+            // 	articleAuthor: '岳麓区就业服务中心',
+            // 	articleReleaseTime: '3月02日',
+            // 	articlePortraitPath: 'http://frqryb.oss-accelerate.aliyuncs.com/headphoto/16297916583243346b1330ea-9a71-4ea4-85d0-02c7556c3b40.jpeg'
+            // },
+        ],
+    },
+
+    state: {
+        communityUuidCompleter: new Completer(),
+    },
+    bindtapTagNewsAnnouncement() {
+        wx.navigateTo({
+            url: '/pages/newsms/newsms?communityUuid=' + this.data.communityUuid,
+        })
+    },
+    binderrorCommunityPortraitPath(e) {
+        console.log(e);
+        this.setData({
+            communityPortraitPath: CONSTANT.STATIC_IMG_URL.portrait_community,
+        })
+    },
+    binderrorArticlePortraitPath(e) {
+        console.log(e);
+        let img = 'newsList[' + e.currentTarget.dataset.index + '].articlePortraitPath';
+        this.setData({
+            [img]: CONSTANT.STATIC_IMG_URL.portrait_news,
+        })
+    },
+
+    bindtapGoLink(e) {
+        let id = e.currentTarget.dataset.id;
+        let linkUrl = this.data.functionTagList.find(v => {
+            return id == v.tagId;
+        }).pagePathLink;
+        switch (id) {
+            // 企业招聘  求职就业
+            case 'tagRecruitCompany' || 'tagRecruitCandidate' || 'tagNewsAnnouncement' ||'tagHouseInformationCollect':
+                linkUrl += ('?communityUuid=' + this.data.communityUuid);
+            // 网格录入
+            case 'tagGridManage':
+                wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_FLAG_ENTRY_GRID_OR_COMMUNITY, 'grid');
+                if (this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_ADMIN
+                    || this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_RECORDER) {
+                    linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                } else {
+                    wx.showModal({
+                        title: '您没有网格录入的权限',
+                        icon:'error',
+                    })
+                    return;
+                }
+                break;
+            // 社区管理
+            case 'tagCommunityManage':
+                wx.setStorageSync(GLOBAL_CONSTANT.GLOBAL_FLAG_ENTRY_GRID_OR_COMMUNITY, 'community');
+                if (this.data.authorizationLevel == CONSTANT.AUTHORIZATION_LEVEL.COMMUNITY_ADMIN) {
+                    linkUrl += ('?communityUuid=' + this.data.communityUuid);
+                } else {
+                    wx.showModal({
+                        title: '您没有社区管理的权限',
+                        icon:'error',
+                    })
+                    return;
+                }
+                break;
+            default:
+                break;
+        }
+        wx.navigateTo({
+            url: linkUrl,
+        })
+    },
+    // 打电话
+    cellphone: function () {
+        let phone = this.data.communityPhone;
+        wx.makePhoneCall({
+            phoneNumber: phone,
+        });
+    },
+    //咨询详情
+    bindtapAllNews(e) {
+        console.log(e);
+        let newsUuid = e.currentTarget.id;
+        wx.navigateTo({
+            url: '/pages/zxxq/zxxq?newsUuid=' + newsUuid,
+        })
+    },
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+        app.globalMonitors.communityInfoChangeMonitor.removeListener(this.communityInfoChangeListener);
+    },
+
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: async function (options) {
+        // 添加社区基本信息是否修改监听器（）
+        app.globalMonitors.communityInfoChangeMonitor.addListener(this.communityInfoChangeListener);
+        this.state.communityUuidCompleter = new Completer();
+
+        let that = this;
+        let communityUuid = "";
+        const scene = decodeURIComponent(options.scene)
+        console.log(scene)
+        let ext1 = scene;
+        if (typeof (ext1) != 'undefined') {
+            console.log(scene)
+            await this.getcommuit(ext1, that)
+        }
+        if (that.data.communityUuid == "") {
+            communityUuid = options.communityUuid;
+            that.setData({
+                communityUuid: communityUuid,
+            });
+        }
+        //获取社区banner图
+        wx.request({
+            url: app.globalData.web_path + '/banner_for_page/searchCommunityBanner',
+            data: {
+                communityUuid: that.data.communityUuid
+            },
+            header: app.globalData.header,
+            success: function (res) {
+                console.log(res)
+                let images = res.data.bannerForPageList;
+                let backgroundimg1 = [];
+                let backgroundimg = [];
+                let ewm = "";
+                for (let i = 0; i < images.length; i++) {
+                    const element = images[i];
+                    var image = { imgsrc: images[i].bannerImgPath, url: images[i].pagePath }
+                    backgroundimg1.push(image)
+                    backgroundimg.push(image)
+                }
+                // console.log(images)
+                if (images.length > 0) {
+                    ewm = images[0].bannerImgPath
+                }
+                console.log(ewm)
+                that.setData({
+                    ewmimg: ewm
+                    // backgroundimg1:backgroundimg1,
+                    // backgroundimg:backgroundimg
+                })
+            },
+            fail: function (res) {
+            }
+        })
+        console.debug(that.data.communityUuid)
+        // 如果获取不到社区id  从全局获取
+        if (string_util.isEmpty(that.data.communityUuid)) {
+            communityUuid = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_COMMUNITYUUID);
+        }
+        this.state.communityUuidCompleter.resolve(that.data.communityUuid);
+
+        // 加载用户事件
+        await app.getOpenidReady();
+        let openid = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_OPENID);
+        this.setData({ openid: openid });
+        // 用户授权
+        this.authorize = this.selectComponent("#authorize");
+        let authorizeRs = await this.authorize.doAuthorize();
+        if (!authorizeRs) {
+            prompt_util.authorizeFailPrompt();
+            return;
+        }
+        // 加载用户功能列表
+        let pages = getCurrentPages();
+        let currentPage = pages[pages.length - 1];
+        // pages/sqfw/sqfw
+        console.log(currentPage.route);
+        // 默认用户功能列表
+        let functionTagData = await functionTagService.listByDefaultOrder(currentPage.route, this.data.communityUuid);
+        functionTagData = functionTagData.data;
+        // 构建 functionTagList
+        this.setData({
+            functionTagList: functionTagData.filter((v, i) => i <= 6),
+        })
+        try {
+            Loading.begin();
+            await this.loadContent();
+            wx.setNavigationBarTitle({
+                title: that.data.communityName
+            })
+        } catch (e) {
+            console.error(e);
+        } finally {
+            Loading.end();
+        }
+    },
+
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: async function () {
+
+    },
+    getcommuit: async function (ext1, that) {
+        let completer = new Completer();
+        wx.request({
+            url: app.globalData.web_path + '/banner_for_page/searchCommunity',
+            data: {
+                ext1: ext1
+            },
+            header: app.globalData.header,
+            success: function (res) {
+                console.log(res)
+                if (res.data.communityInformationList.length > 0) {
+                    communityUuid = res.data.communityInformationList[0].id;
+                    that.setData({
+                        communityUuid: communityUuid,
+                    });
+                }
+                completer.resolve();
+            },
+            fail: function (res) {
+                completer.resolve();
+            }
+        })
+        return completer.promise;
+    },
+    // 加载页面内容
+    loadContent: async function () {
+        // 加载 社区用户 权限
+        await app.getOpenidReady();
+        let openid = wx.getStorageSync(GLOBAL_CONSTANT.GLOBAL_OPENID);
+
+        let communityUuid = await this.state.communityUuidCompleter.promise;
+        console.log(communityUuid);
+        let userCommunityData = await userCommunityService.loadEntityById(openid);
+        userCommunityData = userCommunityData.data;
+        console.log(userCommunityData);
+
+        this.setData({
+            authorizationLevel: (communityUuid == userCommunityData.communityUuid) ? userCommunityData.authorizationLevel : 0,
+        })
+        // 社区信息加载
+        let communityData = await communityInformationService.loadEntityById(communityUuid);
+        communityData = communityData.data;
+        console.log(communityData)
+        this.setData({
+            communityUuid: communityData.id,
+            communityName: communityData.communityName,
+            streetName: communityData.streetName,
+            districtName: communityData.districtName,
+            cityName: communityData.cityName,
+            provinceName: communityData.provinceName,
+            communityAddress: communityData.address,
+            communityPhone: communityData.phone,
+            communityPortraitPath: img_util.handleCommunityPortraitPath(communityData.portraitPath),
+        });
+
+        // 新闻加载
+        let newsData = await informationNewsService.loadListByCommunityUuid(" ", 3);
+
+        let newsList = newsData.data.map(v => {
+            return {
+                id: v.id,
+                articleTitle: v.articleTitle,
+                articleIntroduction: v.articleIntroduction,
+                articleAuthor: v.articleAuthor,
+                articleReleaseTime: date_util.dateToCN(v.articleReleaseTime),
+                articlePortraitPath: img_util.handleArticlePortraitPath(v.articlePortraitPath),
+            }
+        });
+        let newsData1 = await informationNewsService.loadListByCommunityUuid(communityUuid, 3);
+        let newsList1 = newsData1.data.map(v => {
+            return {
+                id: v.id,
+                articleTitle: v.articleTitle,
+                articleIntroduction: v.articleIntroduction,
+                articleAuthor: v.articleAuthor,
+                articleReleaseTime: date_util.dateToCN(v.articleReleaseTime),
+                articlePortraitPath: img_util.handleArticlePortraitPath(v.articlePortraitPath),
+            }
+        });
+        for (let index = 0; index < newsList1.length; index++) {
+            newsList.push(newsList1[index])
+
+        }
+        console.log(newsList);
+        this.setData({
+            newsList: newsList,
+        });
+
+    },
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady: function () {
+
+    },
+
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
+    },
+    ...listener.createListenerMethods(),
+})

@@ -1,0 +1,6 @@
+@import "/clcss.wxss";
+
+
+.tijsq {
+	width: 40%;
+}
